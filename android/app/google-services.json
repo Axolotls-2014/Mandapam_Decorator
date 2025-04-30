@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "72755534939",
+    "firebase_url": "https://mandapam-80161-default-rtdb.firebaseio.com",
+    "project_id": "mandapam-80161",
+    "storage_bucket": "mandapam-80161.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72755534939:android:5fcf53fced68d3406b737e",
+        "android_client_info": {
+          "package_name": "com.mandapam.decorator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "72755534939-fan1juatp730vehj6rqekktlqrqlumdu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLNQCl3kaPTAGBf0SwCgcmDmZhnlxhhK0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "72755534939-fan1juatp730vehj6rqekktlqrqlumdu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72755534939:android:a24c6453c3595c9d6b737e",
+        "android_client_info": {
+          "package_name": "com.mandapam.vendor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "72755534939-fan1juatp730vehj6rqekktlqrqlumdu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLNQCl3kaPTAGBf0SwCgcmDmZhnlxhhK0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "72755534939-fan1juatp730vehj6rqekktlqrqlumdu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
