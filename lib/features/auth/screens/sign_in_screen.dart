@@ -309,5 +309,4 @@ class SignInScreenState extends State<SignInScreen> {
       }
     }
   }
-
 }
