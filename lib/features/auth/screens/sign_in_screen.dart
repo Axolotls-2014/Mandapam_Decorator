@@ -275,7 +275,6 @@ class SignInScreenState extends State<SignInScreen> {
       }else {
         authController.login(numberWithCountryCode, password).then((status) async {
           print("API_Response: \${status.message}");
-
           if (status.isSuccess) {
 
             // String? userId = await authController.getUserId();
