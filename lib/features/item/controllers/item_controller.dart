@@ -270,7 +270,7 @@ class ItemController extends GetxController implements GetxService {
     _item = null;
     if(item.name != null) {
       _item = item;
-    }else {
+    } else {
       _item = null;
       _item = await itemServiceInterface.getItemDetails(item.id);
     }
@@ -328,7 +328,6 @@ class ItemController extends GetxController implements GetxService {
     } else {
       _cartIndex = Get.find<CartController>().isExistInCart(item.id, variationType, false, null);
     }
-
     if(_cartIndex != -1) {
       _quantity = Get.find<CartController>().cartList[_cartIndex].quantity;
       _addOnActiveList = itemServiceInterface.initializeCartAddonActiveList(Get.find<CartController>().cartList[_cartIndex].addOnIds, item.addOns);

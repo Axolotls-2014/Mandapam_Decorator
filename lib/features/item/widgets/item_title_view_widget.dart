@@ -17,6 +17,7 @@ import 'package:sixam_mart/util/styles.dart';
 import 'package:sixam_mart/common/widgets/custom_snackbar.dart';
 import 'package:sixam_mart/common/widgets/organic_tag.dart';
 import 'package:sixam_mart/common/widgets/rating_bar.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ItemTitleViewWidget extends StatelessWidget {
   final Item? item;
@@ -76,7 +77,7 @@ class ItemTitleViewWidget extends StatelessWidget {
                   const SizedBox(width: Dimensions.paddingSizeExtraSmall),
 
                   ((Get.find<SplashController>().configModel!.moduleConfig!.module!.unit! && item!.unitType != null)
-                  || (Get.find<SplashController>().configModel!.moduleConfig!.module!.vegNonVeg! && Get.find<SplashController>().configModel!.toggleVegNonVeg!)) ? Text(
+                      || (Get.find<SplashController>().configModel!.moduleConfig!.module!.vegNonVeg! && Get.find<SplashController>().configModel!.toggleVegNonVeg!)) ? Text(
                     Get.find<SplashController>().configModel!.moduleConfig!.module!.unit! ? '(${item!.unitType})'
                         : item!.veg == 0 ? '(${'non_veg'.tr})' : '(${'veg'.tr})',
                     style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor),
@@ -86,33 +87,37 @@ class ItemTitleViewWidget extends StatelessWidget {
             ),
             const SizedBox(width: Dimensions.paddingSizeSmall),
 
-            item!.availableTimeStarts != null ? const SizedBox() : Container(
-              padding: const EdgeInsets.all(8), alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor.withOpacity(0.05),
-                borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-              ),
-              child: GetBuilder<FavouriteController>(
-                  builder: (favouriteController) {
-                    return InkWell(
-                      onTap: () {
-                        if(AuthHelper.isLoggedIn()){
-                          if(favouriteController.wishItemIdList.contains(itemController.item!.id)) {
-                            favouriteController.removeFromFavouriteList(itemController.item!.id, false);
+            item!.availableTimeStarts != null ? const SizedBox() : Row(
+              children: [
+                // IconButton(
+                //   icon: Icon(Icons.share, size: 25),
+                //   color: Theme.of(context).primaryColor,
+                //   onPressed: () {
+                //     Share.share('Check out this product: ${item!.name!}\n${'Price'.tr}: ${PriceConverter.convertPrice(startingPrice, discount: discount, discountType: discountType)}');
+                //   },
+                // ),
+                GetBuilder<FavouriteController>(
+                    builder: (favouriteController) {
+                      return InkWell(
+                        onTap: () {
+                          if(AuthHelper.isLoggedIn()){
+                            if(favouriteController.wishItemIdList.contains(itemController.item!.id)) {
+                              favouriteController.removeFromFavouriteList(itemController.item!.id, false);
+                            } else {
+                              favouriteController.addToFavouriteList(itemController.item, null, false);
+                            }
                           }else {
-                            favouriteController.addToFavouriteList(itemController.item, null, false);
+                            showCustomSnackBar('you_are_not_logged_in'.tr);
                           }
-                        }else {
-                          showCustomSnackBar('you_are_not_logged_in'.tr);
-                        }
-                      },
-                      child: Icon(
-                        favouriteController.wishItemIdList.contains(itemController.item!.id) ? Icons.favorite : Icons.favorite_border, size: 25,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    );
-                  }
-              ),
+                        },
+                        child: Icon(
+                          favouriteController.wishItemIdList.contains(itemController.item!.id) ? Icons.favorite : Icons.favorite_border, size: 25,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      );
+                    }
+                ),
+              ],
             ),
           ]),
           const SizedBox(height: Dimensions.paddingSizeSmall),
@@ -159,7 +164,7 @@ class ItemTitleViewWidget extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 5, 5, 5),
               child: Text(
-                item!.userName!,
+                item!.name!,
                 style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
               ),
             ),
@@ -217,25 +222,36 @@ class ItemTitleViewWidget extends StatelessWidget {
                 ]),
               ),
 
-              GetBuilder<FavouriteController>(builder: (favouriteController) {
-                return InkWell(
-                  onTap: () {
-                    if(isLoggedIn){
-                      if(favouriteController.wishItemIdList.contains(item!.id)) {
-                        favouriteController.removeFromFavouriteList(item!.id, false);
-                      }else {
-                        favouriteController.addToFavouriteList(item, null, false);
-                      }
-                    }else {
-                      showCustomSnackBar('you_are_not_logged_in'.tr);
-                    }
-                  },
-                  child: Icon(
-                    favouriteController.wishItemIdList.contains(item!.id) ? Icons.favorite : Icons.favorite_border, size: 30,
-                    color: favouriteController.wishItemIdList.contains(item!.id) ? Theme.of(context).primaryColor : Theme.of(context).disabledColor,
-                  ),
-                );
-              }),
+              Row(
+                children: [
+                  // IconButton(
+                  //   icon: Icon(Icons.share, size: 25),
+                  //   color: Theme.of(context).primaryColor,
+                  //   onPressed: () {
+                  //     Share.share('Check out this product: ${item!.name!}\n${'Price'.tr}: ${PriceConverter.convertPrice(startingPrice, discount: discount, discountType: discountType)}');
+                  //   },
+                  // ),
+                  GetBuilder<FavouriteController>(builder: (favouriteController) {
+                    return InkWell(
+                      onTap: () {
+                        if(isLoggedIn){
+                          if(favouriteController.wishItemIdList.contains(item!.id)) {
+                            favouriteController.removeFromFavouriteList(item!.id, false);
+                          }else {
+                            favouriteController.addToFavouriteList(item, null, false);
+                          }
+                        }else {
+                          showCustomSnackBar('you_are_not_logged_in'.tr);
+                        }
+                      },
+                      child: Icon(
+                        favouriteController.wishItemIdList.contains(item!.id) ? Icons.favorite : Icons.favorite_border, size: 30,
+                        color: favouriteController.wishItemIdList.contains(item!.id) ? Theme.of(context).primaryColor : Theme.of(context).disabledColor,
+                      ),
+                    );
+                  }),
+                ],
+              ),
 
             ]),
             const SizedBox(height: 5),
@@ -302,7 +318,7 @@ class ItemTitleViewWidget extends StatelessWidget {
               Column(children: [
 
                 ((Get.find<SplashController>().configModel!.moduleConfig!.module!.unit! && item!.unitType != null)
-                || (Get.find<SplashController>().configModel!.moduleConfig!.module!.vegNonVeg! && Get.find<SplashController>().configModel!.toggleVegNonVeg!)) ? Container(
+                    || (Get.find<SplashController>().configModel!.moduleConfig!.module!.vegNonVeg! && Get.find<SplashController>().configModel!.toggleVegNonVeg!)) ? Container(
                   padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeExtraSmall, horizontal: Dimensions.paddingSizeSmall),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(Dimensions.radiusSmall),

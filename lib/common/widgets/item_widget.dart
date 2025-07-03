@@ -163,15 +163,6 @@ class ItemWidget extends StatelessWidget {
                       ]),
                       const SizedBox(height: 3),
 
-                      // (isStore ? store!.address != null : item!.userName != null) ? Text(
-                      //   isStore ? store!.address ?? '' : item!.userName ?? '',
-                      //   style: robotoRegular.copyWith(
-                      //     fontSize: Dimensions.fontSizeExtraSmall,
-                      //     color: Theme.of(context).disabledColor,
-                      //   ),
-                      //   maxLines: 1, overflow: TextOverflow.ellipsis,
-                      // ) : const SizedBox(),
-
                       (genericName.isNotEmpty) ? Flexible(
                         child: Padding(
                           padding: const EdgeInsets.only(top: 5.0),
@@ -185,7 +176,6 @@ class ItemWidget extends StatelessWidget {
                           ),
                         ),
                       ) : const SizedBox(),
-                      // SizedBox(height: ((desktop || isStore) && (isStore ? store!.address != null : item!.userName != null)) ? 3 : 3),
 
                       !isStore && (item!.ratingCount! > 0) ? Row(children: [
 
@@ -274,14 +264,30 @@ class ItemWidget extends StatelessWidget {
         ),
 
         (!isStore && isCornerTag! == false) ? Positioned(
-          right: ltr ? 0 : null, left: ltr ? null : 0,
-          child: CornerDiscountTag(
-            bannerPosition: ltr ? CornerBannerPosition.topRight : CornerBannerPosition.topLeft,
-            elevation: 0,
-            discount: discount, discountType: discountType,
-            freeDelivery: isStore ? store!.freeDelivery : false,
-        )) : const SizedBox(),
+            right: ltr ? 0 : null, left: ltr ? null : 0,
+            child: CornerDiscountTag(
+              bannerPosition: ltr ? CornerBannerPosition.topRight : CornerBannerPosition.topLeft,
+              elevation: 0,
+              discount: discount, discountType: discountType,
+              freeDelivery: isStore ? store!.freeDelivery : false,
+            )) : const SizedBox(),
 
+        (!isStore && item!.productType != null) ? Positioned(
+          top: 10,
+          left: ltr ? 10 : null,
+          right: ltr ? null : 10,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
+            decoration: BoxDecoration(
+              color: item!.productType == "Rental" ? Colors.red : Colors.red,
+              borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+            ),
+            child: Text(
+              item!.productType == "Rental" ? 'Rental' : 'Purchase',
+              style: robotoRegular.copyWith(color: Colors.white,fontWeight:FontWeight.bold,fontSize: Dimensions.fontSizeExtraSmall),
+            ),
+          ),
+        ) : const SizedBox(),
       ],
     );
   }

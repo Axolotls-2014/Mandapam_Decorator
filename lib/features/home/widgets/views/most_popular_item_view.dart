@@ -24,11 +24,9 @@ class MostPopularItemView extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeDefault),
       child: GetBuilder<ItemController>(builder: (itemController) {
         List<Item>? itemList = itemController.popularItemList;
-
           return (itemList != null) ? itemList.isNotEmpty ? Container(
             color: Theme.of(context).primaryColor.withOpacity(0.1),
             child: Column(children: [
-
               Padding(
                 padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault, left: Dimensions.paddingSizeDefault, right: Dimensions.paddingSizeDefault),
                 child: TitleWidget(
@@ -37,7 +35,6 @@ class MostPopularItemView extends StatelessWidget {
                   onTap: () => Get.toNamed(RouteHelper.getPopularItemRoute(true, false)),
                 ),
               ),
-
               SizedBox(
                 height: 285, width: Get.width,
                 child: ListView.builder(
@@ -59,7 +56,6 @@ class MostPopularItemView extends StatelessWidget {
                   },
                 ),
               ),
-
             ]),
           ) : const SizedBox() : const ItemShimmerView(isPopularItem: true);
         }

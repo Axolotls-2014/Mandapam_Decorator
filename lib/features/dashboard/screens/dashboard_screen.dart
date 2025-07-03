@@ -37,7 +37,6 @@ class DashboardScreen extends StatefulWidget {
   final int pageIndex;
   final bool fromSplash;
   const DashboardScreen({super.key, required this.pageIndex, this.fromSplash = false});
-
   @override
   DashboardScreenState createState() => DashboardScreenState();
 }
@@ -50,7 +49,6 @@ class DashboardScreenState extends State<DashboardScreen> {
   bool _canExit = GetPlatform.isWeb ? true : false;
 
   GlobalKey<ExpandableBottomSheetState> key = GlobalKey();
-
 
   late bool _isLogin;
   bool active = false;
@@ -166,9 +164,7 @@ class DashboardScreenState extends State<DashboardScreen> {
           child: GetBuilder<OrderController>(
             builder: (orderController) {
               List<OrderModel> runningOrder = orderController.runningOrderModel != null ? orderController.runningOrderModel!.orders! : [];
-
               List<OrderModel> reversOrder =  List.from(runningOrder.reversed);
-
               return Scaffold(
                 key: _scaffoldKey,
                 body: ExpandableBottomSheet(

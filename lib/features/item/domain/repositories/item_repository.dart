@@ -31,7 +31,8 @@ class ItemRepository implements ItemRepositoryInterface {
   }
 
   @override
-  Future get(String? id, {bool isConditionWiseItem = false}) async {
+  Future get(String? id, {
+    bool isConditionWiseItem = false}) async {
     if(isConditionWiseItem) {
       return await _getConditionsWiseItems(int.parse(id!));
     } else {
@@ -139,3 +140,6 @@ class ItemRepository implements ItemRepositoryInterface {
   }
 
 }
+
+
+// 'chat'.tr

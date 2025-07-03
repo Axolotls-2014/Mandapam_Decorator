@@ -29,131 +29,151 @@ class MedicineItemCard extends StatelessWidget {
 
     return OnHover(
       isItem: true,
-      child: Container(
-        width: ResponsiveHelper.isDesktop(context) ? 230 : isShop ? 200 : 180,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-          color: Theme.of(context).cardColor,
-        ),
-        child: CustomInkWell(
-          onTap: () => Get.find<ItemController>().navigateToItemPage(item, context),
-          radius: Dimensions.radiusDefault,
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-
-            Expanded(
-              flex: 5,
-              child: Stack(children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(Dimensions.radiusDefault),
-                    topRight: Radius.circular(Dimensions.radiusDefault),
-                  ),
-                  child: CustomImage(
-                    placeholder: Images.placeholder,
-                    image: '${item.imageFullUrl}',
-                    fit: BoxFit.cover, width: double.infinity, height: double.infinity,
-                  ),
-                ),
-
-                AddFavouriteView(
-                  item: item,
-                ),
-
-                DiscountTag(
-                  discount: discount,
-                  discountType: discountType,
-                  freeDelivery: false,
-                ),
-
-                OrganicTag(item: item, placeInImage: false),
-
-                isShop ? const SizedBox() : Positioned(
-                  bottom: 10, right: 10,
-                  child: CartCountView(
-                    item: item,
-                    child: Container(
-                      height: 25, width: 25,
-                      decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).primaryColor),
-                      child: Icon(Icons.add, size: 20, color: Theme.of(context).cardColor),
-                    ),
-                  ),
-                ),
-              ]),
+      child: Stack(
+        children: [
+          Container(
+            width: ResponsiveHelper.isDesktop(context) ? 230 : isShop ? 200 : 180,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+              color: Theme.of(context).cardColor,
             ),
+            child: CustomInkWell(
+              onTap: () => Get.find<ItemController>().navigateToItemPage(item, context),
+              radius: Dimensions.radiusDefault,
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
-            Expanded(
-              flex: 5,
-              child: Padding(
-                padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                child: Column(
-                  crossAxisAlignment: isShop ? CrossAxisAlignment.center : CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-
-                  Text(
-                    item.userName ?? '',
-                    maxLines: 1, overflow: TextOverflow.ellipsis,
-                    style: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
-                  ),
-
-                  Text(item.name ?? '', style: robotoBold,
-                    maxLines: 1, overflow: TextOverflow.ellipsis,
-                  ),
-
-                  if(item.genericName != null && item.genericName!.isNotEmpty)
-                    Wrap(
-                      children: List.generate(item.genericName!.length, (index) {
-                        return Text(
-                          '${item.genericName![index]}${item.genericName!.length-1 == index ? '.' : ', '}',
-                          style: robotoRegular.copyWith(color: Theme.of(context).textTheme.bodyLarge!.color?.withOpacity(0.5), fontSize: Dimensions.fontSizeSmall),
-                          maxLines: 1, overflow: TextOverflow.ellipsis,
-                        );
-                      }),
+                Expanded(
+                  flex: 5,
+                  child: Stack(children: [
+                    ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(Dimensions.radiusDefault),
+                        topRight: Radius.circular(Dimensions.radiusDefault),
+                      ),
+                      child: CustomImage(
+                        placeholder: Images.placeholder,
+                        image: '${item.imageFullUrl}',
+                        fit: BoxFit.cover, width: double.infinity, height: double.infinity,
+                      ),
                     ),
 
-                  if(isShop)
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      Icon(Icons.star, size: 15, color: Theme.of(context).primaryColor),
-                      const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                    AddFavouriteView(
+                      item: item,
+                    ),
 
-                      Text(item.avgRating.toString(), style: robotoRegular),
-                      const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                    DiscountTag(
+                      discount: discount,
+                      discountType: discountType,
+                      freeDelivery: false,
+                    ),
 
-                      Text("(${item.ratingCount})", style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor)),
+                    OrganicTag(item: item, placeInImage: false),
 
-                    ]),
-
-                  item.discount != null && item.discount! > 0  ? Text(
-                    PriceConverter.convertPrice(Get.find<ItemController>().getStartingPrice(item)),
-                    style: robotoMedium.copyWith(
-                      fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor,
-                      decoration: TextDecoration.lineThrough,
-                    ), textDirection: TextDirection.ltr,
-                  ) : const SizedBox(),
-
-                  Align(
-                    alignment: isShop ? Alignment.center : Alignment.centerLeft,
-                    child: Row(mainAxisAlignment: isShop ? MainAxisAlignment.center : MainAxisAlignment.start, children: [
-                      Text(
-                        PriceConverter.convertPrice(
-                          Get.find<ItemController>().getStartingPrice(item), discount: item.discount,
-                          discountType: item.discountType,
+                    isShop ? const SizedBox() : Positioned(
+                      bottom: 10, right: 10,
+                      child: CartCountView(
+                        item: item,
+                        child: Container(
+                          height: 25, width: 25,
+                          decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).primaryColor),
+                          child: Icon(Icons.add, size: 20, color: Theme.of(context).cardColor),
                         ),
-                        textDirection: TextDirection.ltr, style: robotoMedium,
                       ),
-                      const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                    ),
+                  ]),
+                ),
 
-                      (Get.find<SplashController>().configModel!.moduleConfig!.module!.unit! && item.unitType != null) ? Text(
-                        '/ ${ item.unitType ?? ''}',
-                        style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).hintColor),
+                Expanded(
+                  flex: 5,
+                  child: Padding(
+                    padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+                    child: Column(
+                      crossAxisAlignment: isShop ? CrossAxisAlignment.center : CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+
+                      Text(
+                        item.userName ?? '',
+                        maxLines: 1, overflow: TextOverflow.ellipsis,
+                        style: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
+                      ),
+
+                      Text(item.name ?? '', style: robotoBold,
+                        maxLines: 1, overflow: TextOverflow.ellipsis,
+                      ),
+
+                      if(item.genericName != null && item.genericName!.isNotEmpty)
+                        Wrap(
+                          children: List.generate(item.genericName!.length, (index) {
+                            return Text(
+                              '${item.genericName![index]}${item.genericName!.length-1 == index ? '.' : ', '}',
+                              style: robotoRegular.copyWith(color: Theme.of(context).textTheme.bodyLarge!.color?.withOpacity(0.5), fontSize: Dimensions.fontSizeSmall),
+                              maxLines: 1, overflow: TextOverflow.ellipsis,
+                            );
+                          }),
+                        ),
+
+                      if(isShop)
+                        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                          Icon(Icons.star, size: 15, color: Theme.of(context).primaryColor),
+                          const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+
+                          Text(item.avgRating.toString(), style: robotoRegular),
+                          const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+
+                          Text("(${item.ratingCount})", style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor)),
+
+                        ]),
+
+                      item.discount != null && item.discount! > 0  ? Text(
+                        PriceConverter.convertPrice(Get.find<ItemController>().getStartingPrice(item)),
+                        style: robotoMedium.copyWith(
+                          fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor,
+                          decoration: TextDecoration.lineThrough,
+                        ), textDirection: TextDirection.ltr,
                       ) : const SizedBox(),
-                    ]),
+
+                      Align(
+                        alignment: isShop ? Alignment.center : Alignment.centerLeft,
+                        child: Row(mainAxisAlignment: isShop ? MainAxisAlignment.center : MainAxisAlignment.start, children: [
+                          Text(
+                            PriceConverter.convertPrice(
+                              Get.find<ItemController>().getStartingPrice(item), discount: item.discount,
+                              discountType: item.discountType,
+                            ),
+                            textDirection: TextDirection.ltr, style: robotoMedium,
+                          ),
+                          const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+
+                          (Get.find<SplashController>().configModel!.moduleConfig!.module!.unit! && item.unitType != null) ? Text(
+                            '/ ${ item.unitType ?? ''}',
+                            style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).hintColor),
+                          ) : const SizedBox(),
+                        ]),
+                      ),
+                    ],
+                    ),
                   ),
-                ],
+                ),
+              ],
+              ),
+            ),
+          ),
+          if (item.productType != null)
+            Positioned(
+              top: 10,
+              left: 10,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
+                decoration: BoxDecoration(
+                  color: item.productType == "Rental" ? Colors.red : Colors.red,
+                  borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                ),
+                child: Text(
+                  item.productType == "Rental" ? 'Rental' : 'Purchase',
+                  style: robotoRegular.copyWith(color: Colors.white, fontWeight:FontWeight.bold, fontSize: Dimensions.fontSizeExtraSmall),
                 ),
               ),
             ),
-          ],
-          ),
-        ),
+        ],
       ),
     );
   }

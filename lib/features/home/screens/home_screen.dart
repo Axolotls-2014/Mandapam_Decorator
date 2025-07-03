@@ -244,7 +244,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 controller: _scrollController,
                 physics: const AlwaysScrollableScrollPhysics(),
                 slivers: [
-
                   /// App Bar
                   SliverAppBar(
                     floating: true,
@@ -277,7 +276,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   style: robotoMedium.copyWith(color: Theme.of(context).textTheme.bodyLarge!.color, fontSize: Dimensions.fontSizeDefault),
                                   maxLines: 1, overflow: TextOverflow.ellipsis,
                                 ),
-
                                 Row(children: [
                                   Flexible(
                                     child: Text(
@@ -340,7 +338,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: robotoRegular.copyWith(
                                 fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).hintColor,
                               ),
-                            )),
+                            )
+                            ),
                           ]),
                         ),
                       ),
@@ -374,15 +373,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ) : const SliverToBoxAdapter(),
 
-                  SliverToBoxAdapter(child: !showMobileModule ? Center(child: GetBuilder<StoreController>(builder: (storeController) {
+                  SliverToBoxAdapter(child: !showMobileModule ? Center(child:
+
+                  GetBuilder<StoreController>(builder: (storeController) {
                     return Padding(
                       padding: EdgeInsets.only(bottom: ResponsiveHelper.isDesktop(context) ? 0 : 100),
+
                       child: PaginatedListView(
                         scrollController: _scrollController,
                         totalSize: storeController.storeModel?.totalSize,
                         offset: storeController.storeModel?.offset,
                         onPaginate: (int? offset) async => await storeController.getStoreList(offset!, false),
-                        itemView: ItemsView(
+                        itemView: (storeController.storeModel?.stores == null || storeController.storeModel!.stores!.isEmpty)
+                            ? Center(child: Padding(
+                          padding: const EdgeInsets.all(50),
+                          child: Text('No nearby store found', style: robotoMedium.copyWith(fontSize: 14)),
+                        ))
+                            : ItemsView(
                           isStore: true,
                           items: null,
                           isFoodOrGrocery: (isFood || isGrocery),
@@ -394,7 +401,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     );
-                  }),) : const SizedBox()),
+                  }
+                  ),
+
+                  ) : const SizedBox()),
 
                 ],
               ),
@@ -409,7 +419,6 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const CashBackLogoWidget(),
             ),
           ) : null : null,
-
         );
       });
     });

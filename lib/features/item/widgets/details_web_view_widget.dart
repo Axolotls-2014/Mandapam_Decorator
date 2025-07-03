@@ -92,6 +92,7 @@ class DetailsWebViewWidget extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+
                         ItemTitleViewWidget(item: itemController.item, inStock: Get.find<SplashController>().configModel!.moduleConfig!.module!.stock! && stock! <= 0),
 
                         (itemController.item!.description != null && itemController.item!.description!.isNotEmpty) ? Column(

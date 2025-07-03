@@ -481,35 +481,35 @@ class _CartScreenState extends State<CartScreen> {
           return storeController.cartSuggestItemModel != null && suggestedItems!.isNotEmpty ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: Dimensions.paddingSizeSmall),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: Dimensions.paddingSizeExtraSmall),
-                child: Text('you_may_also_like'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault)),
-              ),
-
-              SizedBox(
-                height: ResponsiveHelper.isDesktop(context) ? 160 : 130,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: suggestedItems.length,
-                  physics: const BouncingScrollPhysics(),
-                  padding: EdgeInsets.only(left: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeExtraSmall : Dimensions.paddingSizeDefault),
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: ResponsiveHelper.isDesktop(context) ? const EdgeInsets.symmetric(vertical: 20) : const EdgeInsets.symmetric(vertical: 10) ,
-                      child: Container(
-                        width: ResponsiveHelper.isDesktop(context) ? 500 : 300,
-                        padding: const EdgeInsets.only(right: Dimensions.paddingSizeSmall, left: Dimensions.paddingSizeExtraSmall),
-                        margin: const EdgeInsets.only(right: Dimensions.paddingSizeSmall),
-                        child: ItemWidget(
-                          isStore: false, item: suggestedItems![index], fromCartSuggestion: true,
-                          store: null, index: index, length: null, isCampaign: false, inStore: true,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
+              // const SizedBox(height: Dimensions.paddingSizeSmall),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: Dimensions.paddingSizeExtraSmall),
+              //   child: Text('you_may_also_like'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault)),
+              // ),
+              //
+              // SizedBox(
+              //   height: ResponsiveHelper.isDesktop(context) ? 160 : 130,
+              //   child: ListView.builder(
+              //     scrollDirection: Axis.horizontal,
+              //     itemCount: suggestedItems.length,
+              //     physics: const BouncingScrollPhysics(),
+              //     padding: EdgeInsets.only(left: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeExtraSmall : Dimensions.paddingSizeDefault),
+              //     itemBuilder: (context, index) {
+              //       return Padding(
+              //         padding: ResponsiveHelper.isDesktop(context) ? const EdgeInsets.symmetric(vertical: 20) : const EdgeInsets.symmetric(vertical: 10) ,
+              //         child: Container(
+              //           width: ResponsiveHelper.isDesktop(context) ? 500 : 300,
+              //           padding: const EdgeInsets.only(right: Dimensions.paddingSizeSmall, left: Dimensions.paddingSizeExtraSmall),
+              //           margin: const EdgeInsets.only(right: Dimensions.paddingSizeSmall),
+              //           child: ItemWidget(
+              //             isStore: false, item: suggestedItems![index], fromCartSuggestion: true,
+              //             store: null, index: index, length: null, isCampaign: false, inStore: true,
+              //           ),
+              //         ),
+              //       );
+              //     },
+              //   ),
+              // ),
             ],
           ) : const SizedBox();
         }),
@@ -523,7 +523,6 @@ class _CartScreenState extends State<CartScreen> {
       showCustomSnackBar(text, isError: false);
     }
   }
-
 }
 
 class CheckoutButton extends StatelessWidget {
@@ -534,7 +533,6 @@ class CheckoutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double percentage = 0;
-
     return Container(
       width: Dimensions.webMaxWidth,
       padding:  const EdgeInsets.all(Dimensions.paddingSizeSmall),

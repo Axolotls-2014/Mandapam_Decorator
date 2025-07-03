@@ -84,7 +84,6 @@ class ItemCard extends StatelessWidget {
                   ),
 
                   OrganicTag(item: item, placeInImage: false),
-
                   (item.stock != null && item.stock! < 0) ? Positioned(
                     bottom: 10, left : 0,
                     child: Container(
@@ -100,6 +99,21 @@ class ItemCard extends StatelessWidget {
                     ),
                   ) : const SizedBox(),
 
+                  Positioned(
+                    top: 10,
+                    left: 10,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
+                      decoration: BoxDecoration(
+                        color: item.productType == "Rental" ? Colors.red : Colors.red,
+                        borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                      ),
+                      child: Text(
+                        item.productType == "Rental" ? 'Rental' : 'Purchase',
+                        style: robotoRegular.copyWith(color: Colors.white,fontWeight:FontWeight.bold, fontSize: Dimensions.fontSizeExtraSmall),
+                      ),
+                    ),
+                  ),
 
                   if (item.productType != "Rental")
                     isShop ? const SizedBox() : Positioned(
@@ -143,7 +157,6 @@ class ItemCard extends StatelessWidget {
                           Text("(${item.ratingCount})", style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor)),
                         ]) : const SizedBox(),
 
-                        // showUnitOrRattings(context);
                         (isFood || isShop) ? item.ratingCount! > 0 ? Row(mainAxisAlignment: isPopularItem ? MainAxisAlignment.center : MainAxisAlignment.start, children: [
                           Icon(Icons.star, size: 14, color: Theme.of(context).primaryColor),
                           const SizedBox(width: Dimensions.paddingSizeExtraSmall),
@@ -165,7 +178,6 @@ class ItemCard extends StatelessWidget {
                             decoration: TextDecoration.lineThrough,
                           ), textDirection: TextDirection.ltr,
                         ) : const SizedBox(),
-                        // SizedBox(height: item.discount != null && item.discount! > 0 ? Dimensions.paddingSizeExtraSmall : 0),
 
                         Text(
                           PriceConverter.convertPrice(
@@ -208,50 +220,4 @@ class ItemCard extends StatelessWidget {
       ]),
     );
   }
-
-
-// Widget? showUnitOrRattings(BuildContext context) {
-
-//   if(isFood || isShop) {
-
-//     if(item.ratingCount! > 0) {
-
-//       return Row(mainAxisAlignment: isPopularItem ? MainAxisAlignment.center : MainAxisAlignment.start, children: [
-
-//         Icon(Icons.star, size: 14, color: Theme.of(context).primaryColor),
-
-//         const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-//
-
-//         Text(item.avgRating!.toStringAsFixed(1), style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall)),
-
-//         const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-//
-
-//         Text("(${item.ratingCount})", style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor)),
-
-//
-
-//       ]);
-
-//     }
-
-//   } else if(Get.find<SplashController>().configModel!.moduleConfig!.module!.unit! && item.unitType != null) {
-
-//     return Text(
-
-//       '(${ item.unitType ?? ''})',
-
-//       style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).hintColor),
-
-//     );
-
-//   }
-
-// }
-
-
-
 }

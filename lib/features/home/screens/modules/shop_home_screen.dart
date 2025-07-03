@@ -58,7 +58,7 @@ class ShopHomeScreen extends StatelessWidget {
       const JustForYouView(),
       const FeaturedCategoriesView(),
       // const StoreWiseBannerView(),
-      const ItemThatYouLoveView(forShop: true,),
+      // const ItemThatYouLoveView(forShop: true,),
       const NewOnMartView(isShop: true,isPharmacy: false),
       const PromotionalBannerView(),
     ]);

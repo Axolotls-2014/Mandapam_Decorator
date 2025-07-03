@@ -239,7 +239,6 @@ class SignInScreenState extends State<SignInScreen> {
                                     ),
                                   ),
                                 ]) :  const SizedBox(),
-
                               ]),
                             ),
                           )
@@ -252,8 +251,7 @@ class SignInScreenState extends State<SignInScreen> {
           ),
         ),
       ),
-   );
-
+    );
   }
 
   void _login(AuthController authController, String countryDialCode) async {

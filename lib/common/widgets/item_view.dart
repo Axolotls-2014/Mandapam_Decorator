@@ -1,4 +1,5 @@
 import 'package:sixam_mart/common/widgets/card_design/store_card_with_distance.dart';
+import 'package:sixam_mart/common/widgets/cart_count_view.dart';
 import 'package:sixam_mart/features/splash/controllers/splash_controller.dart';
 import 'package:sixam_mart/features/item/domain/models/item_model.dart';
 import 'package:sixam_mart/features/store/domain/models/store_model.dart';
@@ -10,6 +11,7 @@ import 'package:sixam_mart/common/widgets/item_shimmer.dart';
 import 'package:sixam_mart/common/widgets/item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sixam_mart/util/styles.dart';
 
 class ItemsView extends StatefulWidget {
   final List<Item?>? items;
@@ -56,9 +58,6 @@ class _ItemsViewState extends State<ItemsView> {
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisSpacing: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeExtremeLarge : widget.stores != null ? Dimensions.paddingSizeLarge : Dimensions.paddingSizeLarge,
           mainAxisSpacing: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeExtremeLarge : widget.stores != null && widget.isStore ? Dimensions.paddingSizeLarge : Dimensions.paddingSizeSmall,
-          // childAspectRatio: ResponsiveHelper.isDesktop(context) && widget.isStore ? (1/0.6)
-          //     : ResponsiveHelper.isMobile(context) ? widget.stores != null && widget.isStore ? 2 : 3.8
-          //     : 3.3,
           mainAxisExtent: ResponsiveHelper.isDesktop(context) && widget.isStore ? 220
               : ResponsiveHelper.isMobile(context) ? widget.stores != null && widget.isStore ? 200 : 122
               : 122,
@@ -69,13 +68,38 @@ class _ItemsViewState extends State<ItemsView> {
         itemCount: length,
         padding: widget.padding,
         itemBuilder: (context, index) {
-          return widget.stores != null && widget.isStore ?  widget.isFoodOrGrocery! && widget.isStore
+          return widget.stores != null && widget.isStore ? widget.isFoodOrGrocery! && widget.isStore
               ? StoreCardWidget(store: widget.stores![index])
               : StoreCardWithDistance(store: widget.stores![index]!, fromAllStore: true)
-              : ItemWidget(
-            isStore: widget.isStore, item: widget.isStore ? null : widget.items![index], isFeatured: widget.isFeatured,
-            store: widget.isStore ? widget.stores![index] : null, index: index, length: length, isCampaign: widget.isCampaign,
-            inStore: widget.inStorePage,
+              : Stack(
+            children: [
+              ItemWidget(
+                isStore: widget.isStore,
+                item: widget.isStore ? null : widget.items![index],
+                isFeatured: widget.isFeatured,
+                store: widget.isStore ? widget.stores![index] : null,
+                index: index,
+                length: length,
+                isCampaign: widget.isCampaign,
+                inStore: widget.inStorePage,
+              ),
+              if (!widget.isStore && widget.items![index] != null)
+                Positioned(
+                  top: 10,
+                  left: 10,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
+                    decoration: BoxDecoration(
+                      color: widget.items![index]!.productType == "Rental" ? Colors.red : Colors.red,
+                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                    ),
+                    child: Text(
+                      widget.items![index]!.productType == "Rental" ? 'Rental' : 'Purchase',
+                      style: robotoRegular.copyWith(color: Colors.white,fontWeight:FontWeight.bold,fontSize: Dimensions.fontSizeExtraSmall),
+                    ),
+                  ),
+                ),
+            ],
           );
         },
       ) : NoDataScreen(
@@ -86,9 +110,6 @@ class _ItemsViewState extends State<ItemsView> {
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisSpacing: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeExtremeLarge : widget.stores != null ? Dimensions.paddingSizeLarge : Dimensions.paddingSizeLarge,
           mainAxisSpacing: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeLarge : widget.stores != null ? Dimensions.paddingSizeLarge : Dimensions.paddingSizeSmall,
-          // childAspectRatio: ResponsiveHelper.isDesktop(context) && widget.isStore ? (1/0.6)
-          //     : ResponsiveHelper.isMobile(context) ? widget.isStore ? 2 : 3.8
-          //     : 3,
           mainAxisExtent: ResponsiveHelper.isDesktop(context) && widget.isStore ? 220
               : ResponsiveHelper.isMobile(context) ? widget.isStore ? 200 : 110
               : 110,
@@ -111,7 +132,7 @@ class _ItemsViewState extends State<ItemsView> {
 }
 
 class NewOnShimmerView extends StatelessWidget {
-  const NewOnShimmerView({super.key, });
+  const NewOnShimmerView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +140,6 @@ class NewOnShimmerView extends StatelessWidget {
       padding: EdgeInsets.zero,
       child: Stack(children: [
         Container(
-          // width: fromAllStore ?  MediaQuery.of(context).size.width : 260,
           decoration: BoxDecoration(
             color: Colors.grey[300],
             borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
@@ -229,4 +249,3 @@ class NewOnShimmerView extends StatelessWidget {
     );
   }
 }
-

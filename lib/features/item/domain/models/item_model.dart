@@ -101,7 +101,6 @@ class Item {
   List<String>? genericName;
   String? deliveryTime;
   String? userName;
-
   Item({
     this.id,
     this.name,

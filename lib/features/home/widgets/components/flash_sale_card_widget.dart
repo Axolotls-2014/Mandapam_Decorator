@@ -95,7 +95,7 @@ class _FlashSaleCardState extends State<FlashSaleCard> {
               tag: "image$index",
               child: InkWell(
                 hoverColor: Colors.transparent,
-                onTap: widget.soldOut ? null : () => Get.find<ItemController>().navigateToItemPage(activeProduct.item, context),
+                // onTap: widget.soldOut ? null : () => Get.find<ItemController>().navigateToItemPage(activeProduct.item, context),
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.2), width: 2),

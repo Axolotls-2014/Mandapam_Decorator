@@ -461,7 +461,6 @@ class PharmacyCategoryShimmer extends StatelessWidget {
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(100), topRight: Radius.circular(100)),
               ),
               child: Column(children: [
-
                 Container(
                   height: 60, width: double.infinity,
                   margin: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
@@ -471,7 +470,6 @@ class PharmacyCategoryShimmer extends StatelessWidget {
                   )
                 ),
                 const SizedBox(height: Dimensions.paddingSizeSmall),
-
                 Expanded(
                   child: Container(
                     height: 10, width: 50,

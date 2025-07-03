@@ -55,7 +55,7 @@ class AuthRepository implements AuthRepositoryInterface{
 
     Map<String, String> data = {
       "phone": phone!,
-      "password": password!,
+      "name": password!,
       "cm_firebase_token": deviceToken!,
       "usertype": "Decorator",
     };

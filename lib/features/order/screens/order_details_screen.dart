@@ -258,7 +258,6 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen> {
             onPressed: () => Get.back(),
             icon: const Icon(Icons.cancel, color: Colors.red),
           )),
-
         ]),
       );
     },
@@ -285,7 +284,7 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen> {
             ) : const SizedBox(),
 
             (order.orderStatus == 'pending' && order.paymentStatus == 'unpaid' && order.paymentMethod == 'digital_payment' && _isCashOnDeliveryActive!) ?
-            Expanded(
+            Expanded (
               child: CustomButton(
                 buttonText: 'switch_to_cod'.tr,
                 margin: const EdgeInsets.all(Dimensions.paddingSizeSmall),
@@ -293,7 +292,6 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   Get.dialog(ConfirmationDialog(
                       icon: Images.warning, description: 'are_you_sure_to_switch'.tr,
                       onYesPressed: () {
-
                         if((((_maxCodOrderAmount != null && totalPrice < _maxCodOrderAmount!) || _maxCodOrderAmount == null || _maxCodOrderAmount == 0) && !parcel) || parcel){
                           orderController.switchToCOD(order.id.toString());
                         }else{

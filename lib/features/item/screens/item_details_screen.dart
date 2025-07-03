@@ -43,7 +43,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   @override
   void initState() {
     super.initState();
-
     Get.find<ItemController>().getProductDetails(widget.item!);
     Get.find<ItemController>().setSelect(0, false);
   }
@@ -98,7 +97,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                   if (itemController.addOnActiveList[index]) {
                     addonsCost = addonsCost + (itemController.item!.addOns![index].price! * itemController.addOnQtyList[index]!);
                     addOnIdList.add(AddOn(id: itemController.item!.addOns![index].id, quantity: itemController.addOnQtyList[index]));
-                        addOnsList.add(itemController.item!.addOns![index]);
+                    addOnsList.add(itemController.item!.addOns![index]);
                   }
                 }
 
@@ -136,13 +135,43 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                       child: Center(child: SizedBox(width: Dimensions.webMaxWidth, child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ItemImageViewWidget(item: itemController.item, isCampaign: widget.isCampaign ?? false),
+                          Stack(
+                            children: [
+                              ItemImageViewWidget(item: itemController.item, isCampaign: widget.isCampaign ?? false),
+                              if (itemController.item?.productType != null)
+                                Positioned(
+                                  top: 15,
+                                  left: 15,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
+                                    decoration: BoxDecoration(
+                                      color: itemController.item!.productType == "Rental" ? Colors.red : Colors.red,
+                                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                    ),
+                                    child: Text(
+                                      itemController.item!.productType == "Rental" ? 'Rental' : 'Purchase',
+                                      style: robotoRegular.copyWith(color: Colors.white, fontWeight:FontWeight.bold, fontSize: Dimensions.fontSizeExtraSmall),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
                           const SizedBox(height: 20),
-
                           Builder(
                               builder: (context) {
+                                print('Item being passed to ItemTitleViewWidget:');
+                                print('Item ID: ${itemController.item?.id}');
+                                print('Item Name: ${itemController.item?.name}');
+                                print('Item Name: ${itemController.item?.userName}');
+                                print('Item Price: ${itemController.item?.price}');
+                                print('Item Stock: $stock');
+                                print('Is Campaign: ${itemController.item?.availableDateStarts != null}');
+                                print('In Stock: ${!(Get.find<SplashController>().configModel!.moduleConfig!.module!.stock! && stock! <= 0)}');
+
                                 return ItemTitleViewWidget(
-                                  item: itemController.item, inStorePage: widget.inStorePage, isCampaign: itemController.item!.availableDateStarts != null,
+                                  item: itemController.item,
+                                  inStorePage: widget.inStorePage,
+                                  isCampaign: itemController.item!.availableDateStarts != null,
                                   inStock: (Get.find<SplashController>().configModel!.moduleConfig!.module!.stock! && stock! <= 0),
                                 );
                               }

@@ -27,7 +27,6 @@ class ViewMediaScreen extends StatefulWidget {
   _ViewMediaScreenState createState() => _ViewMediaScreenState();
 }
 
-
 class _ViewMediaScreenState extends State<ViewMediaScreen> {
   late ApiService apiService;
   List<Map<String, dynamic>>? events;
@@ -79,7 +78,6 @@ class _ViewMediaScreenState extends State<ViewMediaScreen> {
   Future<void> _fetchUserId() async {
     authController = Get.find<AuthController>();
     globalUserId = await authController.getUserId();
-
     if (globalUserId != null) {
       print("Stored_User_ID: $globalUserId");
     } else {
