@@ -77,8 +77,6 @@ class AppConstants {
 
   static const String storeDetailsUri = '/api/v1/stores/details/';
 
-
-
   static const String basicCampaignUri = '/api/v1/campaigns/basic';
   static const String itemCampaignUri = '/api/v1/campaigns/item';
   static const String basicCampaignDetailsUri = '/api/v1/campaigns/basic-campaign-details?basic_campaign_id=';

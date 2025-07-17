@@ -149,6 +149,9 @@ class SignInScreenState extends State<SignInScreen> {
                                 ),
                                 const SizedBox(height: Dimensions.paddingSizeLarge),
                                 Row(children: [
+
+
+
                                   // Expanded(
                                   //   child: ListTile(
                                   //     onTap: () => authController.toggleRememberMe(),
@@ -165,10 +168,6 @@ class SignInScreenState extends State<SignInScreen> {
                                   //     horizontalTitleGap: 0,
                                   //   ),
                                   // ),
-
-
-
-
 
 
                                   TextButton(
@@ -214,6 +213,7 @@ class SignInScreenState extends State<SignInScreen> {
                                       child: Text('sign_up'.tr, style: robotoMedium.copyWith(color: Theme.of(context).primaryColor)),
                                     ),
                                   ),
+
                                 ]),
                                 const SizedBox(height: Dimensions.paddingSizeSmall),
 
@@ -246,7 +246,8 @@ class SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                   );
-              }),
+                }
+              ),
             ),
           ),
         ),
@@ -266,7 +267,7 @@ class SignInScreenState extends State<SignInScreen> {
         showCustomSnackBar('enter_phone_number'.tr);
       }else if (!phoneValid.isValid) {
         showCustomSnackBar('invalid_phone_number'.tr);
-      }else if (password.isEmpty) {
+      } else if (password.isEmpty) {
         showCustomSnackBar('enter_password'.tr);
       }else if (password.length < 6) {
         showCustomSnackBar('password_should_be'.tr);

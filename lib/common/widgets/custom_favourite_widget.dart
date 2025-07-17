@@ -24,11 +24,9 @@ class CustomFavouriteWidget extends StatefulWidget {
 class _CustomFavouriteWidgetState extends State<CustomFavouriteWidget> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
 
-
   @override
   void initState() {
     super.initState();
-
     _controller = AnimationController(
       duration: const Duration(milliseconds: 200),
       vsync: this,
@@ -38,8 +36,8 @@ class _CustomFavouriteWidgetState extends State<CustomFavouriteWidget> with Sing
 
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+    super.dispose();
   }
 
   @override

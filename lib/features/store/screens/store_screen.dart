@@ -656,34 +656,34 @@ class _StoreScreenState extends State<StoreScreen> {
                   padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeExtraSmall),
                   child: Column(
                     children: [
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall),
-                      //   child: Row(children: [
-                      //     Text('all_products'.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeDefault)),
-                      //     const Expanded(child: SizedBox()),
-                      //
-                      //     !ResponsiveHelper.isDesktop(context) ? InkWell(
-                      //       onTap: ()=> Get.toNamed(RouteHelper.getSearchStoreItemRoute(store!.id)),
-                      //       child: Container(
-                      //         decoration: BoxDecoration(
-                      //           borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                      //           color: Theme.of(context).primaryColor.withOpacity(0.1),
-                      //         ),
-                      //         padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                      //         child: Icon(Icons.search, size: 28, color: Theme.of(context).primaryColor),
-                      //       ),
-                      //     ) : const SizedBox(),
-                      //
-                      //     storeController.type.isNotEmpty ? VegFilterWidget(
-                      //         type: storeController.type,
-                      //         onSelected: (String type) {
-                      //           storeController.getStoreItemList(storeController.store!.id, 1, type, true);
-                      //         },
-                      //     ) : const SizedBox(),
-                      //
-                      //   ]),
-                      // ),
-                      // const SizedBox(height: Dimensions.paddingSizeSmall),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall),
+                        child: Row(children: [
+                          Text('all_products'.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeDefault)),
+                          const Expanded(child: SizedBox()),
+
+                          // !ResponsiveHelper.isDesktop(context) ? InkWell(
+                          //   onTap: ()=> Get.toNamed(RouteHelper.getSearchStoreItemRoute(store!.id)),
+                          //   child: Container(
+                          //     decoration: BoxDecoration(
+                          //       borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                          //       color: Theme.of(context).primaryColor.withOpacity(0.1),
+                          //     ),
+                          //     padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                          //     child: Icon(Icons.search, size: 28, color: Theme.of(context).primaryColor),
+                          //   ),
+                          // ) : const SizedBox(),
+
+                          storeController.type.isNotEmpty ? VegFilterWidget(
+                              type: storeController.type,
+                              onSelected: (String type) {
+                                storeController.getStoreItemList(storeController.store!.id, 1, type, true);
+                              },
+                          ) : const SizedBox(),
+
+                        ]),
+                      ),
+                      const SizedBox(height: Dimensions.paddingSizeSmall),
 
                       SizedBox(
                         height: 30,

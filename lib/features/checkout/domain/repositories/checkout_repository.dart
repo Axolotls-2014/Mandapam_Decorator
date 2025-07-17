@@ -16,8 +16,12 @@ class CheckoutRepository implements CheckoutRepositoryInterface {
   Future<int> getDmTipMostTapped() async {
     int mostDmTipAmount = 0;
     Response response = await apiClient.getData(AppConstants.mostTipsUri);
+
     if (response.statusCode == 200) {
-      mostDmTipAmount = response.body['most_tips_amount'];
+      final dynamic tipAmount = response.body['most_tips_amount'];
+      if (tipAmount != null && tipAmount is int) {
+        mostDmTipAmount = tipAmount;
+      }
     }
     return mostDmTipAmount;
   }

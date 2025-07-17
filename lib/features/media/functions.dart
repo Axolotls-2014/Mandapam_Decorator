@@ -22,6 +22,7 @@ class ApiService {
   }) async {
     final token = sharedPreferences.getString(AppConstants.token);
     const String url = 'https://mandapam.co/api/v1/events/addMedia';
+
     final Map<String, String> headers = {
       'Authorization': 'Bearer $token',
     };

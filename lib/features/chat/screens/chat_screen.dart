@@ -99,40 +99,50 @@ class _ChatScreenState extends State<ChatScreen> {
         },
         child: Scaffold(
           endDrawer: const MenuDrawer(),endDrawerEnableOpenDragGesture: false,
-          appBar: (ResponsiveHelper.isDesktop(context) ? const WebMenuBar() : AppBar(
-            leading: IconButton(
-              onPressed: () {
-                if(widget.fromNotification) {
-                  Get.offAllNamed(RouteHelper.getInitialRoute());
-                }else {
-                  Get.back();
-                }
-              },
-              icon: const Icon(Icons.arrow_back_ios),
-            ),
-            title: Text(chatController.messageModel != null ? '${chatController.messageModel!.conversation!.receiver!.fName}'
-                ' ${chatController.messageModel!.conversation!.receiver!.lName}' : 'receiver_name'.tr),
-            backgroundColor: Theme.of(context).primaryColor,
-            actions: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: 40, height: 40, alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    border: Border.all(width: 2,color: Theme.of(context).cardColor),
-                    color: Theme.of(context).cardColor,
+            appBar: (ResponsiveHelper.isDesktop(context) ? const WebMenuBar() : AppBar(
+              leading: IconButton(
+                onPressed: () {
+                  if (widget.fromNotification) {
+                    Get.offAllNamed(RouteHelper.getInitialRoute());
+                  } else {
+                    Get.back();
+                  }
+                },
+                icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+              ),
+              title: Text(
+                widget.user != null && widget.user!.fName != null
+                    ? widget.user!.fName!
+                    : 'receiver_name'.tr,
+                style: const TextStyle(color: Colors.white),
+              ),
+              backgroundColor: Theme.of(context).primaryColor,
+              actions: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      border: Border.all(width: 2, color: Theme.of(context).cardColor),
+                      color: Theme.of(context).cardColor,
+                    ),
+                    child: ClipOval(
+                      child: CustomImage(
+                        image: '${chatController.messageModel != null ? chatController.messageModel!.conversation!.receiver!.imageFullUrl : ''}',
+                        fit: BoxFit.cover,
+                        height: 40,
+                        width: 40,
+                      ),
+                    ),
                   ),
-                  child: ClipOval(child: CustomImage(
-                    image: '${chatController.messageModel != null ? chatController.messageModel!.conversation!.receiver!.imageFullUrl : ''}',
-                    fit: BoxFit.cover, height: 40, width: 40,
-                  )),
-                ),
-              )
-            ],
-          )),
+                )
+              ],
+            )),
 
-          body: isLoggedIn ? SafeArea(
+            body: isLoggedIn ? SafeArea(
             child: Center(
               child: SizedBox(
                 width: ResponsiveHelper.isDesktop(context) ? Dimensions.webMaxWidth : MediaQuery.of(context).size.width,
@@ -267,7 +277,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
                         Expanded(
                           child: TextField(
-                            inputFormatters: [LengthLimitingTextInputFormatter(Dimensions.messageInputLength)],
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(Dimensions.messageInputLength),
+                              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')),
+                            ],
                             controller: _inputMessageController,
                             textCapitalization: TextCapitalization.sentences,
                             style: robotoRegular,
@@ -281,14 +294,14 @@ class _ChatScreenState extends State<ChatScreen> {
                             onSubmitted: (String newText) {
                               if(newText.trim().isNotEmpty && !Get.find<ChatController>().isSendButtonActive) {
                                 Get.find<ChatController>().toggleSendButtonActivity();
-                              }else if(newText.isEmpty && Get.find<ChatController>().isSendButtonActive) {
+                              } else if(newText.isEmpty && Get.find<ChatController>().isSendButtonActive) {
                                 Get.find<ChatController>().toggleSendButtonActivity();
                               }
                             },
                             onChanged: (String newText) {
                               if(newText.trim().isNotEmpty && !Get.find<ChatController>().isSendButtonActive) {
                                 Get.find<ChatController>().toggleSendButtonActivity();
-                              }else if(newText.isEmpty && Get.find<ChatController>().isSendButtonActive) {
+                              } else if(newText.isEmpty && Get.find<ChatController>().isSendButtonActive) {
                                 Get.find<ChatController>().toggleSendButtonActivity();
                               }
                             },

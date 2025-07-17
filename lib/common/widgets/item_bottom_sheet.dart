@@ -196,7 +196,7 @@ class _ItemBottomSheetState extends State<ItemBottomSheet> {
                                 onTap: () {
                                   if(widget.inStorePage) {
                                     Get.back();
-                                  }else {
+                                  } else {
                                     Get.back();
                                     Get.find<CartController>().forcefullySetModule(widget.item!.moduleId!);
                                     Get.toNamed(
