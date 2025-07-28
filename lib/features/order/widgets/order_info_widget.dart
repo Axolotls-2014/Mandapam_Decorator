@@ -567,15 +567,15 @@ class OrderInfoWidget extends StatelessWidget {
                 }, icon: const Icon(Icons.directions), label: Text('direction'.tr),
                 ) : const SizedBox(),
 
-                (showChatPermission && !parcel && order.orderStatus != 'delivered' && order.orderStatus != 'failed' && order.orderStatus != 'canceled' && order.orderStatus != 'refunded') ? InkWell(
-                  onTap: () async {
-                    await Get.toNamed(RouteHelper.getChatRoute(
-                      notificationBody: NotificationBodyModel(orderId: order.id, restaurantId: order.store!.vendorId),
-                      user: User(id: order.store!.vendorId, fName: order.store!.userName, lName: '', imageFullUrl: order.store!.logoFullUrl),
-                    ));
-                  },
-                  child: Image.asset(Images.chatOrderDetails, height: 20, width: 20),
-                ) : const SizedBox(),
+                // (showChatPermission && !parcel && order.orderStatus != 'delivered' && order.orderStatus != 'failed' && order.orderStatus != 'canceled' && order.orderStatus != 'refunded') ? InkWell(
+                //   onTap: () async {
+                //     await Get.toNamed(RouteHelper.getChatRoute(
+                //       notificationBody: NotificationBodyModel(orderId: order.id, restaurantId: order.store!.vendorId),
+                //       user: User(id: order.store!.vendorId, fName: order.store!.userName, lName: '', imageFullUrl: order.store!.logoFullUrl),
+                //     ));
+                //   },
+                //   child: Image.asset(Images.chatOrderDetails, height: 20, width: 20),
+                // ) : const SizedBox(),
 
                 !isGuestLoggedIn && (Get.find<SplashController>().configModel!.refundActiveStatus! && order.orderStatus == 'delivered' && !parcel
                 && (parcel || (orderController.orderDetails!.isNotEmpty && orderController.orderDetails![0].itemCampaignId == null))) ? InkWell(
@@ -595,7 +595,28 @@ class OrderInfoWidget extends StatelessWidget {
           ),
           const SizedBox(height: Dimensions.paddingSizeSmall),
 
-          isDesktop ? const SizedBox(height: Dimensions.paddingSizeSmall) : const SizedBox(),
+        isDesktop ? const SizedBox(height: Dimensions.paddingSizeDefault) : const SizedBox(),
+        isDesktop ? Text('contact_details'.tr, style: robotoMedium) : const SizedBox(),
+        isDesktop ? const SizedBox(height: Dimensions.paddingSizeDefault) : const SizedBox(),
+        SizedBox(
+          width: double.infinity,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(isDesktop ? Dimensions.radiusDefault : 0),
+              boxShadow: isDesktop ? const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1)] : [],
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge, vertical: Dimensions.paddingSizeSmall),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text('contact_details'.tr, style: robotoMedium),
+              const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+              Text(Get.find<SplashController>().configModel!.phone ?? '', style: robotoRegular),
+            ]),
+          ),
+        ),
+        const SizedBox(height: Dimensions.paddingSizeSmall),
+
+        isDesktop ? const SizedBox(height: Dimensions.paddingSizeSmall) : const SizedBox(),
           isDesktop ? Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

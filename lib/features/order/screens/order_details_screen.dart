@@ -185,7 +185,6 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen> {
               physics: const BouncingScrollPhysics(),
               child: FooterView(child: SizedBox(width: Dimensions.webMaxWidth, child: Column (
                 children: [
-
                 ResponsiveHelper.isDesktop(context) ?
                   Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Expanded(

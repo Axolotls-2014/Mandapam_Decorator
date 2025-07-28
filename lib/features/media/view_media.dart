@@ -6,6 +6,8 @@ import 'package:photo_view/photo_view_gallery.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sixam_mart/common/widgets/custom_app_bar.dart';
 import 'package:sixam_mart/features/auth/controllers/auth_controller.dart';
+import 'package:sixam_mart/features/dashboard/screens/dashboard_screen.dart';
+import 'package:sixam_mart/features/media/add_media.dart';
 import 'package:sixam_mart/features/media/functions.dart';
 import 'package:sixam_mart/helper/auth_helper.dart';
 import 'package:sixam_mart/common/widgets/not_logged_in_screen.dart';
@@ -15,11 +17,9 @@ import 'package:get/get.dart';
 class ViewMediaScreen extends StatefulWidget {
   final SharedPreferences sharedPreferences;
   final bool fromDashboard;
-  // final String batchId;
 
   ViewMediaScreen({
     required this.sharedPreferences,
-    // required this.batchId,
     this.fromDashboard = false,
   });
 
@@ -113,7 +113,6 @@ class _ViewMediaScreenState extends State<ViewMediaScreen> {
     setState(() {
       isFetchingMedia = true;
     });
-
     final response = await apiService.getMediaByUserAndEvent(
       userId: userId,
       eventId: eventId,
@@ -162,12 +161,59 @@ class _ViewMediaScreenState extends State<ViewMediaScreen> {
     });
   }
 
+  void _openAddMediaScreen() {
+    if (selectedEventIndex != null &&
+        selectedEventIndex! < eventIds.length &&
+        selectedEventIndex! < eventNames.length) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AddMediaScreen(
+            sharedPreferences: widget.sharedPreferences,
+            eventId: eventIds[selectedEventIndex!],
+            eventName: eventNames[selectedEventIndex!],
+          ),
+        ),
+      ).then((value) {
+        if (value == true && globalUserId != null && selectedEventIndex != null) {
+          try {
+            int userId = int.parse(globalUserId!);
+            fetchMediaByUserAndEvent(userId, eventIds[selectedEventIndex!]);
+          } catch (e) {
+            print("Error: Could not convert globalUserId to int");
+          }
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey.shade200,
-      appBar: CustomAppBar(title: 'View Media', backButton: widget.fromDashboard ? false : true),
+      // appBar: CustomAppBar(title: 'View Media', backButton: widget.fromDashboard ? false : true),
+      appBar: CustomAppBar(
+        title: 'View Media',
+        backButton: !widget.fromDashboard,
+        onBackPressed: () {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const DashboardScreen(pageIndex: 4),
+            ),
+                (route) => false,
+          );
+        },
+      ),
+      floatingActionButton: AuthHelper.isLoggedIn() && eventIds.isNotEmpty
+          ? FloatingActionButton(
+        onPressed: _openAddMediaScreen,
+        child: Icon(Icons.add_circle_outline_outlined),
+        backgroundColor: Theme.of(context).primaryColor,
+      )
+          : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: AuthHelper.isLoggedIn()
           ? isLoading
           ? Container(
@@ -178,18 +224,18 @@ class _ViewMediaScreenState extends State<ViewMediaScreen> {
             child: CircularProgressIndicator(),
           ),
         ),
-      ) : SingleChildScrollView(
+      )
+          : SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            // Search Bar
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
               child: TextField(
                 controller: searchController,
                 decoration: InputDecoration(
                   hintText: 'Search media by name...',
-                  hintStyle: TextStyle(fontSize: 14), // Adjust hint text size
+                  hintStyle: TextStyle(fontSize: 14),
                   prefixIcon: Icon(Icons.search),
                   suffixIcon: searchController.text.isNotEmpty
                       ? IconButton(
@@ -357,7 +403,8 @@ class _VideoPreviewWidgetState extends State<VideoPreviewWidget> {
                 ),
               ),
             ),
-          ) : Container(),
+          )
+              : Container(),
         ),
         Positioned(
           top: 8,
@@ -414,7 +461,7 @@ class _VideoFullScreenWidgetState extends State<VideoFullScreenWidget> {
         )
             : Container(),
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Added margins
+          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: VideoProgressIndicator(
             _controller,
             allowScrubbing: true,
@@ -545,220 +592,6 @@ class _FullScreenMediaViewerState extends State<FullScreenMediaViewer> with Widg
       }
     }
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   final media = widget.mediaList[currentIndex];
-  //   final String? title = media['title']?.trim().isNotEmpty == true ? media['title'] : 'Media';
-  //   final bool isVideo = media['media_type'] == 'video';
-  //   final String mediaId = media['media_id'].toString();
-  //
-  //   return WillPopScope(
-  //     onWillPop: _onWillPop,
-  //     child: Scaffold(
-  //       backgroundColor: Colors.black,
-  //       appBar: AppBar(
-  //         backgroundColor: Colors.black,
-  //         iconTheme: IconThemeData(color: Colors.white),
-  //         title: title != null
-  //             ? Text(title, style: TextStyle(color: Colors.white, fontSize: 18))
-  //             : null,
-  //         actions: [
-  //           IconButton(
-  //             icon: Icon(_isLandscape ? Icons.screen_lock_portrait : Icons.screen_lock_landscape,
-  //                 color: Colors.white, size: 20),
-  //             onPressed: _toggleOrientation,
-  //           ),
-  //           IconButton(
-  //             icon: Icon(Icons.delete, color: Colors.white, size: 20),
-  //             onPressed: () async {
-  //               final shouldDelete = await showDialog<bool>(
-  //                 context: context,
-  //                 builder: (context) => AlertDialog(
-  //                   title: Text("Confirm Deletion"),
-  //                   content: Text("Are you sure you want to delete this media?"),
-  //                   actions: [
-  //                     TextButton(
-  //                       onPressed: () => Navigator.pop(context, false),
-  //                       child: Text("Cancel"),
-  //                     ),
-  //                     TextButton(
-  //                       onPressed: () => Navigator.pop(context, true),
-  //                       child: Text("Confirm"),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ) ?? false;
-  //
-  //               if (shouldDelete && mounted) {
-  //                 showDialog(
-  //                   context: context,
-  //                   barrierDismissible: false,
-  //                   builder: (context) => AlertDialog(
-  //                     content: Row(
-  //                       children: [
-  //                         CircularProgressIndicator(),
-  //                         SizedBox(width: 20),
-  //                         Text("Deleting media..."),
-  //                       ],
-  //                     ),
-  //                   ),
-  //                 );
-  //                 await deleteMediaFromUI(mediaId);
-  //               }
-  //             },
-  //           ),
-  //         ],
-  //       ),
-  //       body: Stack(
-  //         children: [
-  //           PageView.builder(
-  //             itemCount: widget.mediaList.length,
-  //             controller: _pageController,
-  //             physics: BouncingScrollPhysics(),
-  //             onPageChanged: (index) {
-  //               if (mounted) {
-  //                 setState(() {
-  //                   currentIndex = index;
-  //                   _videoController?.dispose();
-  //                   _videoController = null;
-  //                   _initializeVideoController();
-  //                 });
-  //               }
-  //             },
-  //             itemBuilder: (context, index) {
-  //               final media = widget.mediaList[index];
-  //               if (media['media_type'] == 'photo' && media['image_full_url'] != null) {
-  //                 return Center(
-  //                   child: SizedBox(
-  //                     width: MediaQuery.of(context).size.width * 0.8,
-  //                     height: MediaQuery.of(context).size.height * 0.8,
-  //                     child: PhotoView(
-  //                       imageProvider: NetworkImage(media['image_full_url']!),
-  //                       initialScale: PhotoViewComputedScale.contained,
-  //                       minScale: PhotoViewComputedScale.contained * 0.5,
-  //                       maxScale: PhotoViewComputedScale.covered * 2,
-  //                       backgroundDecoration: BoxDecoration(color: Colors.black),
-  //                     ),
-  //                   ),
-  //                 );
-  //               } else if (media['media_type'] == 'video' && media['image_full_url'] != null) {
-  //                 double _scale = 1.0;
-  //                 Matrix4 _matrix = Matrix4.identity();
-  //
-  //                 return Center(
-  //                   child: _videoController != null && _videoController!.value.isInitialized
-  //                       ? Column(
-  //                     mainAxisAlignment: MainAxisAlignment.center,
-  //                     children: [
-  //                       SizedBox(
-  //                         width: MediaQuery.of(context).size.width,
-  //                         height: _isLandscape
-  //                             ? MediaQuery.of(context).size.height * 0.7
-  //                             : _videoController!.value.size.height > MediaQuery.of(context).size.height
-  //                             ? _videoController!.value.size.height
-  //                             : MediaQuery.of(context).size.height * 0.3,
-  //                         child: GestureDetector(
-  //                           onTap: _toggleOrientation,
-  //                           onScaleStart: (ScaleStartDetails details) {},
-  //                           onScaleUpdate: (ScaleUpdateDetails details) {
-  //                             if (mounted) {
-  //                               setState(() {
-  //                                 _scale = details.scale.clamp(1.0, 3.0);
-  //                                 _matrix = Matrix4.identity()
-  //                                   ..scale(_scale, _scale, 1.0);
-  //                               });
-  //                             }
-  //                           },
-  //                           onDoubleTap: () {
-  //                             if (mounted) {
-  //                               setState(() {
-  //                                 _scale = 1.0;
-  //                                 _matrix = Matrix4.identity();
-  //                               });
-  //                             }
-  //                           },
-  //                           child: ClipRect(
-  //                             child: Transform(
-  //                               transform: _matrix,
-  //                               alignment: Alignment.center,
-  //                               child: VideoPlayer(_videoController!),
-  //                             ),
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     ],
-  //                   )
-  //                       : CircularProgressIndicator(),
-  //                 );
-  //               }
-  //               return SizedBox.shrink();
-  //             },
-  //           ),
-  //           if (_videoController != null && _videoController!.value.isInitialized && isVideo)
-  //             Positioned(
-  //               bottom: 0,
-  //               left: 0,
-  //               right: 0,
-  //               child: Container(
-  //                 color: Colors.black.withOpacity(0.5),
-  //                 padding: EdgeInsets.symmetric(vertical: 8),
-  //                 child: Column(
-  //                   children: [
-  //                     VideoProgressIndicator(
-  //                       _videoController!,
-  //                       allowScrubbing: true,
-  //                       colors: VideoProgressColors(
-  //                         playedColor: Colors.blue,
-  //                         bufferedColor: Colors.grey[300]!,
-  //                         backgroundColor: Colors.grey[600]!,
-  //                       ),
-  //                     ),
-  //                     SizedBox(height: 8),
-  //                     Row(
-  //                       mainAxisAlignment: MainAxisAlignment.center,
-  //                       children: [
-  //                         IconButton(
-  //                           icon: Icon(Icons.replay_5, color: Colors.white, size: 30),
-  //                           onPressed: () {
-  //                             _videoController!.seekTo(
-  //                                 _videoController!.value.position - Duration(seconds: 5));
-  //                           },
-  //                         ),
-  //                         IconButton(
-  //                           icon: Icon(
-  //                             _videoController!.value.isPlaying ? Icons.pause : Icons.play_arrow,
-  //                             color: Colors.white,
-  //                             size: 36,
-  //                           ),
-  //                           onPressed: () {
-  //                             if (mounted) {
-  //                               setState(() {
-  //                                 _videoController!.value.isPlaying
-  //                                     ? _videoController!.pause()
-  //                                     : _videoController!.play();
-  //                               });
-  //                             }
-  //                           },
-  //                         ),
-  //                         IconButton(
-  //                           icon: Icon(Icons.forward_5, color: Colors.white, size: 30),
-  //                           onPressed: () {
-  //                             _videoController!.seekTo(
-  //                                 _videoController!.value.position + Duration(seconds: 5));
-  //                           },
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -919,7 +752,6 @@ class _FullScreenMediaViewerState extends State<FullScreenMediaViewer> with Widg
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     color: Colors.black.withOpacity(0.5),
-
                     child: AnimatedCrossFade(
                       duration: Duration(milliseconds: 200),
                       firstChild: Text(
@@ -1020,7 +852,6 @@ class _FullScreenMediaViewerState extends State<FullScreenMediaViewer> with Widg
     );
   }
 
-
   void _seekToPosition(double dx, double width) {
     if (_videoController != null && _videoController!.value.isInitialized) {
       final relative = dx.clamp(0.0, width) / width;
@@ -1028,10 +859,4 @@ class _FullScreenMediaViewerState extends State<FullScreenMediaViewer> with Widg
       _videoController!.seekTo(position);
     }
   }
-
-
 }
-
-
-
-

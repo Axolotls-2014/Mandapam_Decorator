@@ -167,6 +167,7 @@ class DashboardScreenState extends State<DashboardScreen> {
               List<OrderModel> reversOrder =  List.from(runningOrder.reversed);
               return Scaffold(
                 key: _scaffoldKey,
+
                 body: ExpandableBottomSheet(
                   background: Stack(children: [
                     PageView.builder(

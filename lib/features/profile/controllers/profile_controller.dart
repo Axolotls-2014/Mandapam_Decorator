@@ -26,6 +26,13 @@ class ProfileController extends GetxController implements GetxService {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
+
+
+
+
+
+
+
   Future<void> getUserInfo() async {
     _pickedFile = null;
     _rawFile = null;

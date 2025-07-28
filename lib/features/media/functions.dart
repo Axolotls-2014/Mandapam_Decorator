@@ -38,8 +38,7 @@ class ApiService {
 
     for (var entry in media.entries) {
       if (entry.key.contains('file_path') && entry.value is String) {
-        request.files
-            .add(await http.MultipartFile.fromPath(entry.key, entry.value));
+        request.files.add(await http.MultipartFile.fromPath(entry.key, entry.value));
       } else {
         request.fields[entry.key] = entry.value.toString();
       }

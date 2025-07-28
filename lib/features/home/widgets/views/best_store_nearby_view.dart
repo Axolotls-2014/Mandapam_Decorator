@@ -248,24 +248,24 @@ class BestStoreNearbyView extends StatelessWidget {
                                         discountType: storeController.getDiscountType(storeList[index]),
                                       ),
 
-                                      Positioned(
-                                        bottom: 0, left: 0,
-                                        child: Container(
-                                          width: 90,
-                                          padding: const EdgeInsets.symmetric(vertical: 3),
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context).cardColor,
-                                            borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                          ),
-                                          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-
-                                            Text('${distance > 10 ? '10+' : distance.toStringAsFixed(1)} ${'km'.tr}', style: robotoBold.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeOverSmall)),
-                                            const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                                            Text('from_you'.tr, style: robotoRegular.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeOverSmall)),
-                                          ]),
-                                        ),
-                                      ),
+                                      // Positioned(
+                                      //   bottom: 0, left: 0,
+                                      //   child: Container(
+                                      //     width: 90,
+                                      //     padding: const EdgeInsets.symmetric(vertical: 3),
+                                      //     decoration: BoxDecoration(
+                                      //       color: Theme.of(context).cardColor,
+                                      //       borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                      //     ),
+                                      //     child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                      //
+                                      //       Text('${distance > 10 ? '10+' : distance.toStringAsFixed(1)} ${'km'.tr}', style: robotoBold.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeOverSmall)),
+                                      //       const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                                      //
+                                      //       Text('from_you'.tr, style: robotoRegular.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeOverSmall)),
+                                      //     ]),
+                                      //   ),
+                                      // ),
                                     ]),
                                   ),
                                 ),

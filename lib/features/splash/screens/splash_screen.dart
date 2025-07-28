@@ -116,7 +116,7 @@ class SplashScreenState extends State<SplashScreen> {
         ScaffoldMessenger.of(Get.context!).showSnackBar(SnackBar(
           backgroundColor: isConnected ? Colors.green : Colors.red,
           duration: Duration(seconds: isConnected ? 3 : 6000),
-          content: Text(isConnected ? 'connected'.tr : 'no_connection'.tr,
+          content: Text(isConnected ? 'connected'.tr : 'No internet connection',
               textAlign: TextAlign.center),
         ));
         if (isConnected) {
@@ -257,20 +257,45 @@ class SplashScreenState extends State<SplashScreen> {
     }
   }
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     key: _globalKey,
+  //     body: Center(
+  //       child: Padding(
+  //         padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
+  //         child: Column(mainAxisSize: MainAxisSize.min, children: [
+  //           Image.asset(Images.logo, width: 300),
+  //           const SizedBox(height: Dimensions.paddingSizeSmall),
+  //           Text('suffix_name'.tr, style: robotoMedium,
+  //               textAlign: TextAlign.center),
+  //         ]),
+  //       ),  ),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _globalKey,
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Image.asset(Images.logo, width: 200),
-            const SizedBox(height: Dimensions.paddingSizeSmall),
-            Text('suffix_name'.tr, style: robotoMedium,
-                textAlign: TextAlign.center),
-          ]),
-        ),  ),
+            padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              Image.asset(Images.logo, width: 300),
+              const SizedBox(height: 10.0),
+              Text(
+                'suffix_name'.tr,
+                style: robotoBold.copyWith(
+                  fontSize: 20,
+                  color: Theme.of(context).primaryColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ])
+        ),
+
+      ),
     );
   }
 }

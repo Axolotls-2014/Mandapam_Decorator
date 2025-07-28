@@ -131,6 +131,7 @@ class SignInScreenState extends State<SignInScreen> {
                                   required: true,
                                   labelText: 'phone'.tr,
                                   validator: (value) => ValidateCheck.validatePhone(value, null),
+                                  maxLength: 10,
                                 ),
                                 const SizedBox(height: Dimensions.paddingSizeExtremeLarge),
 
@@ -146,6 +147,7 @@ class SignInScreenState extends State<SignInScreen> {
                                   required: true,
                                   labelText: 'password'.tr,
                                   validator: (value) => ValidateCheck.validateEmptyText(value, null),
+                                  maxLength: 40,
                                 ),
                                 const SizedBox(height: Dimensions.paddingSizeLarge),
                                 Row(children: [

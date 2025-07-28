@@ -1,5 +1,5 @@
 {
-  "suffix_name": "Decorator",
+  "suffix_name": "DECORATOR",
   "connection_to_api_server_failed": "Connection to API server failed due to internet connection",
   "select_language": "Select Language",
   "save": "Save",
@@ -294,6 +294,7 @@
   "variations": "Variations",
   "restaurant_details": "Restaurant Details",
   "store_details": "Store Details",
+  "contact_details": "Support Details",
   "direction": "Direction",
   "restaurant_is_closed_now": "Restaurant is closed now",
   "store_is_closed_now": "Store is closed now",
@@ -456,7 +457,6 @@
   "terms_and_condition": "Terms & Conditions",
   "add_address": "Add Address",
   "subscribed_successfully": "Subscribed successfully",
-
   "landing_page_texts": "Landing Page Texts",
   "more_than_just_a_reliable_ecommerce_platform": "More than just a reliable e-commerce platform",
   "choose_your_location_to_start_shopping": "Choose your location to start shopping",
@@ -857,7 +857,7 @@
   "ex_jhon": "Ex: Jhon",
   "ex_doe": "Ex: Doe",
   "enter_email": "Enter Email",
-  "8_character": "8 + Character",
+  "8_character": "Enter Password",
   "enter_refer_code": "Enter refer code",
   "general_information": "General Information",
   "login_info": "Login Info",

@@ -129,23 +129,23 @@ class StoreCard extends StatelessWidget {
                 flex: 2,
                 child: Row(children: [
 
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(Dimensions.radiusExtraLarge),
-                    ),
-                    child: Row(children: [
-
-                      Image.asset(Images.distanceLine, height: 15, width: 15),
-                      const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                      Text('${distance > 100 ? '100+' : distance.toStringAsFixed(2)} ${'km'.tr}', style: robotoBold.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeSmall)),
-                      const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                      Text('from_you'.tr, style: robotoRegular.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeSmall)),
-                    ]),
-                  ),
+                  // Container(
+                  //   padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: 3),
+                  //   decoration: BoxDecoration(
+                  //     color: Theme.of(context).primaryColor.withOpacity(0.1),
+                  //     borderRadius: BorderRadius.circular(Dimensions.radiusExtraLarge),
+                  //   ),
+                  //   child: Row(children: [
+                  //
+                  //     Image.asset(Images.distanceLine, height: 15, width: 15),
+                  //     const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                  //
+                  //     Text('${distance > 100 ? '100+' : distance.toStringAsFixed(2)} ${'km'.tr}', style: robotoBold.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeSmall)),
+                  //     const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                  //
+                  //     Text('from_you'.tr, style: robotoRegular.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeSmall)),
+                  //   ]),
+                  // ),
                   const Spacer(),
 
                   Container(

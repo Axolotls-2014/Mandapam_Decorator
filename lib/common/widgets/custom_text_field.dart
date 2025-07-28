@@ -42,6 +42,7 @@ class CustomTextField extends StatefulWidget {
   final String? Function(String?)? validator;
   final double? labelTextSize;
   final Widget? suffixChild;
+  final int? maxLength;
 
   const CustomTextField({
     super.key,
@@ -77,6 +78,7 @@ class CustomTextField extends StatefulWidget {
     this.validator,
     this.labelTextSize,
     this.suffixChild,
+    this.maxLength,
   });
 
   @override

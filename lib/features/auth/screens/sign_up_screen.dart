@@ -290,6 +290,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                                 required: true,
                                 labelTextSize: Dimensions.fontSizeDefault,
                                 validator: (value) => ValidateCheck.validateEmptyText(value, null),
+                                maxLength: 20,
                               ),
                             ),
                             const SizedBox(width: Dimensions.paddingSizeSmall),
@@ -307,6 +308,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                                 required: true,
                                 labelTextSize: Dimensions.fontSizeDefault,
                                 validator: (value) => ValidateCheck.validateEmptyText(value, null),
+                                maxLength: 20,
                               ),
                             )
                           ]),
@@ -324,6 +326,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                                 prefixImage: Images.mail,
                                 required: true,
                                 validator: (value) => ValidateCheck.validateEmail(value),
+                                maxLength: 30,
                               ),
                             ) : const SizedBox(),
                             SizedBox(width: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeSmall : 0),
@@ -343,6 +346,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                                     : Get.find<LocalizationController>().locale.countryCode,
                                 required: true,
                                 validator: (value) => ValidateCheck.validatePhone(value, null),
+                                maxLength: 10,
                               ),
                             ),
                           ]),
@@ -362,6 +366,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                                 prefixIcon: Icons.mail,
                                 required: true,
                                 validator: (value) => ValidateCheck.validateEmptyText(value, null),
+                                maxLength: 30,
                               ),
                               // const SizedBox(height: 4),
                               // const Text(
@@ -387,6 +392,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                                   isPassword: true,
                                   required: true,
                                   validator: (value) => ValidateCheck.validateEmptyText(value, null),
+                                  maxLength: 12,
                                 ),
 
                               ]),
@@ -406,6 +412,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                               onSubmit: (text) => (GetPlatform.isWeb) ? _register(authController, _countryDialCode!) : null,
                               required: true,
                               validator: (value) => ValidateCheck.validateEmptyText(value, null),
+                              maxLength: 12,
                             )) : const SizedBox()
 
                           ]),
@@ -424,6 +431,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                             onSubmit: (text) => (GetPlatform.isWeb) ? _register(authController, _countryDialCode!) : null,
                             required: true,
                             validator: (value) => ValidateCheck.validateEmptyText(value, null),
+                            maxLength: 12,
                           ) : const SizedBox(),
                           SizedBox(height: !ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeLarge : 0),
 
@@ -437,6 +445,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                             capitalization: TextCapitalization.words,
                             prefixImage: Images.referCode,
                             prefixSize: 14,
+                            maxLength: 20,
                           ) : const SizedBox(),
                           const SizedBox(height: Dimensions.paddingSizeLarge),
                           Align(

@@ -141,26 +141,26 @@ class StoreCardWithDistance extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault),
                       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(vertical: 3, horizontal: Dimensions.paddingSizeSmall),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
-                          ),
-                          child: Row(children: [
-
-                            Image.asset(Images.distanceLine, height: 15, width: 15),
-                            const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                            Text(
-                              '${distance > 100 ? '100+' : distance.toStringAsFixed(2)} ${'km'.tr}',
-                              style: robotoBold.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeExtraSmall),
-                            ),
-                            const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                            Text('from_you'.tr, style: robotoRegular.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeExtraSmall)),
-                          ]),
-                        ),
+                        // Container(
+                        //   padding: const EdgeInsets.symmetric(vertical: 3, horizontal: Dimensions.paddingSizeSmall),
+                        //   decoration: BoxDecoration(
+                        //     color: Theme.of(context).primaryColor.withOpacity(0.1),
+                        //     borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
+                        //   ),
+                        //   child: Row(children: [
+                        //
+                        //     Image.asset(Images.distanceLine, height: 15, width: 15),
+                        //     const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                        //
+                        //     Text(
+                        //       '${distance > 100 ? '100+' : distance.toStringAsFixed(2)} ${'km'.tr}',
+                        //       style: robotoBold.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeExtraSmall),
+                        //     ),
+                        //     const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                        //
+                        //     Text('from_you'.tr, style: robotoRegular.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeExtraSmall)),
+                        //   ]),
+                        // ),
 
                         CustomButton(
                           height: 30, width: fromAllStore? 70 : 65,

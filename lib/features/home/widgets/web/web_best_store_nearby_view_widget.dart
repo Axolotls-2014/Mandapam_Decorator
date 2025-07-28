@@ -235,24 +235,24 @@ class _WebBestStoreNearbyViewWidgetState extends State<WebBestStoreNearbyViewWid
 
                                             ]),
 
-                                            Container(
-                                              padding: const EdgeInsets.symmetric(vertical: 3),
-                                              decoration: BoxDecoration(
-                                                color: Theme.of(context).cardColor,
-                                                borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                                // boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1)],
-                                              ),
-                                              child: Row(children: [
-
-                                                Image.asset(Images.distanceLine, height: 15, width: 15),
-                                                const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                                                Text('${distance > 10 ? '10+' : distance.toStringAsFixed(1)} ${'km'.tr}', style: robotoBold.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeExtraSmall)),
-                                                const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                                                Text('from_you'.tr, style: robotoRegular.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeExtraSmall)),
-                                              ]),
-                                            ),
+                                            // Container(
+                                            //   padding: const EdgeInsets.symmetric(vertical: 3),
+                                            //   decoration: BoxDecoration(
+                                            //     color: Theme.of(context).cardColor,
+                                            //     borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                            //     // boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1)],
+                                            //   ),
+                                            //   child: Row(children: [
+                                            //
+                                            //     Image.asset(Images.distanceLine, height: 15, width: 15),
+                                            //     const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                                            //
+                                            //     Text('${distance > 10 ? '10+' : distance.toStringAsFixed(1)} ${'km'.tr}', style: robotoBold.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeExtraSmall)),
+                                            //     const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                                            //
+                                            //     Text('from_you'.tr, style: robotoRegular.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeExtraSmall)),
+                                            //   ]),
+                                            // ),
 
                                           ]),
                                         ),

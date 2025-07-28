@@ -135,14 +135,14 @@ class CategoryView extends StatelessWidget {
                 ): CategoryShimmer(categoryController: categoryController),
               ],
             ),
-
           ],
         );
       });
-    }
+     }
     );
   }
 }
+
 
 class PharmacyCategoryView extends StatelessWidget {
   final CategoryController categoryController;

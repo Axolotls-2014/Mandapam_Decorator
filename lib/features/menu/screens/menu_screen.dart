@@ -114,8 +114,8 @@ class _MenuScreenState extends State<MenuScreen> {
 
                   Container(
                     decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
                       boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1)],
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge, vertical: Dimensions.paddingSizeDefault),
@@ -147,20 +147,20 @@ class _MenuScreenState extends State<MenuScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge, vertical: Dimensions.paddingSizeDefault),
                     margin: const EdgeInsets.all(Dimensions.paddingSizeDefault),
                     child: Column(children: [
-                      PortionWidget(
-                        icon: Images.addmediaIcon,
-                        title: 'Add Media',
-                        onTap: () async {
-                          SharedPreferences prefs = await SharedPreferences.getInstance();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AddMediaScreen(sharedPreferences: prefs),
-                            ),
-                          );
-                        },
-                        route: '',
-                      ),
+                      // PortionWidget(
+                      //   icon: Images.addmediaIcon,
+                      //   title: 'Add Media',
+                      //   onTap: () async {
+                      //     SharedPreferences prefs = await SharedPreferences.getInstance();
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //         builder: (context) => AddMediaScreen(sharedPreferences: prefs),
+                      //       ),
+                      //     );
+                      //   },
+                      //   route: '',
+                      // ),
                       PortionWidget(
                         icon: Images.viewmediaIcon,
                         title: 'View Media',
@@ -179,7 +179,6 @@ class _MenuScreenState extends State<MenuScreen> {
                       ),
                     ]),
                   )
-
                 ]),
 
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -206,13 +205,13 @@ class _MenuScreenState extends State<MenuScreen> {
                       ),
 
                       (Get.find<SplashController>().configModel!.loyaltyPointStatus == 1) ? PortionWidget(
-                          icon: Images.pointIcon, title: 'loyalty_points'.tr, route: RouteHelper.getLoyaltyRoute(),
+                        icon: Images.pointIcon, title: 'loyalty_points'.tr, route: RouteHelper.getLoyaltyRoute(),
                         hideDivider: Get.find<SplashController>().configModel!.customerWalletStatus == 1 ? false : true,
                         suffix: !isLoggedIn ? null : '${profileController.userInfoModel?.loyaltyPoint != null ? profileController.userInfoModel!.loyaltyPoint.toString() : '0'} ${'points'.tr}' ,
                       ) : const SizedBox(),
 
                       (Get.find<SplashController>().configModel!.customerWalletStatus == 1) ? PortionWidget(
-                          icon: Images.walletIcon, title: 'my_wallet'.tr, hideDivider: true, route: RouteHelper.getWalletRoute(),
+                        icon: Images.walletIcon, title: 'my_wallet'.tr, hideDivider: true, route: RouteHelper.getWalletRoute(),
                         suffix: !isLoggedIn ? null : PriceConverter.convertPrice(profileController.userInfoModel != null ? profileController.userInfoModel!.walletBalance : 0),
                       ) : const SizedBox(),
                     ]),
@@ -283,18 +282,18 @@ class _MenuScreenState extends State<MenuScreen> {
                       PortionWidget(icon: Images.privacyIcon, title: 'privacy_policy'.tr, route: RouteHelper.getHtmlRoute('privacy-policy')),
 
                       (Get.find<SplashController>().configModel!.refundPolicyStatus == 1 ) ? PortionWidget(
-                          icon: Images.refundIcon, title: 'refund_policy'.tr, route: RouteHelper.getHtmlRoute('refund-policy'),
+                        icon: Images.refundIcon, title: 'refund_policy'.tr, route: RouteHelper.getHtmlRoute('refund-policy'),
                         hideDivider: (Get.find<SplashController>().configModel!.cancellationPolicyStatus == 1 ) ||
                             (Get.find<SplashController>().configModel!.shippingPolicyStatus == 1 ) ? false : true,
                       ) : const SizedBox(),
 
                       (Get.find<SplashController>().configModel!.cancellationPolicyStatus == 1 ) ? PortionWidget(
-                          icon: Images.cancelationIcon, title: 'cancellation_policy'.tr, route: RouteHelper.getHtmlRoute('cancellation-policy'),
+                        icon: Images.cancelationIcon, title: 'cancellation_policy'.tr, route: RouteHelper.getHtmlRoute('cancellation-policy'),
                         hideDivider: (Get.find<SplashController>().configModel!.shippingPolicyStatus == 1 ) ? false : true,
                       ) : const SizedBox(),
 
                       (Get.find<SplashController>().configModel!.shippingPolicyStatus == 1 ) ? PortionWidget(
-                          icon: Images.shippingIcon, title: 'shipping_policy'.tr, hideDivider: true, route: RouteHelper.getHtmlRoute('shipping-policy'),
+                        icon: Images.shippingIcon, title: 'shipping_policy'.tr, hideDivider: true, route: RouteHelper.getHtmlRoute('shipping-policy'),
                       ) : const SizedBox(),
                     ]),
                   )

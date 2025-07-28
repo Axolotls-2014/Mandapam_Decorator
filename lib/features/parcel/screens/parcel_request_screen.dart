@@ -178,15 +178,15 @@ class _ParcelRequestScreenState extends State<ParcelRequestScreen> {
 
                 CardWidget(child: Row(children: [
                   Expanded(child: Row(children: [
-                    Image.asset(Images.distance, height: 30, width: 30),
-                    const SizedBox(width: Dimensions.paddingSizeSmall),
-                    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Text('distance'.tr, style: robotoRegular),
-                      Text(
-                        parcelController.distance == -1 ? 'calculating'.tr : '${parcelController.distance!.toStringAsFixed(2)} ${'km'.tr}',
-                        style: robotoBold.copyWith(color: Theme.of(context).primaryColor),
-                      ),
-                    ]),
+                    // Image.asset(Images.distance, height: 30, width: 30),
+                    // const SizedBox(width: Dimensions.paddingSizeSmall),
+                    // Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    //   Text('distance'.tr, style: robotoRegular),
+                    //   Text(
+                    //     parcelController.distance == -1 ? 'calculating'.tr : '${parcelController.distance!.toStringAsFixed(2)} ${'km'.tr}',
+                    //     style: robotoBold.copyWith(color: Theme.of(context).primaryColor),
+                    //   ),
+                    // ]),
                   ])),
                   Expanded(child: Row(children: [
                     Image.asset(Images.delivery, height: 30, width: 30),

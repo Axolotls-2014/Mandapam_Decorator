@@ -36,7 +36,7 @@ Future<void> main() async {
   }
   setPathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
-  await disableScreenshots();
+  // await disableScreenshots();
 
 
   /*///Pass all uncaught "fatal" errors from the framework to Crashlytics
