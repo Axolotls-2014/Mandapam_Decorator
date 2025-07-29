@@ -31,7 +31,7 @@ class AuthController extends GetxController implements GetxService {
   bool _acceptTerms = true;
   bool get acceptTerms => _acceptTerms;
 
-  bool _isActiveRememberMe = false;
+  bool _isActiveRememberMe = true;
   bool get isActiveRememberMe => _isActiveRememberMe;
 
   bool _notificationLoading = false;

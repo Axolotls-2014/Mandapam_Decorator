@@ -192,7 +192,6 @@ class _ViewMediaScreenState extends State<ViewMediaScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey.shade200,
-      // appBar: CustomAppBar(title: 'View Media', backButton: widget.fromDashboard ? false : true),
       appBar: CustomAppBar(
         title: 'View Media',
         backButton: !widget.fromDashboard,
@@ -206,14 +205,6 @@ class _ViewMediaScreenState extends State<ViewMediaScreen> {
           );
         },
       ),
-      floatingActionButton: AuthHelper.isLoggedIn() && eventIds.isNotEmpty
-          ? FloatingActionButton(
-        onPressed: _openAddMediaScreen,
-        child: Icon(Icons.add_circle_outline_outlined),
-        backgroundColor: Theme.of(context).primaryColor,
-      )
-          : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: AuthHelper.isLoggedIn()
           ? isLoading
           ? Container(
@@ -224,36 +215,63 @@ class _ViewMediaScreenState extends State<ViewMediaScreen> {
             child: CircularProgressIndicator(),
           ),
         ),
-      )
-          : SingleChildScrollView(
+      ) : SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-              child: TextField(
-                controller: searchController,
-                decoration: InputDecoration(
-                  hintText: 'Search media by name...',
-                  hintStyle: TextStyle(fontSize: 14),
-                  prefixIcon: Icon(Icons.search),
-                  suffixIcon: searchController.text.isNotEmpty
-                      ? IconButton(
-                    icon: Icon(Icons.clear),
-                    onPressed: () {
-                      searchController.clear();
-                    },
-                  )
-                      : null,
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide.none,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: searchController,
+                      decoration: InputDecoration(
+                        hintText: 'Search media by name...',
+                        hintStyle: TextStyle(fontSize: 14),
+                        prefixIcon: Icon(Icons.search),
+                        suffixIcon: searchController.text.isNotEmpty
+                            ? IconButton(
+                          icon: Icon(Icons.clear),
+                          onPressed: () {
+                            searchController.clear();
+                          },
+                        )
+                            : null,
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      ),
+                      style: TextStyle(fontSize: 14),
+                    ),
                   ),
-                  contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                ),
-                style: TextStyle(fontSize: 14),
+                  if (AuthHelper.isLoggedIn() && eventIds.isNotEmpty)
+                    Padding(
+                      padding: EdgeInsets.only(left: 8),
+                      child: ElevatedButton(
+                        onPressed: _openAddMediaScreen,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.add_circle_outline_outlined, size: 18, color: Colors.white),
+                            SizedBox(width: 4),
+                            Text('Add Media', style: TextStyle(fontSize: 12, color: Colors.white)),
+                          ],
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
             Container(

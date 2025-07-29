@@ -103,13 +103,12 @@ class SignUpScreenState extends State<SignUpScreen> {
         final location = locations.first;
         LatLng newPosition = LatLng(location.latitude, location.longitude);
 
-        // Always fetch the full address from coordinates
         String fetchedAddress = await _getAddressFromLatLng(newPosition);
 
         setState(() {
           _selectedPosition = newPosition;
           _placeSuggestions.clear();
-          _addressController.text = fetchedAddress; // Always use reverse-geocoded address
+          _addressController.text = fetchedAddress;
           _latitudeController.text = location.latitude.toString();
           _longitudeController.text = location.longitude.toString();
         });
@@ -122,7 +121,7 @@ class SignUpScreenState extends State<SignUpScreen> {
       }
     } catch (e) {
       print("Error converting address to LatLng: $e");
-      // Fallback: Use the search query if reverse geocoding fails
+
       setState(() {
         _addressController.text = _searchController.text;
       });
@@ -639,28 +638,43 @@ class SignUpScreenState extends State<SignUpScreen> {
 
                           const SizedBox(height: Dimensions.paddingSizeExtraLarge),
 
-                          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                            Text('already_have_account'.tr, style: robotoRegular.copyWith(color: Theme.of(context).hintColor)),
-
-                            InkWell(
-                              onTap: () {
-                                if(ResponsiveHelper.isDesktop(context)){
-                                  Get.back();
-                                  Get.dialog(const SignInScreen(exitFromApp: false, backFromThis: false));
-                                }else{
-                                  if(Get.currentRoute == RouteHelper.signUp) {
-                                    Get.back();
-                                  } else {
-                                    Get.toNamed(RouteHelper.getSignInRoute(RouteHelper.signUp));
-                                  }
-                                }
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                                child: Text('sign_in'.tr, style: robotoMedium.copyWith(color: Theme.of(context).primaryColor)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'already_have_account'.tr,
+                                style: robotoRegular.copyWith(
+                                  color: Theme.of(context).hintColor,
+                                  fontSize: 16,
+                                ),
                               ),
-                            ),
-                          ]),
+                              InkWell(
+                                onTap: () {
+                                  if (ResponsiveHelper.isDesktop(context)) {
+                                    Get.back();
+                                    Get.dialog(const SignInScreen(exitFromApp: false, backFromThis: false));
+                                  } else {
+                                    if (Get.currentRoute == RouteHelper.signUp) {
+                                      Get.back();
+                                    } else {
+                                      Get.toNamed(RouteHelper.getSignInRoute(RouteHelper.signUp));
+                                    }
+                                  }
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                                  child: Text(
+                                    'sign_in'.tr,
+                                    style: robotoMedium.copyWith(
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+
                         ]),
                       ),
                     ),

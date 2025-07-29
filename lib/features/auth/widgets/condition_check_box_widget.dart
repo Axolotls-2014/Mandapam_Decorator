@@ -38,10 +38,24 @@ class ConditionCheckBoxWidget extends StatelessWidget {
             ),
             const TextSpan(text: ' '),
             TextSpan(
-              recognizer: TapGestureRecognizer()..onTap = () => Get.toNamed(RouteHelper.getHtmlRoute('terms-and-condition')),
-              text: 'terms_conditions'.tr,
-              style: robotoMedium.copyWith(color: Theme.of(context).primaryColor),
+              children: [
+                TextSpan(
+                  recognizer: TapGestureRecognizer()..onTap = () => Get.toNamed(RouteHelper.getHtmlRoute('terms-and-condition')),
+                  text: 'terms_conditions'.tr,
+                  style: robotoMedium.copyWith(color: Theme.of(context).primaryColor),
+                ),
+                TextSpan(
+                  text: ' & ',
+                  style: robotoMedium.copyWith(color: Theme.of(context).primaryColor),
+                ),
+                TextSpan(
+                  recognizer: TapGestureRecognizer()..onTap = () => Get.toNamed(RouteHelper.getHtmlRoute('privacy-policy')),
+                  text: 'privacy_policy'.tr,
+                  style: robotoMedium.copyWith(color: Theme.of(context).primaryColor),
+                ),
+              ],
             ),
+
           ]),
         ),
       ),

@@ -152,24 +152,22 @@ class SignInScreenState extends State<SignInScreen> {
                                 const SizedBox(height: Dimensions.paddingSizeLarge),
                                 Row(children: [
 
-
-
-                                  // Expanded(
-                                  //   child: ListTile(
-                                  //     onTap: () => authController.toggleRememberMe(),
-                                  //     leading: Checkbox(
-                                  //       visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                                  //       activeColor: Theme.of(context).primaryColor,
-                                  //       value: authController.isActiveRememberMe,
-                                  //       onChanged: (bool? isChecked) => authController.toggleRememberMe(),
-                                  //     ),
-                                  //     title: Text('remember_me'.tr),
-                                  //     contentPadding: EdgeInsets.zero,
-                                  //     visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
-                                  //     dense: true,
-                                  //     horizontalTitleGap: 0,
-                                  //   ),
-                                  // ),
+                                  Expanded(
+                                    child: ListTile(
+                                      onTap: () => authController.toggleRememberMe(),
+                                      leading: Checkbox(
+                                        visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                                        activeColor: Theme.of(context).primaryColor,
+                                        value: authController.isActiveRememberMe,
+                                        onChanged: (bool? isChecked) => authController.toggleRememberMe(),
+                                      ),
+                                      title: Text('remember_me'.tr),
+                                      contentPadding: EdgeInsets.zero,
+                                      visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
+                                      dense: true,
+                                      horizontalTitleGap: 0,
+                                    ),
+                                  ),
 
 
                                   TextButton(
@@ -223,25 +221,40 @@ class SignInScreenState extends State<SignInScreen> {
 
                                 // ResponsiveHelper.isDesktop(context) ? const SizedBox() : const GuestButtonWidget(),
 
-                                ResponsiveHelper.isDesktop(context) ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                  Text('do_not_have_account'.tr, style: robotoRegular.copyWith(color: Theme.of(context).hintColor)),
-
-                                  InkWell(
-                                    onTap: () {
-                                      if(ResponsiveHelper.isDesktop(context)){
-                                        Get.back();
-                                        Get.dialog(const SignUpScreen());
-                                      }else{
-                                        Get.toNamed(RouteHelper.getSignUpRoute());
-                                      }
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                                      child: Text('sign_up'.tr, style: robotoMedium.copyWith(color: Theme.of(context).primaryColor)),
+                                ResponsiveHelper.isDesktop(context) ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'do_not_have_account'.tr,
+                                      style: robotoRegular.copyWith(
+                                        color: Theme.of(context).hintColor,
+                                        fontSize: 16,
+                                      ),
                                     ),
-                                  ),
-                                ]) :  const SizedBox(),
-                              ]),
+                                    InkWell(
+                                      onTap: () {
+                                        if (ResponsiveHelper.isDesktop(context)) {
+                                          Get.back();
+                                          Get.dialog(const SignUpScreen());
+                                        } else {
+                                          Get.toNamed(RouteHelper.getSignUpRoute());
+                                        }
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                                        child: Text(
+                                          'sign_up'.tr,
+                                          style: robotoMedium.copyWith(
+                                            color: Theme.of(context).primaryColor,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ) : const SizedBox(),
+
+                                ]),
                             ),
                           )
                         ],
