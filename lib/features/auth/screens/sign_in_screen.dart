@@ -169,7 +169,6 @@ class SignInScreenState extends State<SignInScreen> {
                                     ),
                                   ),
 
-
                                   TextButton(
                                     onPressed: () => Get.toNamed(RouteHelper.getForgotPassRoute(false, null)),
                                     child: Text('${'forgot_password'.tr}?', style: robotoRegular.copyWith(color: Theme.of(context).primaryColor)),
