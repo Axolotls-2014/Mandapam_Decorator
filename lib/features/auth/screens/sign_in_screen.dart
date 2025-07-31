@@ -181,7 +181,7 @@ class SignInScreenState extends State<SignInScreen> {
                                   child: ConditionCheckBoxWidget(forDeliveryMan: false),
                                 ),
 
-                                const SizedBox(height: Dimensions.paddingSizeDefault),
+                                const SizedBox(height: Dimensions.paddingSizeExtraLarge),
 
                                 CustomButton(
                                   height: ResponsiveHelper.isDesktop(context) ? 45 : null,
@@ -193,43 +193,63 @@ class SignInScreenState extends State<SignInScreen> {
                                   isBold: !ResponsiveHelper.isDesktop(context),
                                   fontSize: ResponsiveHelper.isDesktop(context) ? Dimensions.fontSizeDefault : null,
                                 ),
-                                const SizedBox(height: Dimensions.paddingSizeExtraLarge),
+                                const SizedBox(height: Dimensions.paddingSizeSmall),
 
                                 ResponsiveHelper.isDesktop(context) ? const SizedBox() : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                  Text('do_not_have_account'.tr, style: robotoRegular.copyWith(color: Theme.of(context).hintColor)),
+                                  // Text('do_not_have_account'.tr, style: robotoRegular.copyWith(color: Theme.of(context).hintColor)),
 
-                                  InkWell(
-                                    onTap: () {
-                                      if(ResponsiveHelper.isDesktop(context)){
-                                        Get.back();
-                                        Get.dialog(const SignUpScreen(exitFromApp: true));
-                                      }else{
-                                        Get.toNamed(RouteHelper.getSignUpRoute());
-                                      }
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                                      child: Text('sign_up'.tr, style: robotoMedium.copyWith(color: Theme.of(context).primaryColor)),
-                                    ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Material(
+                                        color: Colors.transparent,
+                                        child: SizedBox(
+                                          width: 300,
+                                          height: 45,
+                                          child: Ink(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(12),
+                                              border: Border.all(
+                                                color: Theme.of(context).primaryColor,
+                                                width: 1,
+                                              ),
+                                            ),
+                                            child: InkWell(
+                                              borderRadius: BorderRadius.circular(12),
+                                              onTap: () {
+                                                if (ResponsiveHelper.isDesktop(context)) {
+                                                  Get.back();
+                                                  Get.dialog(const SignUpScreen());
+                                                } else {
+                                                  Get.toNamed(RouteHelper.getSignUpRoute());
+                                                }
+                                              },
+                                              child: Center(
+                                                child: Text(
+                                                  'sign_up'.tr,
+                                                  style: robotoMedium.copyWith(
+                                                    color: Theme.of(context).primaryColor,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
 
                                 ]),
                                 const SizedBox(height: Dimensions.paddingSizeSmall),
-
                                 // const SocialLoginWidget(),
-
                                 // ResponsiveHelper.isDesktop(context) ? const SizedBox() : const GuestButtonWidget(),
+                                ResponsiveHelper.isDesktop(context) ?
 
-                                ResponsiveHelper.isDesktop(context) ? Row(
+                                Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      'do_not_have_account'.tr,
-                                      style: robotoRegular.copyWith(
-                                        color: Theme.of(context).hintColor,
-                                        fontSize: 16,
-                                      ),
-                                    ),
                                     InkWell(
                                       onTap: () {
                                         if (ResponsiveHelper.isDesktop(context)) {
@@ -251,7 +271,9 @@ class SignInScreenState extends State<SignInScreen> {
                                       ),
                                     ),
                                   ],
-                                ) : const SizedBox(),
+                                )
+
+                                    : const SizedBox(),
 
                                 ]),
                             ),
