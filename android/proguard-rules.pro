@@ -1,0 +1,2 @@
+-keep class com.google.android.gms.auth.api.phone.** { *; }
+-keep class com.google.android.gms.common.api.internal.** { *; }

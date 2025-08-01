@@ -66,6 +66,8 @@ dependencies:
   location: ^7.0.0
   permission_handler: ^11.0.1
   flutter_windowmanager: ^0.2.0
+  sms_autofill: ^2.4.1
+  flutter_otp_text_field: ^1.5.1+1
 
 dependency_overrides:
   collection: ^1.19.0
