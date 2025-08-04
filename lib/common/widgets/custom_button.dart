@@ -39,7 +39,7 @@ class CustomButton extends StatelessWidget {
         style: flatButtonStyle,
         child: isLoading ?
         Center(child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          const SizedBox(0
+          const SizedBox(
             height: 15, width: 15,
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(Colors.white),

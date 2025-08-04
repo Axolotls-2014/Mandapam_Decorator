@@ -22,7 +22,7 @@ class OtpVerificationScreen extends StatelessWidget {
             GestureDetector(
               onTap: () => Get.back(),
               child: const Row(children: [
-                Icon(Icons.arrow_back, size: 30, color: Color(0xFF215A92)),
+                Icon(Icons.arrow_back, size: 30, color: Color(0xFF0D6EFD)),
                 Spacer(),
               ]),
             ),
@@ -31,7 +31,7 @@ class OtpVerificationScreen extends StatelessWidget {
               'OTP Verification',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF215A92),
+                color: Color(0xFF0D6EFD),
                 fontSize: 32,
               ),
             ),
@@ -62,7 +62,7 @@ class OtpVerificationScreen extends StatelessWidget {
                   cursor: Cursor(
                     width: 2,
                     height: 20,
-                    color: Colors.blue,
+                    color: Theme.of(context).primaryColor,
                     enabled: true,
                   ),
                 )),
