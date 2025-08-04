@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class SignUpBodyModel {
   String? fName;
   String? lName;
@@ -7,7 +5,7 @@ class SignUpBodyModel {
   String? email;
   String? firmName;
   String? refCode;
-  Image? imagePath;
+  String? imagePath;
   // String? deviceToken;
   String? UserType;
   String? zoneId;
@@ -34,7 +32,6 @@ class SignUpBodyModel {
   });
 
   SignUpBodyModel.fromJson(Map<String, dynamic> json) {
-    imagePath = json['image'];
     phone = json['phone'];
     fName = json['f_name'];
     lName = json['l_name'];
@@ -42,6 +39,7 @@ class SignUpBodyModel {
     UserType = json['usertype'];
     refCode = json['ref_by'];
     firmName = json['firm_name'];
+    imagePath = json['firm_image'];
     // deviceToken = json['cm_firebase_token'];
     latitude = json['latitude'];
     longitude = json['longitude'];
@@ -52,7 +50,6 @@ class SignUpBodyModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['image'] = imagePath;
     data['phone'] = phone;
     data['f_name'] = fName;
     data['l_name'] = lName;
@@ -60,6 +57,7 @@ class SignUpBodyModel {
     data['usertype'] = UserType;
     data['ref_by'] = refCode;
     data['firm_name'] = firmName;
+    data['firm_image'] = imagePath;
     // data['cm_firebase_token'] = deviceToken;
     data['latitude'] = latitude;
     data['longitude'] = longitude;

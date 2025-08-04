@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -593,21 +594,33 @@ class SignUpScreenState extends State<SignUpScreen> {
                                               fit: BoxFit.cover,
                                             ),
                                           )
-                                        : const Column(
+                                        : Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              Icon(Icons.add_photo_alternate,
-                                                  size: 40, color: Colors.grey),
-                                              SizedBox(height: 8),
+                                              const Icon(
+                                                  Icons.add_photo_alternate,
+                                                  size: 40,
+                                                  color: Colors.grey),
+                                              const SizedBox(height: 8),
                                               Text("Add File",
                                                   style: TextStyle(
-                                                      color: Colors.grey)),
+                                                      color: controller
+                                                                  .file.value ==
+                                                              null
+                                                          ? Colors.red
+                                                          : Colors.grey)),
                                             ],
                                           ),
                                   ),
                                 ),
                               ),
+                              controller.file.value == null
+                                  ? const Text(
+                                      'Firm image is required',
+                                      style: TextStyle(color: Colors.red),
+                                    )
+                                  : const SizedBox.shrink(),
 
                               const Align(
                                 alignment: Alignment.topLeft,
@@ -932,12 +945,11 @@ class SignUpScreenState extends State<SignUpScreen> {
     String email = _emailController.text.trim();
     String number = _phoneController.text.trim();
     String firmName = _firmNameController.text.trim();
-    String confirmPassword = _confirmPasswordController.text.trim();
+    String? firmImage = controller.fileName.value;
     String referCode = _referCodeController.text.trim();
     String address = _addressController.text.trim();
     String latitude = _latitudeController.text.trim();
     String longitude = _longitudeController.text.trim();
-
     print("Latitude: $latitude");
     print("Longitude: $longitude");
 
@@ -946,108 +958,121 @@ class SignUpScreenState extends State<SignUpScreen> {
         await CustomValidator.isPhoneValid(numberWithCountryCode);
     numberWithCountryCode = phoneValid.phone;
 
-    if (_formKeySignUp!.currentState!.validate()) {
+    if (_formKeySignUp.currentState!.validate()) {
+      // Additional manual field checks
       if (firstName.isEmpty) {
         showCustomSnackBar('enter_your_first_name'.tr);
+        return;
       } else if (lastName.isEmpty) {
         showCustomSnackBar('enter_your_last_name'.tr);
+        return;
       } else if (email.isEmpty) {
         showCustomSnackBar('enter_email_address'.tr);
+        return;
       } else if (!GetUtils.isEmail(email)) {
         showCustomSnackBar('enter_a_valid_email_address'.tr);
+        return;
       } else if (number.isEmpty) {
         showCustomSnackBar('enter_phone_number'.tr);
+        return;
       } else if (!phoneValid.isValid) {
         showCustomSnackBar('invalid_phone_number'.tr);
+        return;
       } else if (firmName.isEmpty) {
-        showCustomSnackBar('enter_password'.tr);
-      } else if (firmName.length < 6) {
-        showCustomSnackBar('password_should_be'.tr);
-      } else if (firmName != confirmPassword) {
-        showCustomSnackBar('confirm_password_does_not_matched'.tr);
+        showCustomSnackBar('Firm name is required');
+        return;
+      } else if (controller.file.value == null) {
+        showCustomSnackBar('Firm image is required');
+        return;
       } else if (address.isEmpty) {
         showCustomSnackBar('Please select your store address');
-      } else {
-        String? zoneId;
-        String? moduleId;
+        return;
+      }
 
-        if (Get.find<ApiClient>()
-            .sharedPreferences
-            .containsKey(AppConstants.userAddress)) {
-          try {
-            AddressModel addressModel = AddressModel.fromJson(
-              jsonDecode(Get.find<ApiClient>()
-                  .sharedPreferences
-                  .getString(AppConstants.userAddress)!),
-            );
-            if (addressModel.zoneIds != null &&
-                addressModel.zoneIds!.isNotEmpty) {
-              zoneId = addressModel.zoneIds!.first.toString();
-            }
-          } catch (_) {}
-        }
+      // ✅ Passed all validations — proceed to registration
+      String? zoneId;
+      String? moduleId;
 
-        if (Get.find<ApiClient>()
-            .sharedPreferences
-            .containsKey(AppConstants.moduleId)) {
-          try {
-            moduleId = ModuleModel.fromJson(
-              jsonDecode(Get.find<ApiClient>()
-                  .sharedPreferences
-                  .getString(AppConstants.moduleId)!),
-            ).id.toString();
-          } catch (_) {}
-        }
+      if (Get.find<ApiClient>()
+          .sharedPreferences
+          .containsKey(AppConstants.userAddress)) {
+        try {
+          AddressModel addressModel = AddressModel.fromJson(
+            jsonDecode(Get.find<ApiClient>()
+                .sharedPreferences
+                .getString(AppConstants.userAddress)!),
+          );
+          if (addressModel.zoneIds != null &&
+              addressModel.zoneIds!.isNotEmpty) {
+            zoneId = addressModel.zoneIds!.first.toString();
+          }
+        } catch (_) {}
+      }
 
-        // String? deviceToken = await authController.saveDeviceToken();
+      if (Get.find<ApiClient>()
+          .sharedPreferences
+          .containsKey(AppConstants.moduleId)) {
+        try {
+          moduleId = ModuleModel.fromJson(
+            jsonDecode(Get.find<ApiClient>()
+                .sharedPreferences
+                .getString(AppConstants.moduleId)!),
+          ).id.toString();
+        } catch (_) {}
+      }
 
-        SignUpBodyModel signUpBody = SignUpBodyModel(
-          phone: numberWithCountryCode,
-          fName: firstName,
-          lName: lastName,
-          email: email,
-          UserType: 'Decorator',
-          refCode: referCode,
-          firmName: '',
-          latitude: latitude,
-          longitude: longitude,
-          zoneId: zoneId,
-          moduleId: '2',
-          address: address,
-        );
+      SignUpBodyModel signUpBody = SignUpBodyModel(
+        phone: numberWithCountryCode,
+        fName: firstName,
+        lName: lastName,
+        email: email,
+        UserType: 'Decorator',
+        refCode: referCode,
+        firmName: firmName,
+        imagePath: firmImage,
+        latitude: latitude,
+        longitude: longitude,
+        zoneId: zoneId,
+        moduleId: '2',
+        address: address,
+      );
 
-        authController.registration(signUpBody).then((status) async {
-          if (status.isSuccess) {
+      authController.registration(signUpBody).then((status) async {
+        if (status.isSuccess) {
+          if (Get.find<SplashController>().configModel!.customerVerification!) {
             if (Get.find<SplashController>()
                 .configModel!
-                .customerVerification!) {
-              if (Get.find<SplashController>()
-                  .configModel!
-                  .firebaseOtpVerification!) {
-                Get.find<AuthController>().firebaseVerifyPhoneNumber(
-                    numberWithCountryCode, status.message,
-                    fromSignUp: true);
-              } else {
-                List<int> encoded = utf8.encode(firmName);
-                String data = base64Encode(encoded);
-                Get.toNamed(RouteHelper.getVerificationRoute(
-                    numberWithCountryCode,
-                    status.message,
-                    RouteHelper.signUp,
-                    data));
-              }
+                .firebaseOtpVerification!) {
+              Get.find<AuthController>().firebaseVerifyPhoneNumber(
+                numberWithCountryCode,
+                status.message,
+                fromSignUp: true,
+              );
             } else {
-              Get.find<LocationController>()
-                  .navigateToLocationScreen(RouteHelper.signUp);
-              if (ResponsiveHelper.isDesktop(Get.context)) {
-                Get.back();
-              }
+              List<int> encoded = utf8.encode(firmName);
+              String data = base64Encode(encoded);
+              Get.toNamed(RouteHelper.getVerificationRoute(
+                numberWithCountryCode,
+                status.message,
+                RouteHelper.signUp,
+                data,
+              ));
             }
           } else {
-            showCustomSnackBar(status.message);
+            Get.find<LocationController>()
+                .navigateToLocationScreen(RouteHelper.signUp);
+            if (ResponsiveHelper.isDesktop(Get.context)) {
+              Get.back();
+            }
           }
-        });
-      }
+        } else {
+          showCustomSnackBar(status.message);
+          print("Form validation failed.");
+        }
+      });
+    } else {
+      // Form is invalid — do nothing or show a message if needed
+      print("Form validation failed.");
     }
   }
 }

@@ -16,6 +16,7 @@ class AppConstants {
   static const String baseUrl = 'https://mandapam.co';
 
   static const String registerUri = '/api/v1/auth/decorator-sign-up';
+  static const String otpUrl = '/api/v1/auth/sendOtp';
 
   static const String addMediaUri = '/api/v1/events/addMedia';
   static const String eventListUri = '/api/v1/events';

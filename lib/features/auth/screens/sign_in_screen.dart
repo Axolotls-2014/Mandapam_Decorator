@@ -14,15 +14,15 @@ import 'package:sixam_mart/helper/custom_validator.dart';
 import 'package:sixam_mart/helper/responsive_helper.dart';
 import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/helper/validate_check.dart';
+import 'package:sixam_mart/screens/otp_controller.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/images.dart';
 import 'package:sixam_mart/util/styles.dart';
 import 'package:sixam_mart/common/widgets/custom_button.dart';
-import 'package:sixam_mart/common/widgets/custom_snackbar.dart';
 import 'package:sixam_mart/common/widgets/custom_text_field.dart';
 import 'package:sixam_mart/common/widgets/menu_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+//import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -40,6 +40,7 @@ class SignInScreen extends StatefulWidget {
 }
 
 class SignInScreenState extends State<SignInScreen> {
+  final controller = Get.put(OtpController());
   final FocusNode _phoneFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
   final TextEditingController _phoneController = TextEditingController();
@@ -252,7 +253,11 @@ class SignInScreenState extends State<SignInScreen> {
                                             ? 'login'.tr
                                             : 'Get OTP',
                                     onPressed: () {
-                                      _login(authController, _countryDialCode!);
+                                      //  _login(authController, _countryDialCode!);
+                                      Get.toNamed(RouteHelper.otpScreen);
+                                      controller.fetchOtpFromApi(
+                                          phone:
+                                              "$_countryDialCode${_phoneController.text.trim()}");
                                     },
                                     isLoading: authController.isLoading,
                                     radius: ResponsiveHelper.isDesktop(context)
@@ -438,8 +443,8 @@ class SignInScreenState extends State<SignInScreen> {
       //         } else {
       //           List<int> encoded = utf8.encode(password);
       //           String data = base64Encode(encoded);
-                // Get.toNamed(RouteHelper.getVerificationRoute(
-                //     numberWithCountryCode, token, RouteHelper.signUp, data));
+      // Get.toNamed(RouteHelper.getVerificationRoute(
+      //     numberWithCountryCode, token, RouteHelper.signUp, data));
       //         }
       //       } else {
       //         Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));

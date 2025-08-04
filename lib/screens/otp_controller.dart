@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-import 'package:sixam_mart/helper/route_helper.dart';
+import 'package:http/http.dart' as http;
 import 'package:sms_autofill/sms_autofill.dart';
+import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/main.dart';
 
 class OtpController extends GetxController with CodeAutoFill {
@@ -24,7 +26,7 @@ class OtpController extends GetxController with CodeAutoFill {
     super.onInit();
     _listenForOtp();
     startTimer();
-    fetchOtpFromApi(); // Simulate API + notification
+    // fetchOtpFromApi() removed from here — now manually call with phone/user_type
   }
 
   void _listenForOtp() async {
@@ -32,7 +34,6 @@ class OtpController extends GetxController with CodeAutoFill {
     listenForCode(); // CodeAutoFill method
   }
 
-  /// Called when SMS or manual input changes
   void _onOtpCallBack(String code, bool isAutoFill) {
     otpCode.value = code;
     final isValid = code.length == otpCodeLength && intRegex.hasMatch(code);
@@ -40,7 +41,6 @@ class OtpController extends GetxController with CodeAutoFill {
     if (isValid && isAutoFill) {
       enableButton.value = false;
       isLoadingButton.value = true;
-      // Trigger verification on auto-fill
       verifyOtpCode();
     } else {
       enableButton.value = isValid;
@@ -54,10 +54,16 @@ class OtpController extends GetxController with CodeAutoFill {
   }
 
   @override
+  @override
   void codeUpdated() {
     if (code != null && code!.isNotEmpty) {
       textEditingController.text = code!;
-      _onOtpCallBack(code!, true); // true means autofill
+      otpCode.value = code!;
+
+      // ⏳ Add a delay before submitting so the screen is visible
+      Future.delayed(const Duration(seconds: 2), () {
+        _onOtpCallBack(code!, true);
+      });
     }
   }
 
@@ -89,13 +95,7 @@ class OtpController extends GetxController with CodeAutoFill {
           duration: const Duration(seconds: 3),
         );
         Get.toNamed(RouteHelper.getSignUpRoute());
-        //  List<int> encoded = utf8.encode(password);
-        //           String data = base64Encode(encoded);
-        // Get.toNamed(RouteHelper.categories);
-        //Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
-        //Get.toNamed(RouteHelper.getVerificationRoute(RouteHelper.signUp, data,''));
       } else {
-        // Invalid OTP
         Get.snackbar(
           "Verification Failed",
           '❌ Incorrect OTP: ${otpCode.value}',
@@ -112,8 +112,9 @@ class OtpController extends GetxController with CodeAutoFill {
     textEditingController.clear();
     otpCode.value = '';
     enableButton.value = false;
-    fetchOtpFromApi(); // Simulate resend
-    _listenForOtp(); // Re-listen after resend
+    //fetchOtpFromApi(phone: phone,);
+    _listenForOtp();
+    startTimer();
   }
 
   void startTimer() {
@@ -128,16 +129,49 @@ class OtpController extends GetxController with CodeAutoFill {
     });
   }
 
-  void fetchOtpFromApi() async {
-    await Future.delayed(const Duration(seconds: 2));
-    const fakeOtp = '1234';
+  Future<void> fetchOtpFromApi({required String phone}) async {
+    print('$phone Ganesh');
+    try {
+      isLoadingButton.value = true;
 
-    _correctOtp = fakeOtp; // store it for verification
-    await _showNotification(fakeOtp);
+      final url = Uri.parse('https://mandapam.co/api/v1/auth/sendOtp');
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'phone': phone,
+          'user_type': 'Decorator',
+        }),
+      );
 
-    // Simulate auto-fill
-    code = fakeOtp;
-    codeUpdated(); // Triggers auto-submit
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data['otp'] != null) {
+          _correctOtp = data['otp'].toString();
+          await _showNotification(_correctOtp);
+
+          code = _correctOtp;
+          codeUpdated();
+        } else {
+          Get.snackbar("Error", "OTP not received from server",
+              backgroundColor: Colors.red.shade100);
+        }
+      } else {
+        Get.snackbar("Error", "Failed to fetch OTP: ${response.statusCode}",
+            backgroundColor: Colors.red.shade100);
+      }
+    } catch (e) {
+      debugPrint("❌ OTP Fetch Error: $e");
+      Get.snackbar(
+        "Error",
+        "Failed to send OTP",
+        backgroundColor: Colors.red.shade100,
+        colorText: Colors.black,
+      );
+    } finally {
+      isLoadingButton.value = false;
+    }
   }
 
   Future<void> _showNotification(String otp) async {
