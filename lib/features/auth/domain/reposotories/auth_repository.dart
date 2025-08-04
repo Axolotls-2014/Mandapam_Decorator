@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get/get_connect/connect.dart';
-import 'package:get/get_utils/src/platform/platform.dart';
+import 'package:get/get.dart';
 import 'package:sixam_mart/api/api_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sixam_mart/common/models/response_model.dart';
@@ -12,9 +10,14 @@ import 'package:sixam_mart/features/address/domain/models/address_model.dart';
 import 'package:sixam_mart/features/auth/domain/models/signup_body_model.dart';
 import 'package:sixam_mart/features/auth/domain/models/social_log_in_body.dart';
 import 'package:sixam_mart/features/auth/domain/reposotories/auth_repository_interface.dart';
+import 'package:sixam_mart/features/auth/screens/image_picker.dart';
 import 'package:sixam_mart/helper/address_helper.dart';
 import 'package:sixam_mart/helper/module_helper.dart';
+import 'package:sixam_mart/screens/subscreption_screen.dart';
 import 'package:sixam_mart/util/app_constants.dart';
+import 'package:http/http.dart' as http;
+// ignore: depend_on_referenced_packages
+import 'package:path/path.dart';
 
 class AuthRepository implements AuthRepositoryInterface {
   final ApiClient apiClient;
@@ -28,28 +31,61 @@ class AuthRepository implements AuthRepositoryInterface {
 
   @override
   Future<ResponseModel> registration(SignUpBodyModel signUpBody) async {
-    Response response = await apiClient.postData(
-      AppConstants.registerUri,
-      signUpBody.toJson(),
-      handleError: false,
-    );
+    final controller = Get.put(SubmitAssignmentController());
+    final uri = Uri.parse('https://mandapam.co/api/v1/auth/decorator-sign-up');
 
-    // Correct log statement
-    log('ganesh : ${response.statusCode} : ${response.body}');
-    log('statusText: ${response.statusText}');
-    log('request: ${response.request?.url}');
-    
-    if (response.statusCode == 200) {
-      Map<String, dynamic> responseData = response.body;
+    final request = http.MultipartRequest('POST', uri);
 
-      if (responseData.containsKey("user_id")) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString("user_id", responseData["user_id"].toString());
+    // Add text fields
+    request.fields['phone'] = signUpBody.phone ?? '';
+    request.fields['f_name'] = signUpBody.fName ?? '';
+    request.fields['l_name'] = signUpBody.lName ?? '';
+    request.fields['email'] = signUpBody.email ?? '';
+    request.fields['UserType'] = signUpBody.UserType ?? '';
+    request.fields['firm_name'] = signUpBody.firmName ?? '';
+    request.fields['latitude'] = signUpBody.latitude ?? '';
+    request.fields['longitude'] = signUpBody.longitude ?? '';
+    request.fields['zone_id'] = signUpBody.zoneId ?? '';
+    request.fields['module_id'] = signUpBody.moduleId ?? '';
+    request.fields['address'] = signUpBody.address ?? '';
+    request.fields['ref_by'] = signUpBody.refCode ?? '';
+
+    // Add image if provided
+    if (controller.file.value != null) {
+      final file = controller.file.value;
+      request.files.add(await http.MultipartFile.fromPath(
+        'firm_image',
+        file!.path,
+        filename: basename(file.path),
+      ));
+    }
+
+    try {
+      // Actually send the request
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      log('🔁 Status: ${response.statusCode}');
+      log('📥 Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+      
+        // Save user_id if returned
+        if (responseData.containsKey("user_id")) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString("user_id", responseData["user_id"].toString());
+        }
+
+        return ResponseModel(true, responseData["token"]);
+      } else {
+        final errorMessage =
+            jsonDecode(response.body)['message'] ?? 'Something went wrong';
+        return ResponseModel(false, errorMessage);
       }
-      return ResponseModel(true, responseData["token"]);
-    } else {
-      return ResponseModel(
-          false, response.statusText ?? "Something went wrong");
+    } catch (e) {
+      log('❌ Registration failed: $e');
+      return ResponseModel(false, 'Registration failed: $e');
     }
   }
 

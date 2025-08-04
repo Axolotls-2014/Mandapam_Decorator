@@ -1,14 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:sms_autofill/sms_autofill.dart';
+import 'package:sixam_mart/features/auth/controllers/auth_controller.dart';
+import 'package:sixam_mart/features/location/controllers/location_controller.dart';
 import 'package:sixam_mart/helper/route_helper.dart';
-import 'package:sixam_mart/main.dart';
 
-class OtpController extends GetxController with CodeAutoFill {
+class OtpController extends GetxController {
   final int otpCodeLength = 4;
   final textEditingController = TextEditingController();
 
@@ -18,53 +17,21 @@ class OtpController extends GetxController with CodeAutoFill {
   var enableButton = false.obs;
   var seconds = 0.obs;
   Timer? _timer;
+  RxBool valid = false.obs;
+  var number = ''.obs;
 
   final RegExp intRegex = RegExp(r'^\d+$');
 
   @override
   void onInit() {
     super.onInit();
-    _listenForOtp();
     startTimer();
-    // fetchOtpFromApi() removed from here — now manually call with phone/user_type
-  }
-
-  void _listenForOtp() async {
-    await SmsAutoFill().unregisterListener(); // Avoid duplicate listeners
-    listenForCode(); // CodeAutoFill method
-  }
-
-  void _onOtpCallBack(String code, bool isAutoFill) {
-    otpCode.value = code;
-    final isValid = code.length == otpCodeLength && intRegex.hasMatch(code);
-
-    if (isValid && isAutoFill) {
-      enableButton.value = false;
-      isLoadingButton.value = true;
-      verifyOtpCode();
-    } else {
-      enableButton.value = isValid;
-      isLoadingButton.value = false;
-    }
   }
 
   void onOtpChanged(String code) {
-    textEditingController.text = code;
-    _onOtpCallBack(code, false);
-  }
-
-  @override
-  @override
-  void codeUpdated() {
-    if (code != null && code!.isNotEmpty) {
-      textEditingController.text = code!;
-      otpCode.value = code!;
-
-      // ⏳ Add a delay before submitting so the screen is visible
-      Future.delayed(const Duration(seconds: 2), () {
-        _onOtpCallBack(code!, true);
-      });
-    }
+    otpCode.value = code;
+    final isValid = code.length == otpCodeLength && intRegex.hasMatch(code);
+    enableButton.value = isValid;
   }
 
   void onSubmitOtp(BuildContext context) {
@@ -78,23 +45,32 @@ class OtpController extends GetxController with CodeAutoFill {
   }
 
   void verifyOtpCode({BuildContext? context}) {
+    if (!valid.value) {
+      print('ganesh what are doing 1: ${valid.value}');
+      Get.toNamed(RouteHelper.getSignUpRoute());
+    } else {
+      print('ganesh what are doing 2: ${valid.value}');
+
+      Get.find<AuthController>().firebaseVerifyPhoneNumber('+91',
+          'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiMjAyY2M2NmQ1Zjg0MzkzNjRiNzBhM2I3Njg2ZjMxMmJjM2Q3ODdlYmU0MmU1NDcyZjU2YzQ1MWNjYmM2OWFhZmI4NmViMGNjMzE3NDc1MzYiLCJpYXQiOjE3NTQzMDU4MDkuMjMzMzcyLCJuYmYiOjE3NTQzMDU4MDkuMjMzMzc3LCJleHAiOjE3ODU4NDE4MDkuMjIzOTk3LCJzdWIiOiIxMTUiLCJzY29wZXMiOltdfQ.YHnvFkBihY8QMgHYo1zVhTwwSyaMnjsCEhGPm2JHpIDLHB3RjmBc8DjnfWs4XkkCOIKMunmgkO2kMGRNdYcv3EFd876ppHZ3SmAjHH9WX9a4THGZVUVJqY7XC8DrPxqWfrAYdPhPENMsxtczKMo1DOBomrxTNpwpLXt9ogLHioET3E7yRHZUvHmvRNrHl8F-VZpQQOr4ljnhD5koDfwXuGq7EmGstuwNN3TCIH8SkktDfhgObTosItAs78ARUDTZ2KSfN-dKn2CD-VmWDyCJPCgK60mfeUjySWZqOo_F4n5WjN6yINN0pHZTvQq09RTX3ocDxLlxhkUx4Rl8irwfEKTJvCV24j4IX0VJFm4XCcRanRBZT296HXQ11sDkwd2iY8y6vVqCz0SJwmIs2nWmsNxhFySVb5tikl5nB_iXT4m4TbDbWNVKQWYv_9PtX7Yp_CfgEiexT1GmVKezRyKKgbcfGqSEjDEE7XgEpYB7d3R-CIPbAZNEKJzdVe2fWE4UnY2KRlXB5waa55kiloILihI-ixr7N5s-qQ4UuYu6Qats313s7PqRB_kWOhVScaZ56rcgxYCSLSxFm8F5VWQCMaPW80s67iKqgJ9rj16MiV2rZXY5RPUdjHCamQqHBa0URkVyvivozbnI-iUa7GPmcXthiaZSqFKqGMQDIAcLOmw',
+          fromSignUp: true);
+    }
     isLoadingButton.value = true;
 
     Future.delayed(const Duration(seconds: 1), () {
       isLoadingButton.value = false;
-      enableButton.value = true;
 
       if (otpCode.value == _correctOtp) {
-        debugPrint("✅ Auto OTP Verified: ${otpCode.value}");
+        debugPrint("✅ OTP Verified: ${otpCode.value}");
         Get.snackbar(
           "Verification Successful",
           '✅ OTP Verified: ${otpCode.value}',
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.green.shade50,
           colorText: Colors.black,
-          duration: const Duration(seconds: 3),
         );
-        Get.toNamed(RouteHelper.getSignUpRoute());
+
+        resetOtpState(); // Clear after success
       } else {
         Get.snackbar(
           "Verification Failed",
@@ -102,18 +78,13 @@ class OtpController extends GetxController with CodeAutoFill {
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red.shade50,
           colorText: Colors.black,
-          duration: const Duration(seconds: 3),
         );
       }
     });
   }
 
   void retry() {
-    textEditingController.clear();
-    otpCode.value = '';
-    enableButton.value = false;
-    //fetchOtpFromApi(phone: phone,);
-    _listenForOtp();
+    resetOtpState();
     startTimer();
   }
 
@@ -130,7 +101,8 @@ class OtpController extends GetxController with CodeAutoFill {
   }
 
   Future<void> fetchOtpFromApi({required String phone}) async {
-    print('$phone Ganesh');
+    number.value = phone;
+    debugPrint('$phone ➡️ Fetching OTP...');
     try {
       isLoadingButton.value = true;
 
@@ -146,13 +118,11 @@ class OtpController extends GetxController with CodeAutoFill {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        valid.value = data['phone_exists'];
 
         if (data['otp'] != null) {
           _correctOtp = data['otp'].toString();
-          await _showNotification(_correctOtp);
-
-          code = _correctOtp;
-          codeUpdated();
+          debugPrint("✅ OTP received from API: $_correctOtp");
         } else {
           Get.snackbar("Error", "OTP not received from server",
               backgroundColor: Colors.red.shade100);
@@ -174,32 +144,19 @@ class OtpController extends GetxController with CodeAutoFill {
     }
   }
 
-  Future<void> _showNotification(String otp) async {
-    const AndroidNotificationDetails androidDetails =
-        AndroidNotificationDetails(
-      'otp_channel',
-      'OTP Notifications',
-      importance: Importance.max,
-      priority: Priority.high,
-    );
-
-    const NotificationDetails notificationDetails = NotificationDetails(
-      android: androidDetails,
-    );
-
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'Your OTP Code',
-      'Use $otp to verify your login',
-      notificationDetails,
-    );
+  /// Reset all OTP values
+  void resetOtpState() {
+    textEditingController.clear();
+    otpCode.value = '';
+    enableButton.value = false;
+    seconds.value = 0;
+    _timer?.cancel();
   }
 
   @override
   void onClose() {
+    resetOtpState();
     textEditingController.dispose();
-    _timer?.cancel();
-    cancel(); // Cancel CodeAutoFill
     super.onClose();
   }
 }
