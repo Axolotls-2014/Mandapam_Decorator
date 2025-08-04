@@ -20,6 +20,7 @@ import 'package:sixam_mart/helper/custom_validator.dart';
 import 'package:sixam_mart/helper/responsive_helper.dart';
 import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/helper/validate_check.dart';
+import 'package:sixam_mart/screens/subscreption_screen.dart';
 import 'package:sixam_mart/util/app_constants.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/images.dart';
@@ -51,15 +52,12 @@ class SignUpScreenState extends State<SignUpScreen> {
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _phoneFocus = FocusNode();
   final FocusNode _firmNameFocus = FocusNode();
-  final FocusNode _confirmPasswordFocus = FocusNode();
-  final FocusNode _referCodeFocus = FocusNode();
 
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _firmNameController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
   final _referCodeController = TextEditingController();
   final _addressController = TextEditingController();
   final _latitudeController = TextEditingController();
@@ -945,7 +943,6 @@ class SignUpScreenState extends State<SignUpScreen> {
     String email = _emailController.text.trim();
     String number = _phoneController.text.trim();
     String firmName = _firmNameController.text.trim();
-    String? firmImage = controller.fileName.value;
     String referCode = _referCodeController.text.trim();
     String address = _addressController.text.trim();
     String latitude = _latitudeController.text.trim();
@@ -1029,7 +1026,7 @@ class SignUpScreenState extends State<SignUpScreen> {
         UserType: 'Decorator',
         refCode: referCode,
         firmName: firmName,
-        imagePath: firmImage,
+        //imagePath: firmImage,
         latitude: latitude,
         longitude: longitude,
         zoneId: zoneId,
@@ -1039,33 +1036,39 @@ class SignUpScreenState extends State<SignUpScreen> {
 
       authController.registration(signUpBody).then((status) async {
         if (status.isSuccess) {
-          if (Get.find<SplashController>().configModel!.customerVerification!) {
-            if (Get.find<SplashController>()
-                .configModel!
-                .firebaseOtpVerification!) {
-              Get.find<AuthController>().firebaseVerifyPhoneNumber(
-                numberWithCountryCode,
-                status.message,
-                fromSignUp: true,
-              );
-            } else {
-              List<int> encoded = utf8.encode(firmName);
-              String data = base64Encode(encoded);
-              Get.toNamed(RouteHelper.getVerificationRoute(
-                numberWithCountryCode,
-                status.message,
-                RouteHelper.signUp,
-                data,
-              ));
-            }
-          } else {
-            Get.find<LocationController>()
-                .navigateToLocationScreen(RouteHelper.signUp);
-            if (ResponsiveHelper.isDesktop(Get.context)) {
-              Get.back();
-            }
-          }
+          Future.microtask(() => Get.to(() => const SubscreptionScreen()));
+
+          // if (Get.find<SplashController>().configModel!.customerVerification!) {
+          //   if (Get.find<SplashController>()
+          //       .configModel!
+          //       .firebaseOtpVerification!) {
+          //     print('ganesh 1');
+          //     Get.find<AuthController>().firebaseVerifyPhoneNumber(
+          //       numberWithCountryCode,
+          //       status.message,
+          //       fromSignUp: true,
+          //     );
+          //   } else {
+          //     print('ganesh 2');
+          //     List<int> encoded = utf8.encode(firmName);
+          //     String data = base64Encode(encoded);
+          //     Get.toNamed(RouteHelper.getVerificationRoute(
+          //       numberWithCountryCode,
+          //       status.message,
+          //       RouteHelper.signUp,
+          //       data,
+          //     ));
+          //   }
+          // } else {
+          //   print('ganesh what are doing 3');
+          //   Get.find<LocationController>()
+          //       .navigateToLocationScreen(RouteHelper.signUp);
+          //   if (ResponsiveHelper.isDesktop(Get.context)) {
+          //     Get.back();
+          //   }
+          // }
         } else {
+          print('ganesh 4');
           showCustomSnackBar(status.message);
           print("Form validation failed.");
         }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 class SignUpBodyModel {
   String? fName;
   String? lName;
@@ -5,7 +7,7 @@ class SignUpBodyModel {
   String? email;
   String? firmName;
   String? refCode;
-  String? imagePath;
+  //File? imagePath;
   // String? deviceToken;
   String? UserType;
   String? zoneId;
@@ -15,7 +17,7 @@ class SignUpBodyModel {
   String? address;
 
   SignUpBodyModel({
-    this.imagePath,
+    //this.imagePath,
     this.phone,
     this.fName,
     this.lName,
@@ -39,7 +41,7 @@ class SignUpBodyModel {
     UserType = json['usertype'];
     refCode = json['ref_by'];
     firmName = json['firm_name'];
-    imagePath = json['firm_image'];
+    //imagePath = json['firm_image'];
     // deviceToken = json['cm_firebase_token'];
     latitude = json['latitude'];
     longitude = json['longitude'];
@@ -57,7 +59,7 @@ class SignUpBodyModel {
     data['usertype'] = UserType;
     data['ref_by'] = refCode;
     data['firm_name'] = firmName;
-    data['firm_image'] = imagePath;
+    //data['firm_image'] = imagePath;
     // data['cm_firebase_token'] = deviceToken;
     data['latitude'] = latitude;
     data['longitude'] = longitude;

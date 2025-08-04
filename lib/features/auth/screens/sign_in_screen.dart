@@ -2,6 +2,7 @@
 import 'dart:convert';
 //import 'dart:io';
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:sixam_mart/common/widgets/custom_snackbar.dart';
 import 'package:sixam_mart/features/cart/controllers/cart_controller.dart';
 import 'package:sixam_mart/features/language/controllers/language_controller.dart';
 //import 'package:sixam_mart/features/location/controllers/location_controller.dart';
@@ -254,10 +255,32 @@ class SignInScreenState extends State<SignInScreen> {
                                             : 'Get OTP',
                                     onPressed: () {
                                       //  _login(authController, _countryDialCode!);
-                                      Get.toNamed(RouteHelper.otpScreen);
-                                      controller.fetchOtpFromApi(
-                                          phone:
-                                              "$_countryDialCode${_phoneController.text.trim()}");
+                                      String number =
+                                          _phoneController.text.trim();
+                                      String fullPhoneNumber =
+                                          "$_countryDialCode$number";
+
+// Basic numeric check (only digits)
+                                      final RegExp phoneRegex =
+                                          RegExp(r'^[0-9]{10}$');
+
+                                      if (number.isEmpty) {
+                                        showCustomSnackBar(
+                                            'Please enter your phone number'
+                                                .tr);
+                                        return;
+                                      } else if (!phoneRegex.hasMatch(number)) {
+                                        showCustomSnackBar(
+                                            'Enter a valid phone number (10 digits)'
+                                                .tr);
+                                        return;
+                                      } else {
+                                        // ✅ Passed all validations
+                                        Get.toNamed(RouteHelper.otpScreen);
+
+                                        controller.fetchOtpFromApi(
+                                            phone: fullPhoneNumber);
+                                      }
                                     },
                                     isLoading: authController.isLoading,
                                     radius: ResponsiveHelper.isDesktop(context)
@@ -275,71 +298,71 @@ class SignInScreenState extends State<SignInScreen> {
 
                                   ResponsiveHelper.isDesktop(context)
                                       ? const SizedBox()
-                                      : Row(
+                                      : const Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
                                               // Text('do_not_have_account'.tr, style: robotoRegular.copyWith(color: Theme.of(context).hintColor)),
 
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Material(
-                                                    color: Colors.transparent,
-                                                    child: SizedBox(
-                                                      width: 300,
-                                                      height: 45,
-                                                      child: Ink(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(12),
-                                                          border: Border.all(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .primaryColor,
-                                                            width: 1,
-                                                          ),
-                                                        ),
-                                                        child: InkWell(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(12),
-                                                          onTap: () {
-                                                            if (ResponsiveHelper
-                                                                .isDesktop(
-                                                                    context)) {
-                                                              Get.back();
-                                                              Get.dialog(
-                                                                  const SignUpScreen());
-                                                            } else {
-                                                              Get.toNamed(
-                                                                  RouteHelper
-                                                                      .getSignUpRoute());
-                                                            }
-                                                          },
-                                                          child: Center(
-                                                            child: Text(
-                                                              'sign_up'.tr,
-                                                              style:
-                                                                  robotoMedium
-                                                                      .copyWith(
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .primaryColor,
-                                                                fontSize: 15,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                              //   Row(
+                                              //     mainAxisAlignment:
+                                              //         MainAxisAlignment.center,
+                                              //     children: [
+                                              //       Material(
+                                              //         color: Colors.transparent,
+                                              //         child: SizedBox(
+                                              //           width: 300,
+                                              //           height: 45,
+                                              //           child: Ink(
+                                              //             decoration:
+                                              //                 BoxDecoration(
+                                              //               color: Colors.white,
+                                              //               borderRadius:
+                                              //                   BorderRadius
+                                              //                       .circular(12),
+                                              //               border: Border.all(
+                                              //                 color: Theme.of(
+                                              //                         context)
+                                              //                     .primaryColor,
+                                              //                 width: 1,
+                                              //               ),
+                                              //             ),
+                                              //             child: InkWell(
+                                              //               borderRadius:
+                                              //                   BorderRadius
+                                              //                       .circular(12),
+                                              //               onTap: () {
+                                              //                 if (ResponsiveHelper
+                                              //                     .isDesktop(
+                                              //                         context)) {
+                                              //                   Get.back();
+                                              //                   Get.dialog(
+                                              //                       const SignUpScreen());
+                                              //                 } else {
+                                              //                   Get.toNamed(
+                                              //                       RouteHelper
+                                              //                           .getSignUpRoute());
+                                              //                 }
+                                              //               },
+                                              //               child: Center(
+                                              //                 child: Text(
+                                              //                   'sign_up'.tr,
+                                              //                   style:
+                                              //                       robotoMedium
+                                              //                           .copyWith(
+                                              //                     color: Theme.of(
+                                              //                             context)
+                                              //                         .primaryColor,
+                                              //                     fontSize: 15,
+                                              //                   ),
+                                              //                 ),
+                                              //               ),
+                                              //             ),
+                                              //           ),
+                                              //         ),
+                                              //       ),
+                                              //     ],
+                                              //   ),
                                             ]),
                                   const SizedBox(
                                       height: Dimensions.paddingSizeSmall),
@@ -351,17 +374,6 @@ class SignInScreenState extends State<SignInScreen> {
                                               MainAxisAlignment.center,
                                           children: [
                                             InkWell(
-                                              onTap: () {
-                                                if (ResponsiveHelper.isDesktop(
-                                                    context)) {
-                                                  Get.back();
-                                                  Get.dialog(
-                                                      const SignUpScreen());
-                                                } else {
-                                                  Get.toNamed(RouteHelper
-                                                      .getSignUpRoute());
-                                                }
-                                              },
                                               child: Padding(
                                                 padding: const EdgeInsets.all(
                                                     Dimensions
@@ -394,66 +406,55 @@ class SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  void _login(AuthController authController, String countryDialCode) async {
-    String phone = _phoneController.text.trim();
-    String password = _passwordController.text.trim();
-    String numberWithCountryCode = countryDialCode + phone;
-    PhoneValid phoneValid =
-        await CustomValidator.isPhoneValid(numberWithCountryCode);
-    numberWithCountryCode = phoneValid.phone;
+  // void verify(AuthController authController, String countryDialCode) async {
+  //   String phone = _phoneController.text.trim();
+  //   String numberWithCountryCode = countryDialCode + phone;
+  //   PhoneValid phoneValid =
+  //       await CustomValidator.isPhoneValid(numberWithCountryCode);
+  //   numberWithCountryCode = phoneValid.phone;
 
-    if (_formKeyLogin!.currentState!.validate()) {
-      // if (phone.isEmpty) {
-      //   showCustomSnackBar('enter_phone_number'.tr);
-      // } else if (!phoneValid.isValid) {
-      //   showCustomSnackBar('invalid_phone_number'.tr);
-      //   } else if (password.isEmpty) {
-      //     showCustomSnackBar('enter_password'.tr);
-      //   } else if (password.length < 6) {
-      //     showCustomSnackBar('password_should_be'.tr);
-      // } else {
-      Get.toNamed(RouteHelper.otpScreen);
-      //   authController.login(numberWithCountryCode, password).then((status) async {
-      //     print("API_Response: \${status.message}");
-      //     if (status.isSuccess) {
-      //       String? userId = await authController.getUserId();
-      //       print("Stored_User_ID: $userId");
+  //   if (_formKeyLogin!.currentState!.validate()) {
+  //      Get.toNamed(RouteHelper.otpScreen);
+  //       authController.login(numberWithCountryCode, password).then((status) async {
+  //         print("API_Response: \${status.message}");
+  //         if (status.isSuccess) {
+  //           String? userId = await authController.getUserId();
+  //           print("Stored_User_ID: $userId");
 
-      //       if (!Get.find<SplashController>().configModel!.customerVerification! &&
-      //           int.parse(status.message![0]) != 0) {
-      //         Get.find<CartController>().getCartDataOnline();
-      //       }
-      //       if (authController.isActiveRememberMe) {
-      //         authController.saveUserNumberAndPasswordSharedPref(
-      //             phone, password, countryDialCode);
-      //       } else {
-      //         authController.clearUserNumberAndPassword();
-      //       }
-      //       String token = status.message!.substring(1, status.message!.length);
-      //       if (Get.find<SplashController>()
-      //               .configModel!
-      //               .customerVerification! &&
-      //           int.parse(status.message![0]) == 0) {
-      //         if (Get.find<SplashController>()
-      //             .configModel!
-      //             .firebaseOtpVerification!) {
-      //           Get.find<AuthController>().firebaseVerifyPhoneNumber(
-      //               numberWithCountryCode, token,
-      //               fromSignUp: true);
-      //         } else {
-      //           List<int> encoded = utf8.encode(password);
-      //           String data = base64Encode(encoded);
-      // Get.toNamed(RouteHelper.getVerificationRoute(
-      //     numberWithCountryCode, token, RouteHelper.signUp, data));
-      //         }
-      //       } else {
-      //         Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
-      //       }
-      //     } else {
-      //       showCustomSnackBar(status.message);
-      //     }
-      //   });
-      //}
-    }
-  }
+  //           if (!Get.find<SplashController>().configModel!.customerVerification! &&
+  //               int.parse(status.message![0]) != 0) {
+  //             Get.find<CartController>().getCartDataOnline();
+  //           }
+  //           if (authController.isActiveRememberMe) {
+  //             // authController.saveUserNumberAndPasswordSharedPref(
+  //             //     phone, password, countryDialCode);
+  //           } else {
+  //             authController.clearUserNumberAndPassword();
+  //           }
+  //           String token = status.message!.substring(1, status.message!.length);
+  //           if (Get.find<SplashController>()
+  //                   .configModel!
+  //                   .customerVerification! &&
+  //               int.parse(status.message![0]) == 0) {
+  //             if (Get.find<SplashController>()
+  //                 .configModel!
+  //                 .firebaseOtpVerification!) {
+  //               Get.find<AuthController>().firebaseVerifyPhoneNumber(
+  //                   numberWithCountryCode, token,
+  //                   fromSignUp: true);
+  //             } else {
+  //               List<int> encoded = utf8.encode(phone);
+  //               String data = base64Encode(encoded);
+  //     Get.toNamed(RouteHelper.getVerificationRoute(
+  //         numberWithCountryCode, token, RouteHelper.signUp, data));
+  //             }
+  //           } else {
+  //             Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
+  //           }
+  //         } else {
+  //           showCustomSnackBar(status.message);
+  //         }
+  //       });
+  //     }
+  //   }
 }
