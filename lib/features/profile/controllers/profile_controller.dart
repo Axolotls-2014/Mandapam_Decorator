@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:flutter/material.dart';
 import 'package:sixam_mart/features/favourite/controllers/favourite_controller.dart';
 import 'package:sixam_mart/features/chat/domain/models/conversation_model.dart';
 import 'package:sixam_mart/common/models/response_model.dart';
@@ -26,13 +27,6 @@ class ProfileController extends GetxController implements GetxService {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-
-
-
-
-
-
-
   Future<void> getUserInfo() async {
     _pickedFile = null;
     _rawFile = null;
@@ -47,10 +41,12 @@ class ProfileController extends GetxController implements GetxService {
     _userInfoModel = null;
   }
 
-  Future<ResponseModel> updateUserInfo(UserInfoModel updateUserModel, String token) async {
+  Future<ResponseModel> updateUserInfo(
+      UserInfoModel updateUserModel, String token) async {
     _isLoading = true;
     update();
-    ResponseModel responseModel = await profileServiceInterface.updateProfile(updateUserModel, _pickedFile, token);
+    ResponseModel responseModel = await profileServiceInterface.updateProfile(
+        updateUserModel, _pickedFile, token);
     _isLoading = false;
     if (responseModel.isSuccess) {
       Get.back();
@@ -68,7 +64,8 @@ class ProfileController extends GetxController implements GetxService {
   Future<ResponseModel> changePassword(UserInfoModel updatedUserModel) async {
     _isLoading = true;
     update();
-    ResponseModel responseModel = await profileServiceInterface.changePassword(updatedUserModel);
+    ResponseModel responseModel =
+        await profileServiceInterface.changePassword(updatedUserModel);
     _isLoading = false;
     if (responseModel.isSuccess) {
       responseModel = ResponseModel(true, responseModel.message);
@@ -83,9 +80,9 @@ class ProfileController extends GetxController implements GetxService {
     _userInfoModel!.userInfo = user;
   }
 
-  void pickImage() async {
-    _pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if(_pickedFile != null) {
+  void pickImage(ImageSource source) async {
+    _pickedFile = await ImagePicker().pickImage(source: source);
+    if (_pickedFile != null) {
       // _pickedFile = await NetworkInfo.compressImage(_pickedFile!);
       _rawFile = await _pickedFile!.readAsBytes();
     }
@@ -95,7 +92,7 @@ class ProfileController extends GetxController implements GetxService {
   void initData({bool isUpdate = false}) {
     _pickedFile = null;
     _rawFile = null;
-    if(isUpdate){
+    if (isUpdate) {
       update();
     }
   }
@@ -110,7 +107,7 @@ class ProfileController extends GetxController implements GetxService {
       Get.find<AuthController>().clearSharedData();
       Get.find<FavouriteController>().removeFavourite();
       Get.offAllNamed(RouteHelper.getSignInRoute(RouteHelper.splash));
-    }else{
+    } else {
       Get.back();
       showCustomSnackBar(responseModel.message, isError: true);
     }
@@ -121,4 +118,49 @@ class ProfileController extends GetxController implements GetxService {
     update();
   }
 
+  void showPickOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+          child: Wrap(
+            children: [
+              Center(
+                child: Container(
+                  height: 4,
+                  width: 40,
+                  margin: const EdgeInsets.only(bottom: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[400],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              ListTile(
+                leading:
+                    const Icon(Icons.photo_camera, color: Colors.deepPurple),
+                title: const Text("Take a Photo"),
+                onTap: () {
+                  Navigator.pop(context);
+                  pickImage(ImageSource.camera);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library, color: Colors.teal),
+                title: const Text("Choose from Gallery"),
+                onTap: () {
+                  Navigator.pop(context);
+                  pickImage(ImageSource.gallery);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }

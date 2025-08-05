@@ -57,15 +57,13 @@ class OtpController extends GetxController {
 
   void verifyOtpCode({BuildContext? context, bool? valid}) {
     isLoadingButton.value = true;
-
     Future.delayed(const Duration(seconds: 1), () {
       isLoadingButton.value = false;
-
       debugPrint(
           'Entered OTP: ${otpCode.value}, Correct OTP: ${correctOtp.value}');
 
       if (otpCode.value == correctOtp.value) {
-        isLoadingButton.value = false;
+        //   isLoadingButton.value = false;
         debugPrint("✅ OTP Verified: ${otpCode.value}");
         Get.snackbar(
           "Verification Successful",

@@ -875,7 +875,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                                     ? Dimensions.fontSizeExtraSmall
                                     : null,
                                 buttonText: 'sign_up'.tr,
-                                isLoading: authController.isLoading,
+                                // isLoading: authController.isLoading,
                                 onPressed: authController.acceptTerms
                                     ? () => _register(
                                         authController, _countryDialCode!)

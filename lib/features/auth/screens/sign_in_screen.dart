@@ -429,43 +429,42 @@ class SignInScreenState extends State<SignInScreen> {
     }
   }
 }
+
 void exitsUser(ResponseModel status, AuthController authController,
-      String numberWithCountryCode) {
-    String number = numberWithCountryCode.substring(3);
-    if (status.isSuccess) {
-      String? token = status.token;
-      int? userId = status.userId;
-      bool isPhoneVerified = status.isPhoneVerified;
+    String numberWithCountryCode) {
+  String number = numberWithCountryCode.substring(3);
+  if (status.isSuccess) {
+    String? token = status.token;
+    int? userId = status.userId;
+    bool isPhoneVerified = status.isPhoneVerified;
 
-      print("UserId: $userId");
-      print("Token: $token");
+    print("UserId: $userId");
+    print("Token: $token");
 
-      if (!Get.find<SplashController>().configModel!.customerVerification! &&
-          isPhoneVerified) {
-        Get.find<CartController>().getCartDataOnline();
-      }
+    if (!Get.find<SplashController>().configModel!.customerVerification! &&
+        isPhoneVerified) {
+      Get.find<CartController>().getCartDataOnline();
+    }
 
-      if (!authController.isActiveRememberMe) {
-        authController.clearUserNumberAndPassword();
-      }
+    if (!authController.isActiveRememberMe) {
+      authController.clearUserNumberAndPassword();
+    }
 
-      if (Get.find<SplashController>().configModel!.customerVerification! &&
-          !isPhoneVerified) {
-        if (Get.find<SplashController>()
-            .configModel!
-            .firebaseOtpVerification!) {
-          Get.find<AuthController>().firebaseVerifyPhoneNumber(
-              numberWithCountryCode, token!,
-              fromSignUp: true);
-        } else {
-          String data = base64Encode(utf8.encode(number));
-          Get.toNamed(RouteHelper.getVerificationRoute(
-              numberWithCountryCode, token!, RouteHelper.signUp, data));
-        }
+    if (Get.find<SplashController>().configModel!.customerVerification! &&
+        !isPhoneVerified) {
+      if (Get.find<SplashController>().configModel!.firebaseOtpVerification!) {
+        Get.find<AuthController>().firebaseVerifyPhoneNumber(
+            numberWithCountryCode, token!,
+            fromSignUp: true);
       } else {
-        Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
+        String data = base64Encode(utf8.encode(number));
+        Get.toNamed(RouteHelper.getVerificationRoute(
+            numberWithCountryCode, token!, RouteHelper.signUp, data));
       }
     } else {
-      showCustomSnackBar(status.message);
+      Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
     }
+  } else {
+    showCustomSnackBar(status.message);
   }
+}
