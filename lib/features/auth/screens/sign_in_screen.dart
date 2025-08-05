@@ -1,17 +1,18 @@
 //import 'dart:async';
-import 'dart:convert';
 //import 'dart:io';
+import 'dart:convert';
+
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:sixam_mart/common/models/response_model.dart';
 import 'package:sixam_mart/common/widgets/custom_snackbar.dart';
 import 'package:sixam_mart/features/cart/controllers/cart_controller.dart';
 import 'package:sixam_mart/features/language/controllers/language_controller.dart';
 //import 'package:sixam_mart/features/location/controllers/location_controller.dart';
 import 'package:sixam_mart/features/splash/controllers/splash_controller.dart';
 import 'package:sixam_mart/features/auth/controllers/auth_controller.dart';
-import 'package:sixam_mart/features/auth/screens/sign_up_screen.dart';
 import 'package:sixam_mart/features/auth/widgets/condition_check_box_widget.dart';
-//import 'package:sixam_mart/features/auth/widgets/social_login_widget.dart';
 import 'package:sixam_mart/helper/custom_validator.dart';
+//import 'package:sixam_mart/features/auth/widgets/social_login_widget.dart';
 import 'package:sixam_mart/helper/responsive_helper.dart';
 import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/helper/validate_check.dart';
@@ -276,10 +277,15 @@ class SignInScreenState extends State<SignInScreen> {
                                         return;
                                       } else {
                                         // ✅ Passed all validations
-                                        Get.toNamed(RouteHelper.otpScreen);
+                                        verify(authController);
+                                        // Get.toNamed(RouteHelper.otpScreen);
 
-                                        controller.fetchOtpFromApi(
-                                            phone: fullPhoneNumber);
+                                        // controller.fetchOtpFromApi(
+                                        //   phone: fullPhoneNumber,
+                                        //   rawPhone: number,
+                                        //   countryDialCode:
+                                        //       _countryDialCode ?? '+91',
+                                        // );
                                       }
                                     },
                                     isLoading: authController.isLoading,
@@ -406,55 +412,60 @@ class SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  // void verify(AuthController authController, String countryDialCode) async {
-  //   String phone = _phoneController.text.trim();
-  //   String numberWithCountryCode = countryDialCode + phone;
-  //   PhoneValid phoneValid =
-  //       await CustomValidator.isPhoneValid(numberWithCountryCode);
-  //   numberWithCountryCode = phoneValid.phone;
+  void verify(AuthController authController) async {
+    String number = _phoneController.text.trim();
+    String fullPhoneNumber = "$_countryDialCode$number";
+    PhoneValid phoneValid = await CustomValidator.isPhoneValid(fullPhoneNumber);
+    String numberWithCountryCode = phoneValid.phone;
 
-  //   if (_formKeyLogin!.currentState!.validate()) {
-  //      Get.toNamed(RouteHelper.otpScreen);
-  //       authController.login(numberWithCountryCode, password).then((status) async {
-  //         print("API_Response: \${status.message}");
-  //         if (status.isSuccess) {
-  //           String? userId = await authController.getUserId();
-  //           print("Stored_User_ID: $userId");
-
-  //           if (!Get.find<SplashController>().configModel!.customerVerification! &&
-  //               int.parse(status.message![0]) != 0) {
-  //             Get.find<CartController>().getCartDataOnline();
-  //           }
-  //           if (authController.isActiveRememberMe) {
-  //             // authController.saveUserNumberAndPasswordSharedPref(
-  //             //     phone, password, countryDialCode);
-  //           } else {
-  //             authController.clearUserNumberAndPassword();
-  //           }
-  //           String token = status.message!.substring(1, status.message!.length);
-  //           if (Get.find<SplashController>()
-  //                   .configModel!
-  //                   .customerVerification! &&
-  //               int.parse(status.message![0]) == 0) {
-  //             if (Get.find<SplashController>()
-  //                 .configModel!
-  //                 .firebaseOtpVerification!) {
-  //               Get.find<AuthController>().firebaseVerifyPhoneNumber(
-  //                   numberWithCountryCode, token,
-  //                   fromSignUp: true);
-  //             } else {
-  //               List<int> encoded = utf8.encode(phone);
-  //               String data = base64Encode(encoded);
-  //     Get.toNamed(RouteHelper.getVerificationRoute(
-  //         numberWithCountryCode, token, RouteHelper.signUp, data));
-  //             }
-  //           } else {
-  //             Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
-  //           }
-  //         } else {
-  //           showCustomSnackBar(status.message);
-  //         }
-  //       });
-  //     }
-  //   }
+    if (_formKeyLogin!.currentState!.validate()) {
+      // Move this if needed
+      authController.login(numberWithCountryCode).then((status) async {
+        print("API_Response: ${status.message}");
+        final controller = Get.put(OtpController());
+        controller.status = status;
+        controller.authController = authController;
+      });
+    }
+  }
 }
+void exitsUser(ResponseModel status, AuthController authController,
+      String numberWithCountryCode) {
+    String number = numberWithCountryCode.substring(3);
+    if (status.isSuccess) {
+      String? token = status.token;
+      int? userId = status.userId;
+      bool isPhoneVerified = status.isPhoneVerified;
+
+      print("UserId: $userId");
+      print("Token: $token");
+
+      if (!Get.find<SplashController>().configModel!.customerVerification! &&
+          isPhoneVerified) {
+        Get.find<CartController>().getCartDataOnline();
+      }
+
+      if (!authController.isActiveRememberMe) {
+        authController.clearUserNumberAndPassword();
+      }
+
+      if (Get.find<SplashController>().configModel!.customerVerification! &&
+          !isPhoneVerified) {
+        if (Get.find<SplashController>()
+            .configModel!
+            .firebaseOtpVerification!) {
+          Get.find<AuthController>().firebaseVerifyPhoneNumber(
+              numberWithCountryCode, token!,
+              fromSignUp: true);
+        } else {
+          String data = base64Encode(utf8.encode(number));
+          Get.toNamed(RouteHelper.getVerificationRoute(
+              numberWithCountryCode, token!, RouteHelper.signUp, data));
+        }
+      } else {
+        Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
+      }
+    } else {
+      showCustomSnackBar(status.message);
+    }
+  }

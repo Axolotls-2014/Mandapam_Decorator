@@ -293,7 +293,8 @@ class SignUpScreenState extends State<SignUpScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Image.asset(Images.logo, width: 125),
+                              Center(
+                                  child: Image.asset(Images.logo, width: 125)),
                               const SizedBox(
                                   height: Dimensions.paddingSizeExtraLarge),
                               Align(

@@ -33,7 +33,7 @@ class AuthService implements AuthServiceInterface{
 
   @override
   Future<ResponseModel> login({String? phone, String? password, required bool isCustomerVerificationOn}) async {
-    Response response = await authRepositoryInterface.login(phone: phone, password: password);
+    Response response = await authRepositoryInterface.login(phone: phone);
     ResponseModel responseModel;
     if (response.statusCode == 200) {
 

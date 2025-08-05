@@ -13,7 +13,8 @@ import 'package:sixam_mart/features/auth/domain/reposotories/auth_repository_int
 import 'package:sixam_mart/features/auth/screens/image_picker.dart';
 import 'package:sixam_mart/helper/address_helper.dart';
 import 'package:sixam_mart/helper/module_helper.dart';
-import 'package:sixam_mart/screens/subscreption_screen.dart';
+import 'package:sixam_mart/helper/route_helper.dart';
+import 'package:sixam_mart/screens/otp_controller.dart';
 import 'package:sixam_mart/util/app_constants.dart';
 import 'package:http/http.dart' as http;
 // ignore: depend_on_referenced_packages
@@ -70,7 +71,7 @@ class AuthRepository implements AuthRepositoryInterface {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
-      
+
         // Save user_id if returned
         if (responseData.containsKey("user_id")) {
           SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -90,32 +91,41 @@ class AuthRepository implements AuthRepositoryInterface {
   }
 
   @override
-  Future<Response> login({String? phone, String? password}) async {
-    String guestId = getSharedPrefGuestId();
-    String? deviceToken = await saveDeviceToken();
-
+  Future<Response> login({
+    String? phone,
+  }) async {
     Map<String, String> data = {
       "phone": phone!,
-      "password": password!,
-      "cm_firebase_token": deviceToken!,
-      "usertype": "Decorator",
+      "user_type": "Decorator",
     };
 
-    if (guestId.isNotEmpty) {
-      data.addAll({"guest_id": guestId});
+    Response response = await apiClient.postData('/api/v1/auth/sendOtp', data,
+        handleError: false);
+    log('Ganesh code status: ${response.status}');
+    if (response.body['phone_exists'] == false) {
+      Get.offAllNamed(RouteHelper.otpScreen);
+    } else {
+      Get.toNamed(RouteHelper.otpScreen);
     }
 
-    Response response = await apiClient.postData(AppConstants.loginUri, data,
-        handleError: false);
-
     if (response.statusCode == 200 && response.body != null) {
+      final controller = Get.put(OtpController());
       Map<String, dynamic> responseData = response.body;
-
+      controller.correctOtp.value = "${responseData['otp']}";
+      controller.userExit.value = responseData['phone_exists'];
+      controller.numberWithCountryCode.value = phone;
+      debugPrint("✅ OTP API Response:");
+      debugPrint("👉 Message: ${responseData['message']}");
+      debugPrint("👉 Phone Exists: ${responseData['phone_exists']}");
+      debugPrint("👉 OTP: ${responseData['otp']}");
+      debugPrint("👉 User ID: ${responseData['user_id']}");
+      debugPrint("👉 Token: ${responseData['token']}");
       if (responseData.containsKey("user_id")) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString("user_id", responseData["user_id"].toString());
       }
     }
+
     return response;
   }
 
