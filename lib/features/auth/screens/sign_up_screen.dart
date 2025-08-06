@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -10,7 +9,6 @@ import 'package:sixam_mart/common/models/module_model.dart';
 import 'package:sixam_mart/features/address/domain/models/address_model.dart';
 import 'package:sixam_mart/features/auth/screens/image_picker.dart';
 import 'package:sixam_mart/features/language/controllers/language_controller.dart';
-import 'package:sixam_mart/features/location/controllers/location_controller.dart';
 import 'package:sixam_mart/features/splash/controllers/splash_controller.dart';
 import 'package:sixam_mart/features/auth/controllers/auth_controller.dart';
 import 'package:sixam_mart/features/auth/domain/models/signup_body_model.dart';
@@ -20,6 +18,7 @@ import 'package:sixam_mart/helper/custom_validator.dart';
 import 'package:sixam_mart/helper/responsive_helper.dart';
 import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/helper/validate_check.dart';
+import 'package:sixam_mart/screens/otp_controller.dart';
 import 'package:sixam_mart/screens/subscreption_screen.dart';
 import 'package:sixam_mart/util/app_constants.dart';
 import 'package:sixam_mart/util/dimensions.dart';
@@ -44,6 +43,7 @@ class SignUpScreen extends StatefulWidget {
 
 class SignUpScreenState extends State<SignUpScreen> {
   final controller = Get.put(SubmitAssignmentController());
+  final otpController = Get.put(OtpController());
 
   final String apiKey = "AIzaSyB3bs7otrlVeqcKYo3zw2Fn-luzy1Chp14";
 
@@ -76,6 +76,8 @@ class SignUpScreenState extends State<SignUpScreen> {
   @override
   void initState() {
     super.initState();
+    String number = otpController.numberWithCountryCode.value.substring(3);
+    _phoneController.text = number;
     _determinePosition();
     _countryDialCode = CountryCode.fromCountryCode(
             Get.find<SplashController>().configModel!.country!)
@@ -875,7 +877,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                                     ? Dimensions.fontSizeExtraSmall
                                     : null,
                                 buttonText: 'sign_up'.tr,
-                                // isLoading: authController.isLoading,
+                                isLoading: authController.isLoading,
                                 onPressed: authController.acceptTerms
                                     ? () => _register(
                                         authController, _countryDialCode!)

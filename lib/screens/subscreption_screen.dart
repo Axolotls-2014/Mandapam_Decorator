@@ -6,6 +6,7 @@ import 'package:sixam_mart/features/location/controllers/location_controller.dar
 import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/screens/subscreption_controller.dart';
 import 'package:sixam_mart/screens/subscreption_model.dart';
+import 'package:sixam_mart/screens/webview_screen.dart';
 
 class SubscreptionScreen extends StatelessWidget {
   const SubscreptionScreen({super.key});
@@ -149,8 +150,16 @@ class SubscreptionScreen extends StatelessWidget {
                         final selectedPackage =
                             controller.packages[selectedIndex.value];
                         log("${selectedPackage.price}");
-                        Get.find<LocationController>()
-                            .navigateToLocationScreen(RouteHelper.signUp);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const ReusableWebView(
+                              url:
+                                  'https://mandapam.co/payment/razor-pay/pay?payment_id=8e8b5fe6-ab49-4543-81bb-99785dc3a25f',
+                              title: 'payment',
+                            ),
+                          ),
+                        );
                       }
                     },
                     child: const Text('Submit',

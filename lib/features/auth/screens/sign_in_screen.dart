@@ -434,7 +434,7 @@ void exitsUser(ResponseModel status, AuthController authController,
     String numberWithCountryCode) {
   String number = numberWithCountryCode.substring(3);
   if (status.isSuccess) {
-    String? token = status.token;
+    String? token = status.token == 'N/A' ? '' : status.token;
     int? userId = status.userId;
     bool isPhoneVerified = status.isPhoneVerified;
 
