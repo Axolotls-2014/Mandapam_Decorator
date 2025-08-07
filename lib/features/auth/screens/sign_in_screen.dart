@@ -277,7 +277,6 @@ class SignInScreenState extends State<SignInScreen> {
                                                 .tr);
                                         return;
                                       } else {
-                                        // ✅ Passed all validations
                                         verify(authController);
                                         // Get.toNamed(RouteHelper.otpScreen);
 
