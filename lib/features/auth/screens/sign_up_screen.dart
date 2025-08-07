@@ -1071,7 +1071,6 @@ class SignUpScreenState extends State<SignUpScreen> {
           //   }
           // }
         } else {
-          print('ganesh 4');
           showCustomSnackBar(status.message);
           print("Form validation failed.");
         }

@@ -107,6 +107,7 @@ class CustomTextFieldState extends State<CustomTextField> {
         SizedBox(height: widget.showTitle ? ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeDefault : Dimensions.paddingSizeExtraSmall : 0),
 
         TextFormField(
+          maxLength: widget.maxLength,
           onTap: onFocusChanged,
           maxLines: widget.maxLines,
           controller: widget.controller,
@@ -121,8 +122,16 @@ class CustomTextFieldState extends State<CustomTextField> {
           enabled: widget.isEnabled,
           autofocus: false,
           obscureText: widget.isPassword ? _obscureText : false,
-          inputFormatters: widget.inputType == TextInputType.phone ? <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp('[0-9]'))]
-              : widget.isAmount ? [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))] : widget.isNumber ? [FilteringTextInputFormatter.allow(RegExp(r'\d'))] : null,
+          inputFormatters: [
+            if (widget.inputType == TextInputType.phone)
+              FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+            if (widget.isAmount)
+              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+            if (widget.isNumber)
+              FilteringTextInputFormatter.allow(RegExp(r'\d')),
+            if (!widget.isAmount && !widget.isNumber && widget.inputType != TextInputType.phone)
+              FilteringTextInputFormatter.allow(RegExp('[a-zA-Z ]')),
+          ],
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
@@ -149,6 +158,7 @@ class CustomTextFieldState extends State<CustomTextField> {
             fillColor: Theme.of(context).cardColor,
             hintStyle: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).hintColor),
             filled: true,
+            counterText: '', // Hides the character counter while still enforcing maxLength
 
             labelStyle : widget.showLabelText ? robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).hintColor) : null,
             errorStyle: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
@@ -166,36 +176,33 @@ class CustomTextFieldState extends State<CustomTextField> {
               if(widget.required && widget.labelText != null)
                 TextSpan(text : ' *', style: robotoRegular.copyWith(color: Theme.of(context).colorScheme.error, fontSize: Dimensions.fontSizeLarge)),
 
-              // if(widget.isEnabled == false)
-              //   TextSpan(text: widget.fromUpdateProfile ? ' (${'phone_number_can_not_be_edited'.tr})' : ' (${'non_changeable'.tr})', style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).colorScheme.error)),
-
             ])) : null,
 
             prefixIcon: widget.isPhone ? SizedBox(width: 95, child: Row(children: [
               Container(
-                width: 85, height: ResponsiveHelper.isDesktop(context) ? 40 : 50,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(Dimensions.radiusSmall),
-                    bottomLeft: Radius.circular(Dimensions.radiusSmall),
+                  width: 85, height: ResponsiveHelper.isDesktop(context) ? 40 : 50,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(Dimensions.radiusSmall),
+                      bottomLeft: Radius.circular(Dimensions.radiusSmall),
+                    ),
                   ),
-                ),
-                margin: const EdgeInsets.only(right: 0),
-                padding: const EdgeInsets.only(left: 5),
-                child: Center(
-                child: CodePickerWidget(
-                  boxDecoration: BoxDecoration(color: Theme.of(context).cardColor),
-                  flagWidth: 25,
-                  padding: EdgeInsets.zero,
-                  onChanged: widget.onCountryChanged,
-                  initialSelection: widget.countryDialCode,
-                  favorite: [widget.countryDialCode!],
-                  enabled: Get.find<SplashController>().configModel?.countryPickerStatus,
-                  textStyle: robotoRegular.copyWith(
-                    fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).textTheme.bodyMedium!.color,
-                  ),
-                ),
-                )),
+                  margin: const EdgeInsets.only(right: 0),
+                  padding: const EdgeInsets.only(left: 5),
+                  child: Center(
+                    child: CodePickerWidget(
+                      boxDecoration: BoxDecoration(color: Theme.of(context).cardColor),
+                      flagWidth: 25,
+                      padding: EdgeInsets.zero,
+                      onChanged: widget.onCountryChanged,
+                      initialSelection: widget.countryDialCode,
+                      favorite: [widget.countryDialCode!],
+                      enabled: Get.find<SplashController>().configModel?.countryPickerStatus,
+                      textStyle: robotoRegular.copyWith(
+                        fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).textTheme.bodyMedium!.color,
+                      ),
+                    ),
+                  )),
 
               Container(
                 height: 20, width: 2,
@@ -209,7 +216,7 @@ class CustomTextFieldState extends State<CustomTextField> {
             suffixIcon: widget.isPassword ? IconButton(
               icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility, color: Theme.of(context).hintColor.withOpacity(0.3)),
               onPressed: _toggle,
-            ) : /*(widget.suffixIcon != null) ? Icon(widget.suffixIcon, color: Theme.of(context).primaryColor) : null,*/ widget.suffixChild,
+            ) : widget.suffixChild,
           ),
           onFieldSubmitted: (text) => widget.nextFocus != null ? FocusScope.of(context).requestFocus(widget.nextFocus)
               : widget.onSubmit != null ? widget.onSubmit!(text) : null,

@@ -19,6 +19,7 @@ class MyTextField extends StatefulWidget {
   final TextCapitalization capitalization;
   final Color? fillColor;
   final bool autoFocus;
+  final int? maxLength;
 
   const MyTextField({
     super.key,
@@ -37,6 +38,7 @@ class MyTextField extends StatefulWidget {
     this.fillColor,
     this.isPassword = false,
     this.autoFocus = false,
+    this.maxLength,
   });
 
   @override
@@ -51,6 +53,7 @@ class MyTextFieldState extends State<MyTextField> {
     return TextField(
       key: widget.key,
       maxLines: widget.maxLines,
+      maxLength: widget.maxLength,
       controller: widget.controller,
       focusNode: widget.focusNode,
       style: robotoRegular,
@@ -61,7 +64,12 @@ class MyTextFieldState extends State<MyTextField> {
       enabled: widget.isEnabled,
       autofocus: widget.autoFocus,
       obscureText: widget.isPassword ? _obscureText : false,
-      inputFormatters: widget.inputType == TextInputType.phone ? <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp('[0-9+]'))] : null,
+      inputFormatters: [
+        if(widget.inputType == TextInputType.phone)
+          FilteringTextInputFormatter.allow(RegExp('[0-9+]')),
+        if(widget.inputType != TextInputType.phone)
+          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};:"\\|,.<>/?~` ]')),
+      ],
       decoration: InputDecoration(
         hintText: widget.hintText,
         isDense: true,
@@ -69,6 +77,7 @@ class MyTextFieldState extends State<MyTextField> {
         fillColor: widget.fillColor ?? Theme.of(context).cardColor,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(Dimensions.radiusSmall), borderSide: BorderSide.none),
         hintStyle: robotoRegular.copyWith(color: Theme.of(context).hintColor),
+        counterText: '', // This hides the character counter
         suffixIcon: widget.isPassword ? IconButton(
           icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility, color: Theme.of(context).hintColor.withOpacity(0.3)),
           onPressed: _toggle,

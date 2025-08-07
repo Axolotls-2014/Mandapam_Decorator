@@ -122,9 +122,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       nextFocus: _lastNameFocus,
                                       inputType: TextInputType.name,
                                       capitalization: TextCapitalization.words,
+                                      maxLength: 20,
                                     ),
+
+
                                     const SizedBox(
-                                        height: Dimensions.paddingSizeLarge),
+                                        height:
+                                        Dimensions.paddingSizeExtraSmall),
                                     Text(
                                       'last_name'.tr,
                                       style: robotoRegular.copyWith(
@@ -134,7 +138,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                     ),
                                     const SizedBox(
                                         height:
-                                            Dimensions.paddingSizeExtraSmall),
+                                        Dimensions.paddingSizeExtraSmall),
                                     MyTextField(
                                       hintText: 'last_name'.tr,
                                       controller: _lastNameController,
@@ -142,9 +146,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       nextFocus: _emailFocus,
                                       inputType: TextInputType.name,
                                       capitalization: TextCapitalization.words,
+                                      maxLength: 20,
                                     ),
+
+
                                     const SizedBox(
-                                        height: Dimensions.paddingSizeLarge),
+                                        height:
+                                        Dimensions.paddingSizeExtraSmall),
                                     Text(
                                       'email'.tr,
                                       style: robotoRegular.copyWith(
@@ -154,16 +162,20 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                     ),
                                     const SizedBox(
                                         height:
-                                            Dimensions.paddingSizeExtraSmall),
+                                        Dimensions.paddingSizeExtraSmall),
                                     MyTextField(
                                       hintText: 'email'.tr,
                                       controller: _emailController,
                                       focusNode: _emailFocus,
                                       inputAction: TextInputAction.done,
                                       inputType: TextInputType.emailAddress,
+                                      maxLength: 30,
                                     ),
+
+
                                     const SizedBox(
-                                        height: Dimensions.paddingSizeLarge),
+                                        height:
+                                        Dimensions.paddingSizeExtraSmall),
                                     Row(children: [
                                       Text(
                                         'phone'.tr,
@@ -186,14 +198,20 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                     ]),
                                     const SizedBox(
                                         height:
-                                            Dimensions.paddingSizeExtraSmall),
+                                        Dimensions.paddingSizeExtraSmall),
                                     MyTextField(
                                       hintText: 'phone'.tr,
                                       controller: _phoneController,
                                       focusNode: _phoneFocus,
                                       inputType: TextInputType.phone,
                                       isEnabled: false,
+                                      maxLength: 10,
                                     ),
+
+
+                                    const SizedBox(
+                                        height:
+                                        Dimensions.paddingSizeExtraSmall),
                                     Text(
                                       'About Us',
                                       style: robotoRegular.copyWith(
@@ -203,7 +221,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                     ),
                                     const SizedBox(
                                         height:
-                                            Dimensions.paddingSizeExtraSmall),
+                                        Dimensions.paddingSizeExtraSmall),
                                     MyTextField(
                                       hintText: 'About Us',
                                       controller: _descriptionController,
@@ -211,10 +229,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       inputType: TextInputType.text,
                                       capitalization:
                                           TextCapitalization.sentences,
-                                      maxLines: 2,
+                                      maxLength: 50,
                                     ),
+
                                     const SizedBox(
-                                        height: Dimensions.paddingSizeLarge),
+                                        height:
+                                        Dimensions.paddingSizeExtraSmall),
                                     Text(
                                       'Firm Name',
                                       style: robotoRegular.copyWith(
@@ -224,7 +244,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                     ),
                                     const SizedBox(
                                         height:
-                                            Dimensions.paddingSizeExtraSmall),
+                                        Dimensions.paddingSizeExtraSmall),
                                     MyTextField(
                                       hintText: 'Firm Name',
                                       controller: _firmNameController,
@@ -232,85 +252,43 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       //nextFocus: _emailFocus,
                                       inputType: TextInputType.name,
                                       capitalization: TextCapitalization.words,
+                                      maxLength: 30,
                                     ),
+
+
                                     const SizedBox(
-                                        height: Dimensions.paddingSizeLarge),
-                                    const SizedBox(
-                                        height: Dimensions.paddingSizeLarge),
-                                    const Text('Firm Image',
-                                        style:
-                                            TextStyle(color: Colors.black87)),
-                                    GestureDetector(
-                                      // onTap: () =>
-                                      //   controller.showPickOptions(context),
-                                      child: Obx(
-                                        () => Container(
-                                          padding: const EdgeInsets.all(10),
-                                          margin: const EdgeInsets.all(10),
-                                          width: 160,
-                                          height: 160,
-                                          decoration: BoxDecoration(
-                                            border:
-                                                Border.all(color: Colors.grey),
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            color: Colors.grey.shade100,
+                                        height:
+                                        Dimensions.paddingSizeExtraSmall),
+                                    // Only show this block if there's an image
+                                    if (controller.file.value != null) ...[
+                                      const Text('Firm Image', style: TextStyle(color: Colors.black87)),
+                                      const SizedBox(
+                                          height:
+                                          Dimensions.paddingSizeExtraSmall),
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        margin: const EdgeInsets.all(10),
+                                        width: 160,
+                                        height: 160,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.grey),
+                                          borderRadius: BorderRadius.circular(12),
+                                          color: Colors.grey.shade100,
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(12),
+                                          child: Image.file(
+                                            controller.file.value!,
+                                            fit: BoxFit.cover,
                                           ),
-                                          child: controller.file.value != null
-                                              ? ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  child: Image.file(
-                                                    controller.file.value!,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                )
-                                              : Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    const Icon(
-                                                        Icons
-                                                            .add_photo_alternate,
-                                                        size: 40,
-                                                        color: Colors.grey),
-                                                    const SizedBox(height: 8),
-                                                    Text("Add File",
-                                                        style: TextStyle(
-                                                            color: controller
-                                                                        .file
-                                                                        .value ==
-                                                                    null
-                                                                ? Colors.red
-                                                                : Colors.grey)),
-                                                  ],
-                                                ),
                                         ),
                                       ),
-                                    ),
-                                    controller.file.value == null
-                                        ? const Text(
-                                            'Firm image is required',
-                                            style: TextStyle(color: Colors.red),
-                                          )
-                                        : const SizedBox.shrink(),
-                                    ResponsiveHelper.isDesktop(context)
-                                        ? Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: Dimensions
-                                                    .paddingSizeLarge),
-                                            child: UpdateProfileButton(
-                                                isLoading:
-                                                    profileController.isLoading,
-                                                onPressed: () {
-                                                  return _updateProfile(
-                                                      profileController);
-                                                }),
-                                          )
-                                        : const SizedBox.shrink(),
+                                    ],
                                   ])),
                         )),
                       )),
+
+
                       ResponsiveHelper.isDesktop(context)
                           ? const SizedBox.shrink()
                           : Padding(

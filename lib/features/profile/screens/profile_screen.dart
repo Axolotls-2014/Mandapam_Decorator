@@ -215,25 +215,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             }) : const SizedBox() : const SizedBox(),
                             SizedBox(height: isLoggedIn ? profileController.userInfoModel!.socialId == null ? Dimensions.paddingSizeSmall : 0 : 0),
 
-                            isLoggedIn ? ProfileButtonWidget(
-                              icon: Icons.delete, title: 'delete_account'.tr,
-                              iconImage: Images.profileDelete,
-                              color: Theme.of(context).colorScheme.error,
-                              onTap: () {
-                                Get.dialog(ConfirmationDialog(icon: Images.support,
-                                  title: 'are_you_sure_to_delete_account'.tr,
-                                  description: 'it_will_remove_your_all_information'.tr, isLogOut: true,
-                                  onYesPressed: () => profileController.deleteUser(),
-                                ), useSafeArea: false);
-                              },
-                            ) : const SizedBox(),
-                            SizedBox(height: isLoggedIn ? Dimensions.paddingSizeLarge : 0),
+                            // isLoggedIn ? ProfileButtonWidget(
+                            //   icon: Icons.delete, title: 'delete_account'.tr,
+                            //   iconImage: Images.profileDelete,
+                            //   color: Theme.of(context).colorScheme.error,
+                            //   onTap: () {
+                            //     Get.dialog(ConfirmationDialog(icon: Images.support,
+                            //       title: 'are_you_sure_to_delete_account'.tr,
+                            //       description: 'it_will_remove_your_all_information'.tr, isLogOut: true,
+                            //       onYesPressed: () => profileController.deleteUser(),
+                            //     ), useSafeArea: false);
+                            //   },
+                            // ) : const SizedBox(),
+                            // SizedBox(height: isLoggedIn ? Dimensions.paddingSizeLarge : 0),
 
                             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                              Text('${'version'.tr}:', style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall)),
-                              const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                              Text(AppConstants.appVersion.toString(), style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall)),
-                            ]),
+                              // Text('${'version'.tr}:', style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall)),
+                              // const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                              // Text(AppConstants.appVersion.toString(), style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall)),
+                            ]
+                            ),
                           ]),
                         ),
                       )

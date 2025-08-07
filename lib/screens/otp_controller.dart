@@ -63,7 +63,6 @@ class OtpController extends GetxController {
           'Entered OTP: ${otpCode.value}, Correct OTP: ${correctOtp.value}');
 
       if (otpCode.value == correctOtp.value) {
-        //   isLoadingButton.value = false;
         debugPrint("✅ OTP Verified: ${otpCode.value}");
         Get.snackbar(
           "Verification Successful",

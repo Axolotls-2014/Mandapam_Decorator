@@ -35,6 +35,9 @@ class ApiService {
     if (media.containsKey('title')) {
       request.fields['media[0][title]'] = media['title'].toString();
     }
+    if (media.containsKey('description')) {
+      request.fields['media[0][description]'] = media['description'].toString();
+    }
 
     for (var entry in media.entries) {
       if (entry.key.contains('file_path') && entry.value is String) {

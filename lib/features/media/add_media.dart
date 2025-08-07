@@ -39,6 +39,7 @@ class _AddMediaScreenState extends State<AddMediaScreen> {
   List<XFile> _selectedVideos = [];
   bool _isSubmitting = false;
   final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   String _selectedOption = 'image';
   String? globalUserId;
   late AuthController authController;
@@ -148,17 +149,35 @@ class _AddMediaScreenState extends State<AddMediaScreen> {
   }
 
   void _submitMedia() async {
-    if (_titleController.text.isEmpty) {
+    if (_selectedImages.isEmpty && _selectedVideos.isEmpty) {
+      _showAutoDismissDialog("Error", "Select at least one image or video.");
+      return;
+    }
+
+    if (_descriptionController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please add hashtags')),
+        SnackBar(content: Text('Add description')),
       );
       return;
     }
 
-    if (_selectedImages.isEmpty && _selectedVideos.isEmpty) {
-      _showAutoDismissDialog("Error", "Please select at least one image or video.");
+    if (_titleController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Add hashtags')),
+      );
       return;
     }
+
+    final hashtags = _titleController.text.trim().split(RegExp(r'\s+'));
+    final isValid = hashtags.every((tag) => tag.startsWith('#') && tag.length > 1);
+
+    if (!isValid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Enter proper hashtag')),
+      );
+      return;
+    }
+
 
     setState(() {
       _isSubmitting = true;
@@ -174,6 +193,7 @@ class _AddMediaScreenState extends State<AddMediaScreen> {
       requestBody["media[$i][type]"] = "photo";
       requestBody["media[$i][file_path]"] = _selectedImages[i].path;
       requestBody["media[$i][title]"] = _titleController.text;
+      requestBody["media[$i][description]"] = _descriptionController.text;
     }
 
     for (int i = 0; i < _selectedVideos.length; i++) {
@@ -181,14 +201,22 @@ class _AddMediaScreenState extends State<AddMediaScreen> {
       requestBody["media[$index][type]"] = "video";
       requestBody["media[$index][file_path]"] = _selectedVideos[i].path;
       requestBody["media[$index][title]"] = _titleController.text;
+      requestBody["media[$index][description]"] = _descriptionController.text;
     }
 
+    print('Submitting media...');
+    print('Event ID: ${widget.eventId}');
+    print('User ID: $userId');
+    print('Media Count: ${_selectedImages.length + _selectedVideos.length}');
     print('Request Body: $requestBody');
+
     final response = await apiService.addMedia(
       eventId: widget.eventId!,
       userId: userId,
       media: requestBody,
     );
+
+    print('API Response: $response');
 
     setState(() {
       _isSubmitting = false;
@@ -400,6 +428,17 @@ class _AddMediaScreenState extends State<AddMediaScreen> {
                       ),
                     ],
                   ),
+                SizedBox(height: 16),
+                TextField(
+                  controller: _descriptionController,
+                  decoration: InputDecoration(
+                    labelText: 'Description',
+                    border: OutlineInputBorder(),
+                  ),
+                  maxLines: 4,
+                  maxLength: 60,
+                  textInputAction: TextInputAction.done,
+                ),
                 SizedBox(height: 16),
                 TextField(
                   controller: _titleController,

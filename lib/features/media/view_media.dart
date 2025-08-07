@@ -123,6 +123,7 @@ class _ViewMediaScreenState extends State<ViewMediaScreen> {
       for (var batch in response['data']) {
         for (var mediaItem in batch['media']) {
           mediaItem['title'] = mediaItem['title'];
+          mediaItem['event_description'] = batch['event_description'];
         }
         allMedia.addAll(batch['media']);
       }
