@@ -123,7 +123,6 @@ class _ViewMediaScreenState extends State<ViewMediaScreen> {
       for (var batch in response['data']) {
         for (var mediaItem in batch['media']) {
           mediaItem['title'] = mediaItem['title'];
-          mediaItem['event_description'] = batch['event_description'];
         }
         allMedia.addAll(batch['media']);
       }
@@ -140,6 +139,7 @@ class _ViewMediaScreenState extends State<ViewMediaScreen> {
       });
     }
   }
+
 
   void _showMediaFullScreen(int index) {
     Navigator.of(context).push(
@@ -518,6 +518,7 @@ class _FullScreenMediaViewerState extends State<FullScreenMediaViewer> with Widg
   late ApiService apiService;
   bool _isLandscape = false;
   bool _isTitleExpanded = false;
+  bool _isDescriptionExpanded = false;
 
   @override
   void initState() {
@@ -618,8 +619,12 @@ class _FullScreenMediaViewerState extends State<FullScreenMediaViewer> with Widg
     final String? rawTitle = media['title'];
     final bool hasValidTitle = rawTitle != null && rawTitle.trim().isNotEmpty;
     final String title = hasValidTitle ? rawTitle.trim() : 'Media';
+    final String? rawDescription = media['description'];
+    final bool hasValidDescription = rawDescription != null && rawDescription.trim().isNotEmpty;
+    final String description = hasValidDescription ? rawDescription.trim() : '';
     final bool isVideo = media['media_type'] == 'video';
     final String mediaId = media['media_id'].toString();
+
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -687,6 +692,7 @@ class _FullScreenMediaViewerState extends State<FullScreenMediaViewer> with Widg
                     _videoController = null;
                     _initializeVideoController();
                     _isTitleExpanded = false;
+                    _isDescriptionExpanded = false;
                   });
                 }
               },
@@ -755,39 +761,37 @@ class _FullScreenMediaViewerState extends State<FullScreenMediaViewer> with Widg
                 return SizedBox.shrink();
               },
             ),
-            if (hasValidTitle)
+
+            if (hasValidTitle || hasValidDescription)
               Positioned(
                 bottom: isVideo ? 100 : 20,
                 left: 0,
                 right: 0,
-                child: GestureDetector(
-                  onTap: () {
-                    if (mounted) {
-                      setState(() {
-                        _isTitleExpanded = !_isTitleExpanded;
-                      });
-                    }
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    color: Colors.black.withOpacity(0.5),
-                    child: AnimatedCrossFade(
-                      duration: Duration(milliseconds: 200),
-                      firstChild: Text(
-                        title,
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      secondChild: Text(
-                        title,
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                      crossFadeState: _isTitleExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                    ),
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  color: Colors.black.withOpacity(0.5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (hasValidDescription)
+                        Text(
+                          description,
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      if (hasValidTitle)
+                        Text(
+                          title,
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ),
+
+
             if (_videoController != null && _videoController!.value.isInitialized && isVideo)
               Positioned(
                 bottom: 0,
