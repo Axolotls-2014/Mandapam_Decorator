@@ -164,7 +164,7 @@ class SubscreptionScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20), // Added extra space at bottom for better scrolling
+                const SizedBox(height: 20),
               ],
             ),
           );

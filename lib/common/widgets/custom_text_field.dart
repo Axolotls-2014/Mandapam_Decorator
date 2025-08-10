@@ -88,12 +88,11 @@ class CustomTextField extends StatefulWidget {
 class CustomTextFieldState extends State<CustomTextField> {
   bool _obscureText = true;
 
-  void onFocusChanged(){
+  void onFocusChanged() {
     FocusScope.of(context).unfocus();
     FocusScope.of(Get.context!).requestFocus(widget.focusNode);
     widget.focusNode?.addListener(() {
-      setState(() {
-      });
+      setState(() {});
     });
   }
 
@@ -102,10 +101,17 @@ class CustomTextFieldState extends State<CustomTextField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        widget.showTitle ? Text(widget.titleText, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall)) : const SizedBox(),
-        SizedBox(height: widget.showTitle ? ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeDefault : Dimensions.paddingSizeExtraSmall : 0),
-
+        widget.showTitle
+            ? Text(widget.titleText,
+            style: robotoRegular.copyWith(
+                fontSize: Dimensions.fontSizeSmall))
+            : const SizedBox(),
+        SizedBox(
+            height: widget.showTitle
+                ? ResponsiveHelper.isDesktop(context)
+                ? Dimensions.paddingSizeDefault
+                : Dimensions.paddingSizeExtraSmall
+                : 0),
         TextFormField(
           maxLength: widget.maxLength,
           onTap: onFocusChanged,
@@ -116,7 +122,9 @@ class CustomTextFieldState extends State<CustomTextField> {
           validator: widget.validator,
           style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge),
           textInputAction: widget.inputAction,
-          keyboardType: widget.isAmount ? TextInputType.number : widget.inputType,
+          keyboardType: widget.isAmount
+              ? TextInputType.number
+              : widget.inputType,
           cursorColor: Theme.of(context).primaryColor,
           textCapitalization: widget.capitalization,
           enabled: widget.isEnabled,
@@ -129,100 +137,185 @@ class CustomTextFieldState extends State<CustomTextField> {
               FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
             if (widget.isNumber)
               FilteringTextInputFormatter.allow(RegExp(r'\d')),
-            if (!widget.isAmount && !widget.isNumber && widget.inputType != TextInputType.phone)
-              FilteringTextInputFormatter.allow(RegExp('[a-zA-Z ]')),
+            if (!widget.isAmount &&
+                !widget.isNumber &&
+                widget.inputType != TextInputType.phone)
+              FilteringTextInputFormatter.allow(
+                  RegExp(r'[a-zA-Z0-9@._-]')), // ✅ Updated to allow proper email chars
           ],
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-              borderSide: BorderSide(style: widget.showBorder ? BorderStyle.solid : BorderStyle.none, width: ResponsiveHelper.isDesktop(context) ? 0.7 : 0.3, color: Theme.of(context).disabledColor),
+              borderSide: BorderSide(
+                  style: widget.showBorder
+                      ? BorderStyle.solid
+                      : BorderStyle.none,
+                  width: ResponsiveHelper.isDesktop(context) ? 0.7 : 0.3,
+                  color: Theme.of(context).disabledColor),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-              borderSide: BorderSide(style: widget.showBorder ? BorderStyle.solid : BorderStyle.none, width: 1, color: Theme.of(context).primaryColor),
+              borderSide: BorderSide(
+                  style: widget.showBorder
+                      ? BorderStyle.solid
+                      : BorderStyle.none,
+                  width: 1,
+                  color: Theme.of(context).primaryColor),
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-              borderSide: BorderSide(style: widget.showBorder ? BorderStyle.solid : BorderStyle.none, width: 0.3, color: Theme.of(context).primaryColor),
+              borderSide: BorderSide(
+                  style: widget.showBorder
+                      ? BorderStyle.solid
+                      : BorderStyle.none,
+                  width: 0.3,
+                  color: Theme.of(context).primaryColor),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-              borderSide: BorderSide(style: widget.showBorder ? BorderStyle.solid : BorderStyle.none, color: Theme.of(context).colorScheme.error),
+              borderSide: BorderSide(
+                  style: widget.showBorder
+                      ? BorderStyle.solid
+                      : BorderStyle.none,
+                  color: Theme.of(context).colorScheme.error),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-              borderSide: BorderSide(style: widget.showBorder ? BorderStyle.solid : BorderStyle.none, color: Theme.of(context).colorScheme.error),
+              borderSide: BorderSide(
+                  style: widget.showBorder
+                      ? BorderStyle.solid
+                      : BorderStyle.none,
+                  color: Theme.of(context).colorScheme.error),
             ),
             isDense: true,
-            hintText: widget.hintText.isEmpty || !ResponsiveHelper.isDesktop(context) ? widget.titleText : widget.hintText,
+            hintText: widget.hintText.isEmpty ||
+                !ResponsiveHelper.isDesktop(context)
+                ? widget.titleText
+                : widget.hintText,
             fillColor: Theme.of(context).cardColor,
-            hintStyle: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).hintColor),
+            hintStyle: robotoRegular.copyWith(
+                fontSize: Dimensions.fontSizeLarge,
+                color: Theme.of(context).hintColor),
             filled: true,
-            counterText: '', // Hides the character counter while still enforcing maxLength
-
-            labelStyle : widget.showLabelText ? robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).hintColor) : null,
-            errorStyle: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
-
-            label: widget.showLabelText ? Text.rich(TextSpan(children: [
-
+            counterText: '',
+            labelStyle: widget.showLabelText
+                ? robotoRegular.copyWith(
+                fontSize: Dimensions.fontSizeDefault,
+                color: Theme.of(context).hintColor)
+                : null,
+            errorStyle: robotoRegular.copyWith(
+                fontSize: Dimensions.fontSizeSmall),
+            label: widget.showLabelText
+                ? Text.rich(TextSpan(children: [
               TextSpan(
                 text: widget.labelText ?? '',
                 style: robotoRegular.copyWith(
-                  fontSize: widget.labelTextSize ?? Dimensions.fontSizeLarge,
-                  color: ((widget.focusNode?.hasFocus == true || widget.controller!.text.isNotEmpty ) &&  widget.isEnabled) ? Theme.of(context).textTheme.bodyLarge?.color :  Theme.of(context).hintColor.withOpacity(.75),
+                  fontSize: widget.labelTextSize ??
+                      Dimensions.fontSizeLarge,
+                  color: ((widget.focusNode?.hasFocus == true ||
+                      widget.controller!.text.isNotEmpty) &&
+                      widget.isEnabled)
+                      ? Theme.of(context).textTheme.bodyLarge?.color
+                      : Theme.of(context)
+                      .hintColor
+                      .withOpacity(.75),
                 ),
               ),
-
-              if(widget.required && widget.labelText != null)
-                TextSpan(text : ' *', style: robotoRegular.copyWith(color: Theme.of(context).colorScheme.error, fontSize: Dimensions.fontSizeLarge)),
-
-            ])) : null,
-
-            prefixIcon: widget.isPhone ? SizedBox(width: 95, child: Row(children: [
-              Container(
-                  width: 85, height: ResponsiveHelper.isDesktop(context) ? 40 : 50,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(Dimensions.radiusSmall),
-                      bottomLeft: Radius.circular(Dimensions.radiusSmall),
-                    ),
-                  ),
-                  margin: const EdgeInsets.only(right: 0),
-                  padding: const EdgeInsets.only(left: 5),
-                  child: Center(
-                    child: CodePickerWidget(
-                      boxDecoration: BoxDecoration(color: Theme.of(context).cardColor),
-                      flagWidth: 25,
-                      padding: EdgeInsets.zero,
-                      onChanged: widget.onCountryChanged,
-                      initialSelection: widget.countryDialCode,
-                      favorite: [widget.countryDialCode!],
-                      enabled: Get.find<SplashController>().configModel?.countryPickerStatus,
-                      textStyle: robotoRegular.copyWith(
-                        fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).textTheme.bodyMedium!.color,
+              if (widget.required && widget.labelText != null)
+                TextSpan(
+                    text: ' *',
+                    style: robotoRegular.copyWith(
+                        color:
+                        Theme.of(context).colorScheme.error,
+                        fontSize: Dimensions.fontSizeLarge)),
+            ]))
+                : null,
+            prefixIcon: widget.isPhone
+                ? SizedBox(
+              width: 95,
+              child: Row(children: [
+                Container(
+                    width: 85,
+                    height: ResponsiveHelper.isDesktop(context)
+                        ? 40
+                        : 50,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(
+                            Dimensions.radiusSmall),
+                        bottomLeft: Radius.circular(
+                            Dimensions.radiusSmall),
                       ),
                     ),
-                  )),
-
-              Container(
-                height: 20, width: 2,
-                color: Theme.of(context).disabledColor,
-              )
-            ]),
-            ) : widget.prefixImage != null && widget.prefixIcon == null ? Padding(
-              padding: EdgeInsets.symmetric(horizontal: widget.prefixSize),
-              child: CustomAssetImageWidget(widget.prefixImage!, height: 25, width: 25, fit: BoxFit.scaleDown),
-            ) : widget.prefixImage == null && widget.prefixIcon != null ? Icon(widget.prefixIcon, size: widget.iconSize, color: Theme.of(context).disabledColor) : null,
-            suffixIcon: widget.isPassword ? IconButton(
-              icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility, color: Theme.of(context).hintColor.withOpacity(0.3)),
+                    margin: const EdgeInsets.only(right: 0),
+                    padding: const EdgeInsets.only(left: 5),
+                    child: Center(
+                      child: CodePickerWidget(
+                        boxDecoration: BoxDecoration(
+                            color: Theme.of(context).cardColor),
+                        flagWidth: 25,
+                        padding: EdgeInsets.zero,
+                        onChanged: widget.onCountryChanged,
+                        initialSelection:
+                        widget.countryDialCode,
+                        favorite: [widget.countryDialCode!],
+                        enabled: Get.find<SplashController>()
+                            .configModel
+                            ?.countryPickerStatus,
+                        textStyle: robotoRegular.copyWith(
+                          fontSize:
+                          Dimensions.fontSizeDefault,
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .color,
+                        ),
+                      ),
+                    )),
+                Container(
+                  height: 20,
+                  width: 2,
+                  color: Theme.of(context).disabledColor,
+                )
+              ]),
+            )
+                : widget.prefixImage != null &&
+                widget.prefixIcon == null
+                ? Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: widget.prefixSize),
+              child: CustomAssetImageWidget(
+                  widget.prefixImage!,
+                  height: 25,
+                  width: 25,
+                  fit: BoxFit.scaleDown),
+            )
+                : widget.prefixImage == null &&
+                widget.prefixIcon != null
+                ? Icon(widget.prefixIcon,
+                size: widget.iconSize,
+                color: Theme.of(context).disabledColor)
+                : null,
+            suffixIcon: widget.isPassword
+                ? IconButton(
+              icon: Icon(
+                  _obscureText
+                      ? Icons.visibility_off
+                      : Icons.visibility,
+                  color: Theme.of(context)
+                      .hintColor
+                      .withOpacity(0.3)),
               onPressed: _toggle,
-            ) : widget.suffixChild,
+            )
+                : widget.suffixChild,
           ),
-          onFieldSubmitted: (text) => widget.nextFocus != null ? FocusScope.of(context).requestFocus(widget.nextFocus)
-              : widget.onSubmit != null ? widget.onSubmit!(text) : null,
+          onFieldSubmitted: (text) => widget.nextFocus != null
+              ? FocusScope.of(context).requestFocus(widget.nextFocus)
+              : widget.onSubmit != null
+              ? widget.onSubmit!(text)
+              : null,
           onChanged: widget.onChanged as void Function(String)?,
         ),
-
       ],
     );
   }

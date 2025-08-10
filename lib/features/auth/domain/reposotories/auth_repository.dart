@@ -125,7 +125,6 @@ class AuthRepository implements AuthRepositoryInterface {
         await prefs.setString("user_id", responseData["user_id"].toString());
       }
     }
-
     return response;
   }
 
@@ -250,7 +249,9 @@ class AuthRepository implements AuthRepositoryInterface {
 
   @override
   bool isLoggedIn() {
-    return sharedPreferences.containsKey(AppConstants.token);
+    // bool hasToken = sharedPreferences.containsKey(AppConstants.token);
+    bool otpVerified = sharedPreferences.getBool(AppConstants.isOtpVerified) ?? false;
+    return otpVerified;
   }
 
   @override

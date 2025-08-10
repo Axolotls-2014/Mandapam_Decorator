@@ -463,6 +463,7 @@ void exitsUser(ResponseModel status, AuthController authController,
       }
     } else {
       Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
+      // Get.offNamed(RouteHelper.getSignInRoute(RouteHelper.splash));
     }
   } else {
     showCustomSnackBar(status.message);

@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sixam_mart/common/models/response_model.dart';
 import 'package:sixam_mart/features/auth/controllers/auth_controller.dart';
 import 'package:sixam_mart/features/auth/screens/sign_in_screen.dart';
+import 'package:sixam_mart/helper/auth_helper.dart';
 import 'package:sixam_mart/helper/route_helper.dart';
+import 'package:sixam_mart/util/app_constants.dart';
 
 class OtpController extends GetxController {
   final int otpCodeLength = 4;
@@ -55,15 +58,17 @@ class OtpController extends GetxController {
     verifyOtpCode(context: context);
   }
 
-  void verifyOtpCode({BuildContext? context, bool? valid}) {
+
+  void verifyOtpCode({BuildContext? context, bool? valid}) async {
     isLoadingButton.value = true;
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () async {
       isLoadingButton.value = false;
       debugPrint(
           'Entered OTP: ${otpCode.value}, Correct OTP: ${correctOtp.value}');
 
       if (otpCode.value == correctOtp.value) {
         debugPrint("✅ OTP Verified: ${otpCode.value}");
+
         Get.snackbar(
           "Verification Successful",
           '✅ OTP Verified: ${otpCode.value}',
@@ -71,15 +76,15 @@ class OtpController extends GetxController {
           backgroundColor: Colors.green.shade50,
           colorText: Colors.black,
         );
+
         if (userExit == true) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setBool(AppConstants.isOtpVerified, true);
           exitsUser(statusValue!, auth!, numberWithCountryCode.value);
         } else {
           Get.toNamed(RouteHelper.getSignUpRoute());
         }
         resetOtpState();
-
-        // Navigate or handle post-verification logic
-        // Get.offNamed(RouteHelper.getNextRoute());
       } else {
         Get.snackbar(
           "Verification Failed",

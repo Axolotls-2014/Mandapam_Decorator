@@ -149,7 +149,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       maxLength: 20,
                                     ),
 
-
                                     const SizedBox(
                                         height:
                                         Dimensions.paddingSizeExtraSmall),
@@ -171,7 +170,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       inputType: TextInputType.emailAddress,
                                       maxLength: 30,
                                     ),
-
 
                                     const SizedBox(
                                         height:
@@ -207,7 +205,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       isEnabled: false,
                                       maxLength: 10,
                                     ),
-
 
                                     const SizedBox(
                                         height:

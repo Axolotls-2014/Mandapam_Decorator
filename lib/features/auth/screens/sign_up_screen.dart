@@ -391,6 +391,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                                             : _emailFocus,
                                     inputType: TextInputType.phone,
                                     isPhone: true,
+                                    isEnabled: false,
                                     onCountryChanged:
                                         (CountryCode countryCode) {
                                       _countryDialCode = countryCode.dialCode;

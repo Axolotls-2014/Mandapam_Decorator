@@ -112,6 +112,17 @@ class ItemController extends GetxController implements GetxService {
   int _selectedCategory = 0;
   int get selectedCategory => _selectedCategory;
 
+  // Add this method inside your ItemController class
+  void setQuantityManually(int quantity) {
+    if (quantity <= 0) {
+      _quantity = 1;
+    } else {
+      _quantity = quantity;
+    }
+    update();
+  }
+
+
   void selectCategory(int index) {
     _selectedCategory = index;
     update();

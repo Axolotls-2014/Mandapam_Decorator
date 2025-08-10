@@ -192,25 +192,25 @@ class ItemCard extends StatelessWidget {
                       ]),
                     ),
 
-                    if (item.productType != "Rental")
-                      isShop ? Positioned(
-                        bottom: 0, right: 0,
-                        child: CartCountView(
-                          item: item,
-                          index: index,
-                          child: Container(
-                            height: 35, width: 38,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(Dimensions.radiusLarge),
-                                bottomRight: Radius.circular(Dimensions.radiusLarge),
-                              ),
-                            ),
-                            child: Icon(isPopularItemCart ? Icons.add_shopping_cart : Icons.add, color: Theme.of(context).cardColor, size: 20),
-                          ),
-                        ),
-                      ) : const SizedBox(),
+                    // if (item.productType != "Rental")
+                    //   isShop ? Positioned(
+                    //     bottom: 0, right: 0,
+                    //     child: CartCountView(
+                    //       item: item,
+                    //       index: index,
+                    //       child: Container(
+                    //         height: 35, width: 38,
+                    //         decoration: BoxDecoration(
+                    //           color: Theme.of(context).primaryColor,
+                    //           borderRadius: const BorderRadius.only(
+                    //             topLeft: Radius.circular(Dimensions.radiusLarge),
+                    //             bottomRight: Radius.circular(Dimensions.radiusLarge),
+                    //           ),
+                    //         ),
+                    //         child: Icon(isPopularItemCart ? Icons.add_shopping_cart : Icons.add, color: Theme.of(context).cardColor, size: 20),
+                    //       ),
+                    //     ),
+                    //   ) : const SizedBox(),
                   ]),
                 ),
               ),
