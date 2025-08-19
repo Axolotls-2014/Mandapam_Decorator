@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sixam_mart/common/models/response_model.dart';
 import 'package:sixam_mart/common/widgets/custom_snackbar.dart';
 import 'package:sixam_mart/features/cart/controllers/cart_controller.dart';
@@ -33,9 +34,9 @@ class SignInScreen extends StatefulWidget {
   final bool fromNotification;
   const SignInScreen(
       {super.key,
-      required this.exitFromApp,
-      required this.backFromThis,
-      this.fromNotification = false});
+        required this.exitFromApp,
+        required this.backFromThis,
+        this.fromNotification = false});
 
   @override
   SignInScreenState createState() => SignInScreenState();
@@ -56,11 +57,11 @@ class SignInScreenState extends State<SignInScreen> {
     super.initState();
     _formKeyLogin = GlobalKey<FormState>();
     _countryDialCode =
-        Get.find<AuthController>().getUserCountryCode().isNotEmpty
-            ? Get.find<AuthController>().getUserCountryCode()
-            : CountryCode.fromCountryCode(
-                    Get.find<SplashController>().configModel!.country!)
-                .dialCode;
+    Get.find<AuthController>().getUserCountryCode().isNotEmpty
+        ? Get.find<AuthController>().getUserCountryCode()
+        : CountryCode.fromCountryCode(
+        Get.find<SplashController>().configModel!.country!)
+        .dialCode;
     _phoneController.text = Get.find<AuthController>().getUserNumber();
     _passwordController.text = Get.find<AuthController>().getUserPassword();
   }
@@ -79,13 +80,13 @@ class SignInScreenState extends State<SignInScreen> {
           appBar: (ResponsiveHelper.isDesktop(context)
               ? null
               : !widget.exitFromApp
-                  ? AppBar(
-                      leading: const SizedBox(),
-                      elevation: 0,
-                      backgroundColor: Colors.transparent,
-                      actions: const [SizedBox()],
-                    )
-                  : null),
+              ? AppBar(
+            leading: const SizedBox(),
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            actions: const [SizedBox()],
+          )
+              : null),
           endDrawer: const MenuDrawer(),
           endDrawerEnableOpenDragGesture: false,
           body: Center(
@@ -97,18 +98,18 @@ class SignInScreenState extends State<SignInScreen> {
                   : const EdgeInsets.all(Dimensions.paddingSizeExtremeLarge),
               decoration: context.width > 700
                   ? BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.radiusSmall),
-                      boxShadow: ResponsiveHelper.isDesktop(context)
-                          ? null
-                          : const [
-                              BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 5,
-                                  spreadRadius: 1)
-                            ],
-                    )
+                color: Theme.of(context).cardColor,
+                borderRadius:
+                BorderRadius.circular(Dimensions.radiusSmall),
+                boxShadow: ResponsiveHelper.isDesktop(context)
+                    ? null
+                    : const [
+                  BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 5,
+                      spreadRadius: 1)
+                ],
+              )
                   : null,
               child: GetBuilder<AuthController>(builder: (authController) {
                 return Center(
@@ -117,17 +118,17 @@ class SignInScreenState extends State<SignInScreen> {
                       children: [
                         ResponsiveHelper.isDesktop(context)
                             ? Positioned(
-                                top: 0,
-                                right: 0,
-                                child: Align(
-                                  alignment: Alignment.topRight,
-                                  child: IconButton(
-                                    padding: EdgeInsets.zero,
-                                    onPressed: () => Get.back(),
-                                    icon: const Icon(Icons.clear),
-                                  ),
-                                ),
-                              )
+                          top: 0,
+                          right: 0,
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: () => Get.back(),
+                              icon: const Icon(Icons.clear),
+                            ),
+                          ),
+                        )
                             : const SizedBox(),
                         Form(
                           key: _formKeyLogin,
@@ -146,13 +147,13 @@ class SignInScreenState extends State<SignInScreen> {
 
                                   Align(
                                     alignment:
-                                        Get.find<LocalizationController>().isLtr
-                                            ? Alignment.topLeft
-                                            : Alignment.topRight,
+                                    Get.find<LocalizationController>().isLtr
+                                        ? Alignment.topLeft
+                                        : Alignment.topRight,
                                     child: Text('sign_in'.tr,
                                         style: robotoBold.copyWith(
                                             fontSize:
-                                                Dimensions.fontSizeExtraLarge)),
+                                            Dimensions.fontSizeExtraLarge)),
                                   ),
                                   const SizedBox(
                                       height: Dimensions.paddingSizeLarge),
@@ -181,7 +182,7 @@ class SignInScreenState extends State<SignInScreen> {
                                   ),
                                   const SizedBox(
                                       height:
-                                          Dimensions.paddingSizeExtremeLarge),
+                                      Dimensions.paddingSizeExtremeLarge),
 
                                   // CustomTextField(
                                   //   titleText: 'enter_your_password'.tr,
@@ -198,106 +199,111 @@ class SignInScreenState extends State<SignInScreen> {
                                   //   maxLength: 40,
                                   // ),
                                   // const SizedBox(height: Dimensions.paddingSizeLarge),
-                                  // Row(children: [
-                                  //   Expanded(
-                                  //     child: ListTile(
-                                  //       onTap: () =>
-                                  //           authController.toggleRememberMe(),
-                                  //       leading: Checkbox(
-                                  //         visualDensity: const VisualDensity(
-                                  //             horizontal: -4, vertical: -4),
-                                  //         activeColor:
-                                  //             Theme.of(context).primaryColor,
-                                  //         value:
-                                  //             authController.isActiveRememberMe,
-                                  //         onChanged: (bool? isChecked) =>
-                                  //             authController.toggleRememberMe(),
-                                  //       ),
-                                  //       title: Text('remember_me'.tr),
-                                  //       contentPadding: EdgeInsets.zero,
-                                  //       visualDensity: const VisualDensity(
-                                  //           horizontal: 0, vertical: -4),
-                                  //       dense: true,
-                                  //       horizontalTitleGap: 0,
-                                  //     ),
-                                  //   ),
-                                  //   TextButton(
-                                  //     onPressed: () => Get.toNamed(
-                                  //         RouteHelper.getForgotPassRoute(
-                                  //             false, null)),
-                                  //     child: Text('${'forgot_password'.tr}?',
-                                  //         style: robotoRegular.copyWith(
-                                  //             color: Theme.of(context)
-                                  //                 .primaryColor)),
-                                  //   ),
-                                  // ]
-                                  // ),
-                                  // const SizedBox(
-                                  //     height: Dimensions.paddingSizeLarge),
+                                  Row(children: [
+                                    Expanded(
+                                      child: ListTile(
+                                        onTap: () =>
+                                            authController.toggleRememberMe(),
+                                        leading: Checkbox(
+                                          visualDensity: const VisualDensity(
+                                              horizontal: -4, vertical: -4),
+                                          activeColor:
+                                          Theme.of(context).primaryColor,
+                                          value:
+                                          authController.isActiveRememberMe,
+                                          onChanged: (bool? isChecked) =>
+                                              authController.toggleRememberMe(),
+                                        ),
+                                        title: Text('remember_me'.tr),
+                                        contentPadding: EdgeInsets.zero,
+                                        visualDensity: const VisualDensity(
+                                            horizontal: 0, vertical: -4),
+                                        dense: true,
+                                        horizontalTitleGap: 0,
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () => Get.toNamed(
+                                          RouteHelper.getForgotPassRoute(
+                                              false, null)),
+                                      child: Text('${'forgot_password'.tr}?',
+                                          style: robotoRegular.copyWith(
+                                              color: Theme.of(context)
+                                                  .primaryColor)),
+                                    ),
+                                  ]),
+                                  const SizedBox(
+                                      height: Dimensions.paddingSizeLarge),
 
-                                  // const Align(
-                                  //   alignment: Alignment.center,
-                                  //   child: ConditionCheckBoxWidget(
-                                  //       forDeliveryMan: false),
-                                  // ),
+                                  const Align(
+                                    alignment: Alignment.center,
+                                    child: ConditionCheckBoxWidget(
+                                        forDeliveryMan: false),
+                                  ),
 
                                   const SizedBox(
                                       height: Dimensions.paddingSizeExtraLarge),
 
-                                  CustomButton(
-                                    height: ResponsiveHelper.isDesktop(context)
-                                        ? 45
-                                        : null,
-                                    width: ResponsiveHelper.isDesktop(context)
-                                        ? 180
-                                        : null,
-                                    buttonText:
-                                        ResponsiveHelper.isDesktop(context)
-                                            ? 'login'.tr
-                                            : 'Get OTP',
-                                    onPressed: () {
-                                      //  _login(authController, _countryDialCode!);
-                                      String number =
-                                          _phoneController.text.trim();
-                                      String fullPhoneNumber =
-                                          "$_countryDialCode$number";
+                                  Obx(
+                                        () => CustomButton(
+                                      height:
+                                      ResponsiveHelper.isDesktop(context)
+                                          ? 45
+                                          : null,
+                                      width: ResponsiveHelper.isDesktop(context)
+                                          ? 180
+                                          : null,
+                                      buttonText:
+                                      ResponsiveHelper.isDesktop(context)
+                                          ? 'login'.tr
+                                          : 'Get OTP',
+                                      onPressed: () {
+                                        //  _login(authController, _countryDialCode!);
+                                        String number =
+                                        _phoneController.text.trim();
+                                        String fullPhoneNumber =
+                                            "$_countryDialCode$number";
+                                        // Basic numeric check (only digits)
+                                        final RegExp phoneRegex =
+                                        RegExp(r'^[0-9]{10}$');
 
-// Basic numeric check (only digits)
-                                      final RegExp phoneRegex =
-                                          RegExp(r'^[0-9]{10}$');
+                                        if (number.isEmpty) {
+                                          showCustomSnackBar(
+                                              'Please enter your phone number'
+                                                  .tr);
+                                          return;
+                                        } else if (!phoneRegex
+                                            .hasMatch(number)) {
+                                          showCustomSnackBar(
+                                              'Enter a valid phone number (10 digits)'
+                                                  .tr);
+                                          return;
+                                        } else {
+                                          // ✅ Passed all validations
+                                          loginUser(authController);
+                                          // Get.toNamed(RouteHelper.otpScreen);
 
-                                      if (number.isEmpty) {
-                                        showCustomSnackBar(
-                                            'Please enter your phone number'
-                                                .tr);
-                                        return;
-                                      } else if (!phoneRegex.hasMatch(number)) {
-                                        showCustomSnackBar(
-                                            'Enter a valid phone number (10 digits)'
-                                                .tr);
-                                        return;
-                                      } else {
-                                        verify(authController);
-                                        // Get.toNamed(RouteHelper.otpScreen);
-
-                                        // controller.fetchOtpFromApi(
-                                        //   phone: fullPhoneNumber,
-                                        //   rawPhone: number,
-                                        //   countryDialCode:
-                                        //       _countryDialCode ?? '+91',
-                                        // );
-                                      }
-                                    },
-                                    isLoading: authController.isLoading,
-                                    radius: ResponsiveHelper.isDesktop(context)
-                                        ? Dimensions.radiusSmall
-                                        : Dimensions.radiusDefault,
-                                    isBold:
-                                        !ResponsiveHelper.isDesktop(context),
-                                    fontSize:
-                                        ResponsiveHelper.isDesktop(context)
-                                            ? Dimensions.fontSizeDefault
-                                            : null,
+                                          // controller.fetchOtpFromApi(
+                                          //   phone: fullPhoneNumber,
+                                          //   rawPhone: number,
+                                          //   countryDialCode:
+                                          //       _countryDialCode ?? '+91',
+                                          // );
+                                        }
+                                      },
+                                      isLoading:
+                                      controller.isLoadingButton.value,
+                                      radius:
+                                      ResponsiveHelper.isDesktop(context)
+                                          ? Dimensions.radiusSmall
+                                          : Dimensions.radiusDefault,
+                                      isBold:
+                                      !ResponsiveHelper.isDesktop(context),
+                                      fontSize:
+                                      ResponsiveHelper.isDesktop(context)
+                                          ? Dimensions.fontSizeDefault
+                                          : null,
+                                    ),
                                   ),
                                   const SizedBox(
                                       height: Dimensions.paddingSizeSmall),
@@ -305,97 +311,97 @@ class SignInScreenState extends State<SignInScreen> {
                                   ResponsiveHelper.isDesktop(context)
                                       ? const SizedBox()
                                       : const Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                              // Text('do_not_have_account'.tr, style: robotoRegular.copyWith(color: Theme.of(context).hintColor)),
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                      children: [
+                                        // Text('do_not_have_account'.tr, style: robotoRegular.copyWith(color: Theme.of(context).hintColor)),
 
-                                              //   Row(
-                                              //     mainAxisAlignment:
-                                              //         MainAxisAlignment.center,
-                                              //     children: [
-                                              //       Material(
-                                              //         color: Colors.transparent,
-                                              //         child: SizedBox(
-                                              //           width: 300,
-                                              //           height: 45,
-                                              //           child: Ink(
-                                              //             decoration:
-                                              //                 BoxDecoration(
-                                              //               color: Colors.white,
-                                              //               borderRadius:
-                                              //                   BorderRadius
-                                              //                       .circular(12),
-                                              //               border: Border.all(
-                                              //                 color: Theme.of(
-                                              //                         context)
-                                              //                     .primaryColor,
-                                              //                 width: 1,
-                                              //               ),
-                                              //             ),
-                                              //             child: InkWell(
-                                              //               borderRadius:
-                                              //                   BorderRadius
-                                              //                       .circular(12),
-                                              //               onTap: () {
-                                              //                 if (ResponsiveHelper
-                                              //                     .isDesktop(
-                                              //                         context)) {
-                                              //                   Get.back();
-                                              //                   Get.dialog(
-                                              //                       const SignUpScreen());
-                                              //                 } else {
-                                              //                   Get.toNamed(
-                                              //                       RouteHelper
-                                              //                           .getSignUpRoute());
-                                              //                 }
-                                              //               },
-                                              //               child: Center(
-                                              //                 child: Text(
-                                              //                   'sign_up'.tr,
-                                              //                   style:
-                                              //                       robotoMedium
-                                              //                           .copyWith(
-                                              //                     color: Theme.of(
-                                              //                             context)
-                                              //                         .primaryColor,
-                                              //                     fontSize: 15,
-                                              //                   ),
-                                              //                 ),
-                                              //               ),
-                                              //             ),
-                                              //           ),
-                                              //         ),
-                                              //       ),
-                                              //     ],
-                                              //   ),
-                                            ]),
+                                        //   Row(
+                                        //     mainAxisAlignment:
+                                        //         MainAxisAlignment.center,
+                                        //     children: [
+                                        //       Material(
+                                        //         color: Colors.transparent,
+                                        //         child: SizedBox(
+                                        //           width: 300,
+                                        //           height: 45,
+                                        //           child: Ink(
+                                        //             decoration:
+                                        //                 BoxDecoration(
+                                        //               color: Colors.white,
+                                        //               borderRadius:
+                                        //                   BorderRadius
+                                        //                       .circular(12),
+                                        //               border: Border.all(
+                                        //                 color: Theme.of(
+                                        //                         context)
+                                        //                     .primaryColor,
+                                        //                 width: 1,
+                                        //               ),
+                                        //             ),
+                                        //             child: InkWell(
+                                        //               borderRadius:
+                                        //                   BorderRadius
+                                        //                       .circular(12),
+                                        //               onTap: () {
+                                        //                 if (ResponsiveHelper
+                                        //                     .isDesktop(
+                                        //                         context)) {
+                                        //                   Get.back();
+                                        //                   Get.dialog(
+                                        //                       const SignUpScreen());
+                                        //                 } else {
+                                        //                   Get.toNamed(
+                                        //                       RouteHelper
+                                        //                           .getSignUpRoute());
+                                        //                 }
+                                        //               },
+                                        //               child: Center(
+                                        //                 child: Text(
+                                        //                   'sign_up'.tr,
+                                        //                   style:
+                                        //                       robotoMedium
+                                        //                           .copyWith(
+                                        //                     color: Theme.of(
+                                        //                             context)
+                                        //                         .primaryColor,
+                                        //                     fontSize: 15,
+                                        //                   ),
+                                        //                 ),
+                                        //               ),
+                                        //             ),
+                                        //           ),
+                                        //         ),
+                                        //       ),
+                                        //     ],
+                                        //   ),
+                                      ]),
                                   const SizedBox(
                                       height: Dimensions.paddingSizeSmall),
                                   // const SocialLoginWidget(),
                                   // ResponsiveHelper.isDesktop(context) ? const SizedBox() : const GuestButtonWidget(),
                                   ResponsiveHelper.isDesktop(context)
                                       ? Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            InkWell(
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(
-                                                    Dimensions
-                                                        .paddingSizeExtraSmall),
-                                                child: Text(
-                                                  'sign_up'.tr,
-                                                  style: robotoMedium.copyWith(
-                                                    color: Theme.of(context)
-                                                        .primaryColor,
-                                                    fontSize: 15,
-                                                  ),
-                                                ),
-                                              ),
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: [
+                                      InkWell(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(
+                                              Dimensions
+                                                  .paddingSizeExtraSmall),
+                                          child: Text(
+                                            'sign_up'.tr,
+                                            style: robotoMedium.copyWith(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 15,
                                             ),
-                                          ],
-                                        )
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
                                       : const SizedBox(),
                                 ]),
                           ),
@@ -412,60 +418,85 @@ class SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  void verify(AuthController authController) async {
+  void loginUser(AuthController authController) async {
     String number = _phoneController.text.trim();
     String fullPhoneNumber = "$_countryDialCode$number";
+
     PhoneValid phoneValid = await CustomValidator.isPhoneValid(fullPhoneNumber);
     String numberWithCountryCode = phoneValid.phone;
 
     if (_formKeyLogin!.currentState!.validate()) {
-      // Move this if needed
-      authController.login(numberWithCountryCode).then((status) async {
-        print("API_Response: ${status.message}");
-        final controller = Get.put(OtpController());
-        controller.status = status;
-        controller.authController = authController;
-      });
-    }
-  }
-}
+      final apiResponse = await controller.login(phone: numberWithCountryCode);
 
-void exitsUser(ResponseModel status, AuthController authController,
-    String numberWithCountryCode) {
-  String number = numberWithCountryCode.substring(3);
-  if (status.isSuccess) {
-    String? token = status.token == 'N/A' ? '' : status.token;
-    int? userId = status.userId;
-    bool isPhoneVerified = status.isPhoneVerified;
+      if (apiResponse['success'] == true) {
+        final data = apiResponse['data'];
 
-    print("UserId: $userId");
-    print("Token: $token");
+        // Store in SharedPreferences for later use
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('otp', data['otp'].toString());
+        prefs.setBool('phone_exists', data['phone_exists']);
+        prefs.setString(
+            'subscription_status', data['subscription_status'].toString());
+        prefs.setString('phone_number', numberWithCountryCode);
 
-    if (!Get.find<SplashController>().configModel!.customerVerification! &&
-        isPhoneVerified) {
-      Get.find<CartController>().getCartDataOnline();
-    }
+        // Pass OTP details to controller
+        final otpController = Get.find<OtpController>();
+        otpController.correctOtp.value = data['otp'].toString();
+        // otpController.userExit.value = data['phone_exists'];
+        otpController.numberWithCountryCode.value = numberWithCountryCode;
+        otpController.authController = authController;
+        otpController.update();
 
-    if (!authController.isActiveRememberMe) {
-      authController.clearUserNumberAndPassword();
-    }
-
-    if (Get.find<SplashController>().configModel!.customerVerification! &&
-        !isPhoneVerified) {
-      if (Get.find<SplashController>().configModel!.firebaseOtpVerification!) {
-        Get.find<AuthController>().firebaseVerifyPhoneNumber(
-            numberWithCountryCode, token!,
-            fromSignUp: true);
+        // Navigate to OTP screen
+        Get.toNamed(RouteHelper.otpScreen);
       } else {
-        String data = base64Encode(utf8.encode(number));
-        Get.toNamed(RouteHelper.getVerificationRoute(
-            numberWithCountryCode, token!, RouteHelper.signUp, data));
+        showCustomSnackBar(apiResponse['message'] ?? "Login failed");
       }
-    } else {
-      Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
-      // Get.offNamed(RouteHelper.getSignInRoute(RouteHelper.splash));
     }
-  } else {
-    showCustomSnackBar(status.message);
   }
+
+// void exitsUser(Map<String, dynamic> status, AuthController authController,
+//     String numberWithCountryCode) {
+//   String number = numberWithCountryCode.substring(3);
+
+//   // Extract data safely from API JSON
+//   final data = status['data'] ?? {};
+//   final bool phoneExists = data['phone_exists'] ?? false;
+//   final bool isPhoneVerified = data['is_phone_verified'] ?? false;
+//   final String? token = data['token'];
+//   final int? userId = data['user_id'];
+
+//   print("UserId: $userId");
+//   print("Token: $token");
+
+//   if (!Get.find<SplashController>().configModel!.customerVerification! &&
+//       isPhoneVerified) {
+//     Get.find<CartController>().getCartDataOnline();
+//   }
+
+//   if (!authController.isActiveRememberMe) {
+//     authController.clearUserNumberAndPassword();
+//   }
+
+//   if (Get.find<SplashController>().configModel!.customerVerification! &&
+//       !isPhoneVerified) {
+//     if (Get.find<SplashController>().configModel!.firebaseOtpVerification!) {
+//       Get.find<AuthController>().firebaseVerifyPhoneNumber(
+//         numberWithCountryCode,
+//         token ?? '',
+//         fromSignUp: true,
+//       );
+//     } else {
+//       String dataEncoded = base64Encode(utf8.encode(number));
+//       Get.toNamed(RouteHelper.getVerificationRoute(
+//         numberWithCountryCode,
+//         token ?? '',
+//         RouteHelper.signUp,
+//         dataEncoded,
+//       ));
+//     }
+//   } else {
+//     Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
+//   }
+// }
 }

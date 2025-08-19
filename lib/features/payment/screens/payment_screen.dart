@@ -91,7 +91,7 @@ class PaymentScreenState extends State<PaymentScreen> {
             crossPlatform: InAppWebViewOptions(useShouldOverrideUrlLoading: true, useOnLoadResource: true, javaScriptEnabled: true)));
 
     await browser.openUrlRequest(
-        // urlRequest: URLRequest(url: WebUri(selectedUrl)),
+      // urlRequest: URLRequest(url: WebUri(selectedUrl)),
         urlRequest: URLRequest(url: Uri.parse(selectedUrl)),
         options: options);
 

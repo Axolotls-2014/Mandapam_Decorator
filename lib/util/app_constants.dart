@@ -178,7 +178,7 @@ class AppConstants {
   /// Shared Key
   static const String theme = '6ammart_theme';
   static const String token = '6ammart_token';
-  static const String isOtpVerified = '6ammart_otpVerified';
+  static const String isOtpVerified = 'is_otp_verified';
   static const String countryCode = '6ammart_country_code';
   static const String languageCode = '6ammart_language_code';
   static const String cacheCountryCode = 'cache_country_code';

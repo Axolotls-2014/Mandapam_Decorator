@@ -210,7 +210,7 @@ class AuthService implements AuthServiceInterface{
 
   @override
   Future<void> setNotificationActive(bool isActive) async {
-   await authRepositoryInterface.setNotificationActive(isActive);
+    await authRepositoryInterface.setNotificationActive(isActive);
   }
 
   @override

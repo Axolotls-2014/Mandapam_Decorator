@@ -4,7 +4,8 @@ import 'package:sixam_mart/features/profile/domain/models/userinfo_model.dart';
 
 abstract class ProfileServiceInterface {
   Future<UserInfoModel?> getUserInfo();
-  Future<ResponseModel> updateProfile(UserInfoModel userInfoModel, XFile? data, String token);
+  Future<ResponseModel> updateProfile(UserInfoModel userInfoModel, XFile? data, XFile? firmData, String token);
   Future<ResponseModel> changePassword(UserInfoModel userInfoModel);
   Future<ResponseModel> deleteUser();
 }
+

@@ -22,7 +22,7 @@ class ProfileRepository implements ProfileRepositoryInterface {
 
   @override
   Future<ResponseModel> updateProfile(
-      UserInfoModel userInfoModel, XFile? data, String token) async {
+      UserInfoModel userInfoModel, XFile? data, XFile? firmData, String token) async {
     ResponseModel responseModel;
     Map<String, String> body = {
       'f_name': userInfoModel.fName!,
@@ -32,8 +32,16 @@ class ProfileRepository implements ProfileRepositoryInterface {
       'firm_name': userInfoModel.firmName!,
     };
 
+    List<MultipartBody> multipartBody = [];
+    if (data != null) {
+      multipartBody.add(MultipartBody('image', data));
+    }
+    if (firmData != null) {
+      multipartBody.add(MultipartBody('firm_image', firmData));
+    }
+
     Response response = await apiClient.postMultipartData(
-        AppConstants.updateProfileUri, body, [MultipartBody('image', data)],
+        AppConstants.updateProfileUri, body, multipartBody,
         handleError: false);
     if (response.statusCode == 200) {
       responseModel = ResponseModel(true, response.bodyString);

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sixam_mart/common/controllers/theme_controller.dart';
+import 'package:sixam_mart/features/auth/controllers/auth_controller.dart';
 import 'package:sixam_mart/features/banner/controllers/banner_controller.dart';
 import 'package:sixam_mart/features/brands/controllers/brands_controller.dart';
 import 'package:sixam_mart/features/home/controllers/advertisement_controller.dart';
@@ -15,6 +17,7 @@ import 'package:sixam_mart/features/coupon/controllers/coupon_controller.dart';
 import 'package:sixam_mart/features/flash_sale/controllers/flash_sale_controller.dart';
 import 'package:sixam_mart/features/language/controllers/language_controller.dart';
 import 'package:sixam_mart/features/location/controllers/location_controller.dart';
+import 'package:sixam_mart/features/media/functions.dart';
 import 'package:sixam_mart/features/notification/controllers/notification_controller.dart';
 import 'package:sixam_mart/features/item/controllers/item_controller.dart';
 import 'package:sixam_mart/features/store/controllers/store_controller.dart';
@@ -30,6 +33,7 @@ import 'package:sixam_mart/helper/address_helper.dart';
 import 'package:sixam_mart/helper/auth_helper.dart';
 import 'package:sixam_mart/helper/responsive_helper.dart';
 import 'package:sixam_mart/helper/route_helper.dart';
+import 'package:sixam_mart/screens/subscreption_screen.dart';
 import 'package:sixam_mart/util/app_constants.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/images.dart';
@@ -46,6 +50,8 @@ import 'package:sixam_mart/features/parcel/screens/parcel_category_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  static bool isSubscriptionExpired = false;
 
   static Future<void> loadData(bool reload, {bool fromModule = false}) async {
     Get.find<LocationController>().syncZoneData();
@@ -101,6 +107,7 @@ class HomeScreen extends StatefulWidget {
     }
   }
 
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -109,10 +116,22 @@ class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
   bool searchBgShow = false;
   final GlobalKey _headerKey = GlobalKey();
+  late AuthController authController;
+  String? globalUserId;
+  late ApiService apiService;
+  SharedPreferences? sharedPreferences;
 
   @override
   void initState() {
     super.initState();
+
+    Future.microtask(() async {
+      sharedPreferences = await SharedPreferences.getInstance();
+      apiService = ApiService(sharedPreferences: sharedPreferences!);
+      await _fetchUserId();
+    });
+
+
     HomeScreen.loadData(false).then((value) {
       Get.find<SplashController>().getReferBottomSheetStatus();
 
@@ -140,6 +159,91 @@ class _HomeScreenState extends State<HomeScreen> {
           Future.delayed(const Duration(milliseconds: 800), () => Get.find<HomeController>().changeFavVisibility());
         }
       }
+    });
+
+  }
+
+  Future<void> _fetchUserId() async {
+    authController = Get.find<AuthController>();
+    globalUserId = await authController.getUserId();
+
+    if (globalUserId != null) {
+      debugPrint("Stored_User_ID: $globalUserId");
+
+      final response =
+      await apiService.sendSubscriptionStatus(userId: int.parse(globalUserId!));
+
+      if (response != null) {
+        final status = response["subscription_status"];
+        final userType = response["user_type"];
+
+        debugPrint("User Type: $userType");
+        debugPrint("Subscription Status: $status");
+
+        if (userType == "Decorator" && status != "active") {
+          _showSubscriptionPopup();
+        }
+      } else {
+        debugPrint("Error: API returned null");
+      }
+    } else {
+      debugPrint("Error: Could not fetch User ID");
+    }
+  }
+
+  void _showSubscriptionPopup() {
+    Future.delayed(Duration.zero, () {
+      Get.dialog(
+        WillPopScope(
+          onWillPop: () async => false,
+          child: Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            insetPadding: const EdgeInsets.all(24),
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Image.asset(
+                  //   Images.subscription,
+                  //   height: 400,
+                  //   width: 150,
+                  //   fit: BoxFit.contain,
+                  // ),
+                  // const SizedBox(height: 20),
+                  Text(
+                    "Your subscription plan has expired.\nPlease renew to continue using the app.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                        fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Future.microtask(() => Get.to(() => SubscreptionScreen(from: "home")));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      minimumSize: const Size(double.infinity, 48),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      "Renew Subscription",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        barrierDismissible: false,
+      );
     });
   }
 

@@ -24,104 +24,93 @@ import 'package:sixam_mart/features/item/domain/services/item_service_interface.
 class ItemController extends GetxController implements GetxService {
   final ItemServiceInterface itemServiceInterface;
   ItemController({required this.itemServiceInterface});
-  
+
   List<Item>? _popularItemList;
   List<Item>? get popularItemList => _popularItemList;
-  
+
   List<Item>? _reviewedItemList;
   List<Item>? get reviewedItemList => _reviewedItemList;
-  
+
   List<Item>? _recommendedItemList;
   List<Item>? get recommendedItemList => _recommendedItemList;
-  
+
   List<Item>? _discountedItemList;
   List<Item>? get discountedItemList => _discountedItemList;
-  
+
   List<Categories>? _reviewedCategoriesList;
   List<Categories>? get reviewedCategoriesList => _reviewedCategoriesList;
-  
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
-  
+
   List<int>? _variationIndex;
   List<int>? get variationIndex => _variationIndex;
-  
+
   List<List<bool?>> _selectedVariations = [];
   List<List<bool?>> get selectedVariations => _selectedVariations;
-  
-  int? _quantity = 1;
-  int? get quantity => _quantity;
-  
+
+  int? quantityy = 1;
+  int? get quantity => quantityy;
+
   List<bool> _addOnActiveList = [];
   List<bool> get addOnActiveList => _addOnActiveList;
-  
+
   List<int?> _addOnQtyList = [];
   List<int?> get addOnQtyList => _addOnQtyList;
-  
+
   String _popularType = 'all';
   String get popularType => _popularType;
-  
+
   String _reviewedType = 'all';
   String get reviewType => _reviewedType;
 
   String _discountedType = 'all';
   String get discountedType => _discountedType;
-  
+
   static final List<String> _itemTypeList = ['all', 'veg', 'non_veg'];
   List<String> get itemTypeList => _itemTypeList;
-  
+
   int _imageIndex = 0;
   int get imageIndex => _imageIndex;
-  
+
   int _cartIndex = -1;
   int get cartIndex => _cartIndex;
-  
+
   Item? _item;
   Item? get item => _item;
-  
+
   int _productSelect = 0;
   int get productSelect => _productSelect;
-  
+
   int _imageSliderIndex = 0;
   int get imageSliderIndex => _imageSliderIndex;
-  
+
   List<bool> _collapseVariation = [];
   List<bool> get collapseVariation => _collapseVariation;
-  
+
   int _currentIndex = 0;
   int get currentIndex => _currentIndex;
-  
+
   bool _isReadMore = false;
   bool get isReadMore => _isReadMore;
-  
+
   BasicMedicineModel? _basicMedicineModel;
   BasicMedicineModel? get basicMedicineModel => _basicMedicineModel;
-  
+
   List<CommonConditionModel>? _commonConditions;
   List<CommonConditionModel>? get commonConditions => _commonConditions;
-  
+
   int _selectedCommonCondition = 0;
   int get selectedCommonCondition => _selectedCommonCondition;
-  
+
   List<Item>? _conditionWiseProduct;
   List<Item>? get conditionWiseProduct => _conditionWiseProduct;
-  
+
   ItemModel? _featuredCategoriesItem;
   ItemModel? get featuredCategoriesItem => _featuredCategoriesItem;
-  
+
   int _selectedCategory = 0;
   int get selectedCategory => _selectedCategory;
-
-  // Add this method inside your ItemController class
-  void setQuantityManually(int quantity) {
-    if (quantity <= 0) {
-      _quantity = 1;
-    } else {
-      _quantity = quantity;
-    }
-    update();
-  }
-
 
   void selectCategory(int index) {
     _selectedCategory = index;
@@ -301,7 +290,7 @@ class ItemController extends GetxController implements GetxService {
     _selectedVariations = [];
     _collapseVariation = [];
     if(cart != null) {
-      _quantity = cart.quantity;
+      quantityy = cart.quantity;
       _addOnActiveList.addAll(itemServiceInterface.initializeCartAddonActiveList(cart.addOnIds, item!.addOns));
       _addOnQtyList.addAll(itemServiceInterface.initializeCartAddonsQtyList(cart.addOnIds, item.addOns));
 
@@ -318,7 +307,7 @@ class ItemController extends GetxController implements GetxService {
       } else {
         _variationIndex = itemServiceInterface.initializeVariationIndexes(item.choiceOptions);
       }
-      _quantity = 1;
+      quantityy = 1;
       _addOnActiveList.addAll(itemServiceInterface.initializeAddonActiveList(item.addOns));
       _addOnQtyList.addAll(itemServiceInterface.initializeAddonQtyList(item.addOns));
 
@@ -340,11 +329,11 @@ class ItemController extends GetxController implements GetxService {
       _cartIndex = Get.find<CartController>().isExistInCart(item.id, variationType, false, null);
     }
     if(_cartIndex != -1) {
-      _quantity = Get.find<CartController>().cartList[_cartIndex].quantity;
+      quantityy = Get.find<CartController>().cartList[_cartIndex].quantity;
       _addOnActiveList = itemServiceInterface.initializeCartAddonActiveList(Get.find<CartController>().cartList[_cartIndex].addOnIds, item.addOns);
       _addOnQtyList = itemServiceInterface.initializeCartAddonsQtyList(Get.find<CartController>().cartList[_cartIndex].addOnIds, item.addOns);
     } else {
-      _quantity = 1;
+      quantityy = 1;
     }
     if(notify) {
       update();
@@ -358,13 +347,13 @@ class ItemController extends GetxController implements GetxService {
   }
 
   Future<void> setQuantity(bool isIncrement, int? stock,  int? quantityLimit, {bool getxSnackBar = false}) async {
-    _quantity = await itemServiceInterface.setQuantity(isIncrement, Get.find<SplashController>().configModel!.moduleConfig!.module!.stock!, stock, _quantity!, quantityLimit, getxSnackBar: getxSnackBar);
+    quantityy = await itemServiceInterface.setQuantity(isIncrement, Get.find<SplashController>().configModel!.moduleConfig!.module!.stock!, stock, quantityy!, quantityLimit, getxSnackBar: getxSnackBar);
     update();
   }
 
   void setCartVariationIndex(int index, int i, Item? item) {
     _variationIndex![index] = i;
-    _quantity = 1;
+    quantityy = 1;
     setExistInCart(item, _selectedVariations);
     update();
   }
@@ -455,6 +444,60 @@ class ItemController extends GetxController implements GetxService {
     }
   }
 
+  // void itemDirectlyAddToCart(Item? item, BuildContext context, {bool inStore = false, bool isCampaign = false}) {
+  //
+  //   if (((item!.foodVariations != null && item.foodVariations!.isEmpty) && item.moduleType == AppConstants.food) || (item.variations != null && item.variations!.isEmpty && item.moduleType != AppConstants.food)) {
+  //     double price = item.price!;
+  //     double discount = item.discount!;
+  //     double discountPrice = PriceConverter.convertWithDiscount(price, discount, item.discountType)!;
+  //
+  //     CartModel cartModel = CartModel(
+  //       null, price, discount, [], [], (price - discountPrice), 1, [], [], isCampaign,
+  //       item.stock, item, item.quantityLimit,
+  //     );
+  //
+  //     OnlineCart onlineCart = OnlineCart(
+  //       null, isCampaign ? null : item.id, isCampaign ? item.id : null, price.toString(),
+  //       '', null, ModuleHelper.getModuleConfig(item.moduleType).newVariation! ? [] : null,
+  //       1, [], [], [], 'Item',
+  //     );
+  //     if(Get.find<SplashController>().configModel!.moduleConfig!.module!.stock! && item.stock! <= 0){
+  //       showCustomSnackBar('out_of_stock'.tr);
+  //     }
+  //     else if (Get.find<CartController>().existAnotherStoreItem(cartModel.item!.storeId, ModuleHelper.getModule() != null
+  //         ? ModuleHelper.getModule()?.id : ModuleHelper.getCacheModule()?.id)) {
+  //       Get.dialog(ConfirmationDialog(
+  //         icon: Images.warning,
+  //         title: 'are_you_sure_to_reset'.tr,
+  //         description: Get.find<SplashController>().configModel!.moduleConfig!.module!.showRestaurantText!
+  //             ? 'if_you_continue'.tr : 'if_you_continue_without_another_store'.tr,
+  //         onYesPressed: () {
+  //           Get.find<CartController>().clearCartOnline().then((success) async {
+  //             if (success) {
+  //               await Get.find<CartController>().addToCartOnline(onlineCart);
+  //               Get.back();
+  //               showCartSnackBar();
+  //             }
+  //           });
+  //         },
+  //       ), barrierDismissible: false);
+  //     } else {
+  //       Get.find<CartController>().addToCartOnline(onlineCart);
+  //       showCartSnackBar();
+  //     }
+  //   } else if(Get.find<SplashController>().configModel!.moduleConfig!.module!.showRestaurantText! || item.moduleType == AppConstants.food){
+  //     ResponsiveHelper.isMobile(context) ? Get.bottomSheet(
+  //       ItemBottomSheet(item: item, inStorePage: inStore, isCampaign: isCampaign),
+  //       backgroundColor: Colors.transparent, isScrollControlled: true,
+  //     ) : Get.dialog(
+  //       Dialog(child: ItemBottomSheet(item: item, inStorePage: inStore, isCampaign: isCampaign)),
+  //     );
+  //   } else {
+  //     Get.toNamed(RouteHelper.getItemDetailsRoute(item.id, inStore), arguments: ItemDetailsScreen(item: item, inStorePage: inStore));
+  //   }
+  // }
+
+
   void itemDirectlyAddToCart(Item? item, BuildContext context, {bool inStore = false, bool isCampaign = false}) {
 
     if (((item!.foodVariations != null && item.foodVariations!.isEmpty) && item.moduleType == AppConstants.food) || (item.variations != null && item.variations!.isEmpty && item.moduleType != AppConstants.food)) {
@@ -477,21 +520,14 @@ class ItemController extends GetxController implements GetxService {
       }
       else if (Get.find<CartController>().existAnotherStoreItem(cartModel.item!.storeId, ModuleHelper.getModule() != null
           ? ModuleHelper.getModule()?.id : ModuleHelper.getCacheModule()?.id)) {
-        Get.dialog(ConfirmationDialog(
-          icon: Images.warning,
-          title: 'are_you_sure_to_reset'.tr,
-          description: Get.find<SplashController>().configModel!.moduleConfig!.module!.showRestaurantText!
-              ? 'if_you_continue'.tr : 'if_you_continue_without_another_store'.tr,
-          onYesPressed: () {
-            Get.find<CartController>().clearCartOnline().then((success) async {
-              if (success) {
-                await Get.find<CartController>().addToCartOnline(onlineCart);
-                Get.back();
-                showCartSnackBar();
-              }
-            });
-          },
-        ), barrierDismissible: false);
+
+        Get.find<CartController>().clearCartOnline().then((success) async {
+          if (success) {
+            await Get.find<CartController>().addToCartOnline(onlineCart);
+            showCartSnackBar();
+          }
+        });
+
       } else {
         Get.find<CartController>().addToCartOnline(onlineCart);
         showCartSnackBar();
@@ -507,5 +543,6 @@ class ItemController extends GetxController implements GetxService {
       Get.toNamed(RouteHelper.getItemDetailsRoute(item.id, inStore), arguments: ItemDetailsScreen(item: item, inStorePage: inStore));
     }
   }
-  
+
+
 }

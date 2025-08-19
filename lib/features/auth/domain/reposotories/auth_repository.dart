@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -15,6 +16,8 @@ import 'package:sixam_mart/helper/address_helper.dart';
 import 'package:sixam_mart/helper/module_helper.dart';
 import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/screens/otp_controller.dart';
+import 'package:sixam_mart/screens/otp_verification_screen.dart';
+import 'package:sixam_mart/screens/subscreption_screen.dart';
 import 'package:sixam_mart/util/app_constants.dart';
 import 'package:http/http.dart' as http;
 // ignore: depend_on_referenced_packages
@@ -34,7 +37,6 @@ class AuthRepository implements AuthRepositoryInterface {
   Future<ResponseModel> registration(SignUpBodyModel signUpBody) async {
     final controller = Get.put(SubmitAssignmentController());
     final uri = Uri.parse('https://mandapam.co/api/v1/auth/decorator-sign-up');
-
     final request = http.MultipartRequest('POST', uri);
 
     // Add text fields
@@ -91,41 +93,106 @@ class AuthRepository implements AuthRepositoryInterface {
   }
 
   @override
-  Future<Response> login({
-    String? phone,
-  }) async {
+  Future<Response> login({String? phone}) async {
+    if (phone == null || phone.isEmpty) {
+      return const Response<Map<String, dynamic>>(
+        statusCode: 400,
+        statusText: 'Bad Request',
+        body: {
+          'success': false,
+          'message': 'Phone number is required.',
+        },
+      );
+    }
+
     Map<String, String> data = {
-      "phone": phone!,
+      "phone": phone,
       "user_type": "Decorator",
     };
 
-    Response response = await apiClient.postData('/api/v1/auth/sendOtp', data,
-        handleError: false);
-    log('Ganesh code status: ${response.status}');
-    if (response.body['phone_exists'] == false) {
-      Get.offAllNamed(RouteHelper.otpScreen);
-    } else {
-      Get.toNamed(RouteHelper.otpScreen);
-    }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Response response = await apiClient.postData(
+      '/api/v1/auth/sendOtp',
+      data,
+      handleError: false,
+    );
 
     if (response.statusCode == 200 && response.body != null) {
       final controller = Get.put(OtpController());
       Map<String, dynamic> responseData = response.body;
-      controller.correctOtp.value = "${responseData['otp']}";
-      controller.userExit.value = responseData['phone_exists'];
+
+      //controller.userExit.value = responseData['phone_exists'];
       controller.numberWithCountryCode.value = phone;
+      controller.correctOtp.value = "${responseData['otp']}";
+
+      await prefs.setString("otp", "${responseData['otp']}");
+      await prefs.setBool('phone_exists', responseData['phone_exists']);
+      await prefs.setString('number', phone);
+
       debugPrint("✅ OTP API Response:");
       debugPrint("👉 Message: ${responseData['message']}");
       debugPrint("👉 Phone Exists: ${responseData['phone_exists']}");
       debugPrint("👉 OTP: ${responseData['otp']}");
       debugPrint("👉 User ID: ${responseData['user_id']}");
       debugPrint("👉 Token: ${responseData['token']}");
-      if (responseData.containsKey("user_id")) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString("user_id", responseData["user_id"].toString());
+      debugPrint("👉 Subscription Status: ${responseData['subscription_status']}");
+
+      if (responseData['phone_exists'] == true) {
+        if (responseData.containsKey("user_id")) {
+          await prefs.setString("user_id", responseData["user_id"].toString());
+        }
+
+        String subStatus = (responseData['subscription_status'] ?? '').toLowerCase();
+
+        if (subStatus == 'active') {
+          // ✅ Normal OTP flow
+          final otpCompleter = Completer<void>();
+          Get.toNamed(RouteHelper.otpScreen, arguments: otpCompleter);
+          await otpCompleter.future;
+
+          return Response<Map<String, dynamic>>(
+            statusCode: 200,
+            body: {
+              'success': true,
+              'message': 'OTP sent successfully.',
+              'subscription_status': subStatus,
+            },
+          );
+        } else {
+          // ⚠️ Subscription inactive, expired, or not subscribed
+          await prefs.clear();
+          Get.to(() => const SubscreptionScreen());
+
+          return Response<Map<String, dynamic>>(
+            statusCode: 403, // Forbidden due to subscription issue
+            body: {
+              'success': false,
+              'message': 'Subscription is $subStatus. Please subscribe to continue.',
+              'subscription_status': subStatus,
+            },
+          );
+        }
+      } else {
+        // 🚫 Phone does not exist
+        Get.offAllNamed(RouteHelper.otpScreen);
+        return const  Response<Map<String, dynamic>>(
+          statusCode: 404,
+          body: {
+            'success': false,
+            'message': 'User not registered. Please sign up.',
+          },
+        );
       }
     }
-    return response;
+
+    // ❌ API call failed
+    return Response<Map<String, dynamic>>(
+      statusCode: response.statusCode ?? 500,
+      body: {
+        'success': false,
+        'message': response.statusText ?? 'Unexpected error occurred.',
+      },
+    );
   }
 
   Future<String?> getUserId() async {
@@ -199,7 +266,7 @@ class AuthRepository implements AuthRepositoryInterface {
         FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
             alert: true, badge: true, sound: true);
         NotificationSettings settings =
-            await FirebaseMessaging.instance.requestPermission(
+        await FirebaseMessaging.instance.requestPermission(
           alert: true,
           announcement: false,
           badge: true,
@@ -249,9 +316,7 @@ class AuthRepository implements AuthRepositoryInterface {
 
   @override
   bool isLoggedIn() {
-    // bool hasToken = sharedPreferences.containsKey(AppConstants.token);
-    bool otpVerified = sharedPreferences.getBool(AppConstants.isOtpVerified) ?? false;
-    return otpVerified;
+    return sharedPreferences.containsKey(AppConstants.token);
   }
 
   @override

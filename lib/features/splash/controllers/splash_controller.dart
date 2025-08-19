@@ -175,13 +175,35 @@ class SplashController extends GetxController implements GetxService {
     update();
   }
 
+  // Future<void> _showInterestPage() async {
+  //   if(!Get.find<ProfileController>().userInfoModel!.selectedModuleForInterest!.contains(Get.find<SplashController>().module!.id)
+  //       && (Get.find<SplashController>().module!.moduleType == 'food' || Get.find<SplashController>().module!.moduleType == 'grocery' || Get.find<SplashController>().module!.moduleType == 'ecommerce')
+  //   ) {
+  //     await Get.toNamed(RouteHelper.getInterestRoute());
+  //   }
+  // }
+
+
   Future<void> _showInterestPage() async {
-    if(!Get.find<ProfileController>().userInfoModel!.selectedModuleForInterest!.contains(Get.find<SplashController>().module!.id)
-        && (Get.find<SplashController>().module!.moduleType == 'food' || Get.find<SplashController>().module!.moduleType == 'grocery' || Get.find<SplashController>().module!.moduleType == 'ecommerce')
-    ) {
+    final profileController = Get.find<ProfileController>();
+    final splashController = Get.find<SplashController>();
+
+    final userInfo = profileController.userInfoModel;
+    final selectedModules = userInfo?.selectedModuleForInterest;
+    final module = splashController.module;
+
+    if (userInfo == null || selectedModules == null || module == null) {
+      return; // Nothing to do if data not ready
+    }
+
+    if (!selectedModules.contains(module.id) &&
+        (module.moduleType == 'food' ||
+            module.moduleType == 'grocery' ||
+            module.moduleType == 'ecommerce')) {
       await Get.toNamed(RouteHelper.getInterestRoute());
     }
   }
+
 
   void switchModule(int index, bool fromPhone) async {
     if(_module == null || _module!.id != _moduleList![index].id) {

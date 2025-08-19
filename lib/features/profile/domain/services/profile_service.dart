@@ -14,8 +14,8 @@ class ProfileService implements ProfileServiceInterface {
   }
 
   @override
-  Future<ResponseModel> updateProfile(UserInfoModel userInfoModel, XFile? data, String token) async {
-    return await profileRepositoryInterface.updateProfile(userInfoModel, data, token);
+  Future<ResponseModel> updateProfile(UserInfoModel userInfoModel, XFile? data, XFile? firmData, String token) async {
+    return await profileRepositoryInterface.updateProfile(userInfoModel, data, firmData, token);
   }
 
   @override
@@ -27,5 +27,4 @@ class ProfileService implements ProfileServiceInterface {
   Future<ResponseModel> deleteUser() async {
     return await profileRepositoryInterface.delete(null);
   }
-
 }

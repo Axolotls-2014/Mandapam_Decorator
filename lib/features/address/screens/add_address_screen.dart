@@ -371,6 +371,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                                           focusNode: _nameNode,
                                           nextFocus: _numberNode,
                                           capitalization: TextCapitalization.words,
+                                          maxLength: 40,
                                         ),
                                         const SizedBox(height: Dimensions.paddingSizeLarge),
 
@@ -388,6 +389,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                                             _countryDialCode = countryCode.dialCode;
                                           },
                                           countryDialCode: _countryDialCode ?? Get.find<LocalizationController>().locale.countryCode,
+                                          maxLength: 10,
                                         ),
                                         const SizedBox(height: Dimensions.paddingSizeLarge),
 
@@ -400,6 +402,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                                           focusNode: _emailFocus,
                                           nextFocus: _streetNode,
                                           inputType: TextInputType.emailAddress,
+                                          maxLength: 80,
                                         ) : const SizedBox(),
                                         SizedBox(height: widget.forGuest ? Dimensions.paddingSizeLarge : 0),
 
@@ -412,6 +415,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                                           focusNode: _streetNode,
                                           nextFocus: _houseNode,
                                           controller: _streetNumberController,
+                                          maxLength: 20,
                                         ),
                                         const SizedBox(height: Dimensions.paddingSizeLarge),
 
@@ -426,6 +430,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                                               focusNode: _houseNode,
                                               nextFocus: _floorNode,
                                               controller: _houseController,
+                                              maxLength: 40,
                                             ),
                                           ),
                                           const SizedBox(width: Dimensions.paddingSizeSmall),

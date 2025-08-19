@@ -280,4 +280,44 @@ class ApiService {
   }
 
 
+//   To check subscription status
+
+  Future<dynamic> sendSubscriptionStatus({
+    required int userId,
+  }) async {
+    final token = sharedPreferences.getString(AppConstants.token);
+    const String url = 'https://mandapam.co/api/v1/auth/sendsubscription-status';
+
+    final Map<String, String> headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    final Map<String, dynamic> body = {
+      'user_id': userId.toString(),
+      'user_type': 'Decorator', // static
+    };
+
+    print('URL: $url');
+    print('Headers: $headers');
+    print('Request Body: $body');
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    print('Response Status Code: ${response.statusCode}');
+    print('Response Body: ${response.body}');
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      return null;
+    }
+  }
+
+
+
 }

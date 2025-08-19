@@ -72,15 +72,15 @@ class SubmitAssignmentController extends GetxController {
                   pickFile(ImageSource.gallery);
                 },
               ),
-              ListTile(
-                leading:
-                    const Icon(Icons.insert_drive_file, color: Colors.blue),
-                title: const Text("Choose from Files"),
-                onTap: () {
-                  Navigator.pop(context);
-                  pickDocumentFromFileManager();
-                },
-              ),
+              // ListTile(
+              //   leading:
+              //       const Icon(Icons.insert_drive_file, color: Colors.blue),
+              //   title: const Text("Choose from Files"),
+              //   onTap: () {
+              //     Navigator.pop(context);
+              //     pickDocumentFromFileManager();
+              //   },
+              // ),
             ],
           ),
         );

@@ -293,8 +293,8 @@ class Images {
   static const String unFavouriteIcon = 'assets/image/unfavourite_icon.svg';
   static const String languageBg = 'assets/image/language_bg.svg';
 
-
   static const String addmediaIcon = 'assets/image/add_media.png';
   static const String viewmediaIcon = 'assets/image/view_media.png';
+  // static const String subscription = 'assets/image/subscribe.png';
 
 }

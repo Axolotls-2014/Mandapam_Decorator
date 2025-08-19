@@ -34,7 +34,7 @@ class SubscriptionController extends GetxController {
       } else {
         hasError.value = true;
         errorMessage.value =
-            'Error ${response.statusCode}: ${response.reasonPhrase}';
+        'Error ${response.statusCode}: ${response.reasonPhrase}';
       }
     } catch (e) {
       hasError.value = true;
@@ -44,4 +44,58 @@ class SubscriptionController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  Future<Map<String, dynamic>?> subscribeToBusinessPlan({
+    required packageId,
+    required userId,
+  }) async {
+    try {
+      isLoading.value = true;
+
+      final requestBody = {
+        'package_id': packageId.toString(),
+        'user_id': userId,
+        'type': 'payment',
+        'payment_type': 'pay_now',
+        'payment_method': 'razor_pay',
+        'payment_gateway': 'razor_pay',
+        'business_plan': 'subscription',
+        'callback': 'success',
+      };
+
+      // Print request parameters
+
+      print('====> API Request: POST https://mandapam.co/api/v1/decorator/business_plan');
+      print('====> Request Parameters: $requestBody');
+
+
+      final response = await http.post(
+        Uri.parse('https://mandapam.co/api/v1/decorator/business_plan'),
+        body: requestBody,
+      );
+
+      // Print response details
+
+      print('====> API Response Status Code: ${response.statusCode}');
+      print('====> API Response Body: ${response.body}');
+
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('Failed to subscribe: ${response.statusCode}');
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to subscribe: ${e.toString()}',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return null;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
 }

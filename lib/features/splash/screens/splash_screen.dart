@@ -4,7 +4,6 @@ import 'package:sixam_mart/features/auth/controllers/auth_controller.dart';
 import 'package:sixam_mart/features/cart/controllers/cart_controller.dart';
 import 'package:sixam_mart/features/language/controllers/language_controller.dart';
 import 'package:sixam_mart/features/location/controllers/location_controller.dart';
-import 'package:sixam_mart/features/media/functions.dart';
 import 'package:sixam_mart/features/splash/controllers/splash_controller.dart';
 import 'package:sixam_mart/features/favourite/controllers/favourite_controller.dart';
 import 'package:sixam_mart/features/notification/domain/models/notification_body_model.dart';
@@ -14,14 +13,12 @@ import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/util/app_constants.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/images.dart';
-import 'package:sixam_mart/common/widgets/no_internet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sixam_mart/util/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
   final NotificationBodyModel? body;
@@ -94,7 +91,7 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _launchUpdateUrl() async {
-    const url = 'https://mandapam.co/Mandapam_Decorator.apk';
+    const url = 'https://play.google.com/store/apps/details?id=com.mandapam.decorator&pcampaignid=web_share';
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url));
     } else {
@@ -280,22 +277,37 @@ class SplashScreenState extends State<SplashScreen> {
       key: _globalKey,
       body: Center(
         child: Padding(
-            padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
+          padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
               Image.asset(Images.logo, width: 300),
-              const SizedBox(height: 10.0),
-              Text(
-                'suffix_name'.tr,
-                style: robotoBold.copyWith(
-                  fontSize: 20,
-                  color: Theme.of(context).primaryColor,
-                ),
-                textAlign: TextAlign.center,
+              const SizedBox(height: 4.0),
+              Column(
+                children: [
+                  Text(
+                    'MANDAPAM',
+                    style: robotoBold.copyWith(
+                      fontSize: 30,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    'DECORATOR',
+                    style: robotoBold.copyWith(
+                      fontSize: 15,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
-            ])
+            ],
+          ),
         ),
-
       ),
     );
   }
+
 }

@@ -89,7 +89,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       child: CustomButton(
                         transparent: true,
                         onPressed: () {
-                          _configureToRouteInitialPage();
+                          _pageController.jumpToPage(2);
                         },
                         buttonText: 'skip'.tr,
                       ),

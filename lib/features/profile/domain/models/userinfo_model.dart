@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:sixam_mart/features/chat/domain/models/conversation_model.dart';
 
 class UserInfoModel {
@@ -26,10 +25,9 @@ class UserInfoModel {
   List<int>? selectedModuleForInterest;
   String? firmName;
   File? firmImage;
+  String? firmImageFullUrl;
 
   UserInfoModel({
-    this.firmName,
-    this.firmImage,
     this.id,
     this.fName,
     this.lName,
@@ -51,10 +49,12 @@ class UserInfoModel {
     this.discountAmountType,
     this.validity,
     this.selectedModuleForInterest,
+    this.firmName,
+    this.firmImage,
+    this.firmImageFullUrl,
   });
 
   UserInfoModel.fromJson(Map<String, dynamic> json) {
-    firmName = json['firm_name'];
     id = json['id'];
     fName = json['f_name'];
     lName = json['l_name'];
@@ -66,16 +66,18 @@ class UserInfoModel {
     password = json['password'];
     orderCount = json['order_count'];
     memberSinceDays = json['member_since_days'];
-    walletBalance = json['wallet_balance'].toDouble();
+    walletBalance = json['wallet_balance']?.toDouble();
     loyaltyPoint = json['loyalty_point'];
     refCode = json['ref_code'];
     socialId = json['social_id'];
-    userInfo =
-        json['userinfo'] != null ? User.fromJson(json['userinfo']) : null;
+    userInfo = json['userinfo'] != null ? User.fromJson(json['userinfo']) : null;
     isValidForDiscount = json['is_valid_for_discount'] ?? false;
     discountAmount = json['discount_amount']?.toDouble();
     discountAmountType = json['discount_amount_type'];
     validity = json['validity'];
+    firmName = json['firm_name'];
+    firmImageFullUrl = json['firm_image_full_url'];
+
     if (json['selected_modules_for_interest'] != null) {
       selectedModuleForInterest = [];
       json['selected_modules_for_interest'].forEach((value) {
@@ -88,7 +90,6 @@ class UserInfoModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['firm_name'] = firmName;
     data['id'] = id;
     data['f_name'] = fName;
     data['l_name'] = lName;
@@ -103,8 +104,12 @@ class UserInfoModel {
     data['wallet_balance'] = walletBalance;
     data['loyalty_point'] = loyaltyPoint;
     data['ref_code'] = refCode;
+    data['social_id'] = socialId;
+    data['firm_name'] = firmName;
+    data['firm_image_full_url'] = firmImageFullUrl;
+
     if (userInfo != null) {
-      data['user`info'] = userInfo!.toJson();
+      data['userinfo'] = userInfo!.toJson();
     }
     data['is_valid_for_discount'] = isValidForDiscount;
     data['discount_amount'] = discountAmount;

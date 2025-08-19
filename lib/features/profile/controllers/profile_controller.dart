@@ -18,11 +18,17 @@ class ProfileController extends GetxController implements GetxService {
   UserInfoModel? _userInfoModel;
   UserInfoModel? get userInfoModel => _userInfoModel;
 
-  XFile? _pickedFile;
+  XFile? _pickedFile; // Profile image file
   XFile? get pickedFile => _pickedFile;
 
-  Uint8List? _rawFile;
+  Uint8List? _rawFile; // Profile raw image
   Uint8List? get rawFile => _rawFile;
+
+  XFile? _firmPickedFile; // Firm image file
+  XFile? get firmPickedFile => _firmPickedFile;
+
+  Uint8List? _firmRawFile; // Firm raw image
+  Uint8List? get firmRawFile => _firmRawFile;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -30,6 +36,8 @@ class ProfileController extends GetxController implements GetxService {
   Future<void> getUserInfo() async {
     _pickedFile = null;
     _rawFile = null;
+    _firmPickedFile = null;
+    _firmRawFile = null;
     UserInfoModel? userInfoModel = await profileServiceInterface.getUserInfo();
     if (userInfoModel != null) {
       _userInfoModel = userInfoModel;
@@ -46,13 +54,15 @@ class ProfileController extends GetxController implements GetxService {
     _isLoading = true;
     update();
     ResponseModel responseModel = await profileServiceInterface.updateProfile(
-        updateUserModel, _pickedFile, token);
+        updateUserModel, _pickedFile, _firmPickedFile, token);
     _isLoading = false;
     if (responseModel.isSuccess) {
       Get.back();
       responseModel = ResponseModel(true, responseModel.message);
       _pickedFile = null;
       _rawFile = null;
+      _firmPickedFile = null;
+      _firmRawFile = null;
       getUserInfo();
     } else {
       responseModel = ResponseModel(false, responseModel.message);
@@ -65,7 +75,7 @@ class ProfileController extends GetxController implements GetxService {
     _isLoading = true;
     update();
     ResponseModel responseModel =
-        await profileServiceInterface.changePassword(updatedUserModel);
+    await profileServiceInterface.changePassword(updatedUserModel);
     _isLoading = false;
     if (responseModel.isSuccess) {
       responseModel = ResponseModel(true, responseModel.message);
@@ -83,8 +93,15 @@ class ProfileController extends GetxController implements GetxService {
   void pickImage(ImageSource source) async {
     _pickedFile = await ImagePicker().pickImage(source: source);
     if (_pickedFile != null) {
-      // _pickedFile = await NetworkInfo.compressImage(_pickedFile!);
       _rawFile = await _pickedFile!.readAsBytes();
+    }
+    update();
+  }
+
+  void pickFirmImage(ImageSource source) async {
+    _firmPickedFile = await ImagePicker().pickImage(source: source);
+    if (_firmPickedFile != null) {
+      _firmRawFile = await _firmPickedFile!.readAsBytes();
     }
     update();
   }
@@ -92,6 +109,8 @@ class ProfileController extends GetxController implements GetxService {
   void initData({bool isUpdate = false}) {
     _pickedFile = null;
     _rawFile = null;
+    _firmPickedFile = null;
+    _firmRawFile = null;
     if (isUpdate) {
       update();
     }
@@ -142,7 +161,7 @@ class ProfileController extends GetxController implements GetxService {
               ),
               ListTile(
                 leading:
-                    const Icon(Icons.photo_camera, color: Colors.deepPurple),
+                const Icon(Icons.photo_camera, color: Colors.deepPurple),
                 title: const Text("Take a Photo"),
                 onTap: () {
                   Navigator.pop(context);
@@ -163,4 +182,52 @@ class ProfileController extends GetxController implements GetxService {
       },
     );
   }
+
+  void showFirmPickOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+          child: Wrap(
+            children: [
+              Center(
+                child: Container(
+                  height: 4,
+                  width: 40,
+                  margin: const EdgeInsets.only(bottom: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[400],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              ListTile(
+                leading:
+                const Icon(Icons.photo_camera, color: Colors.deepPurple),
+                title: const Text("Take a Photo"),
+                onTap: () {
+                  Navigator.pop(context);
+                  pickFirmImage(ImageSource.camera);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library, color: Colors.teal),
+                title: const Text("Choose from Gallery"),
+                onTap: () {
+                  Navigator.pop(context);
+                  pickFirmImage(ImageSource.gallery);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 }
+

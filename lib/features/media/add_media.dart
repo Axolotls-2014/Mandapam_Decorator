@@ -148,6 +148,15 @@ class _AddMediaScreenState extends State<AddMediaScreen> {
     return Future.value(false);
   }
 
+  void _clearAllFields() {
+    setState(() {
+      _selectedImages.clear();
+      _selectedVideos.clear();
+      _titleController.clear();
+      _descriptionController.clear();
+    });
+  }
+
   void _submitMedia() async {
     if (_selectedImages.isEmpty && _selectedVideos.isEmpty) {
       _showAutoDismissDialog("Error", "Select at least one image or video.");
@@ -168,8 +177,9 @@ class _AddMediaScreenState extends State<AddMediaScreen> {
       return;
     }
 
+    // Updated regex: allow letters, digits, underscores after '#'
     final hashtags = _titleController.text.trim().split(RegExp(r'\s+'));
-    final isValid = hashtags.every((tag) => tag.startsWith('#') && tag.length > 1);
+    final isValid = hashtags.every((tag) => RegExp(r'^#[a-zA-Z0-9_]+$').hasMatch(tag));
 
     if (!isValid) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -177,7 +187,6 @@ class _AddMediaScreenState extends State<AddMediaScreen> {
       );
       return;
     }
-
 
     setState(() {
       _isSubmitting = true;
@@ -221,6 +230,9 @@ class _AddMediaScreenState extends State<AddMediaScreen> {
     setState(() {
       _isSubmitting = false;
     });
+
+    // Clear all fields regardless of success or failure
+    _clearAllFields();
 
     if (response != null) {
       _showAutoDismissDialog("Success", "Media added successfully.");
@@ -444,6 +456,8 @@ class _AddMediaScreenState extends State<AddMediaScreen> {
                   controller: _titleController,
                   decoration: InputDecoration(
                     labelText: 'Hashtags',
+                    hintText: 'Enter hashtags like #Decorator #Art #Media etc.',
+                    hintStyle: TextStyle(color: Colors.grey),
                     border: OutlineInputBorder(),
                   ),
                   maxLines: 5,

@@ -80,14 +80,14 @@ class SignUpScreenState extends State<SignUpScreen> {
     _phoneController.text = number;
     _determinePosition();
     _countryDialCode = CountryCode.fromCountryCode(
-            Get.find<SplashController>().configModel!.country!)
+        Get.find<SplashController>().configModel!.country!)
         .dialCode;
   }
 
   Future<void> _updateAddressFromLatLng(LatLng position) async {
     try {
       List<Placemark> placemarks =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
+      await placemarkFromCoordinates(position.latitude, position.longitude);
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks.first;
         String address =
@@ -219,7 +219,7 @@ class SignUpScreenState extends State<SignUpScreen> {
   Future<String> _getAddressFromLatLng(LatLng position) async {
     try {
       List<Placemark> placemarks =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
+      await placemarkFromCoordinates(position.latitude, position.longitude);
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks.first;
         return "${place.street ?? ''}, ${place.locality ?? ''}, ${place.administrativeArea ?? ''}, ${place.country ?? ''}";
@@ -237,17 +237,17 @@ class SignUpScreenState extends State<SignUpScreen> {
         appBar: (ResponsiveHelper.isDesktop(context)
             ? null
             : !widget.exitFromApp
-                ? AppBar(
-                    leading: IconButton(
-                      onPressed: () => Get.back(),
-                      icon: Icon(Icons.arrow_back_ios_rounded,
-                          color: Theme.of(context).textTheme.bodyLarge!.color),
-                    ),
-                    elevation: 0,
-                    backgroundColor: Colors.transparent,
-                    actions: const [SizedBox()],
-                  )
-                : null),
+            ? AppBar(
+          leading: IconButton(
+            onPressed: () => Get.back(),
+            icon: Icon(Icons.arrow_back_ios_rounded,
+                color: Theme.of(context).textTheme.bodyLarge!.color),
+          ),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          actions: const [SizedBox()],
+        )
+            : null),
         backgroundColor: ResponsiveHelper.isDesktop(context)
             ? Colors.transparent
             : Theme.of(context).cardColor,
@@ -264,9 +264,9 @@ class SignUpScreenState extends State<SignUpScreen> {
                 : null,
             decoration: context.width > 700
                 ? BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                  )
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+            )
                 : null,
             child: GetBuilder<AuthController>(builder: (authController) {
               return SingleChildScrollView(
@@ -274,16 +274,16 @@ class SignUpScreenState extends State<SignUpScreen> {
                   children: [
                     ResponsiveHelper.isDesktop(context)
                         ? Positioned(
-                            top: 0,
-                            right: 0,
-                            child: Align(
-                              alignment: Alignment.topRight,
-                              child: IconButton(
-                                onPressed: () => Get.back(),
-                                icon: const Icon(Icons.clear),
-                              ),
-                            ),
-                          )
+                      top: 0,
+                      right: 0,
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(
+                          onPressed: () => Get.back(),
+                          icon: const Icon(Icons.clear),
+                        ),
+                      ),
+                    )
                         : const SizedBox(),
                     Form(
                       key: _formKeySignUp,
@@ -304,7 +304,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                                 child: Text('sign_up'.tr,
                                     style: robotoBold.copyWith(
                                         fontSize:
-                                            Dimensions.fontSizeExtraLarge)),
+                                        Dimensions.fontSizeExtraLarge)),
                               ),
                               const SizedBox(
                                   height: Dimensions.paddingSizeDefault),
@@ -336,9 +336,9 @@ class SignUpScreenState extends State<SignUpScreen> {
                                     controller: _lastNameController,
                                     focusNode: _lastNameFocus,
                                     nextFocus:
-                                        ResponsiveHelper.isDesktop(context)
-                                            ? _emailFocus
-                                            : _phoneFocus,
+                                    ResponsiveHelper.isDesktop(context)
+                                        ? _emailFocus
+                                        : _phoneFocus,
                                     inputType: TextInputType.name,
                                     capitalization: TextCapitalization.words,
                                     prefixIcon: Icons.person,
@@ -356,24 +356,24 @@ class SignUpScreenState extends State<SignUpScreen> {
                               Row(children: [
                                 ResponsiveHelper.isDesktop(context)
                                     ? Expanded(
-                                        child: CustomTextField(
-                                          labelText: 'email'.tr,
-                                          titleText: 'enter_email'.tr,
-                                          controller: _emailController,
-                                          focusNode: _emailFocus,
-                                          nextFocus: ResponsiveHelper.isDesktop(
-                                                  context)
-                                              ? _phoneFocus
-                                              : _firmNameFocus,
-                                          inputType: TextInputType.emailAddress,
-                                          prefixImage: Images.mail,
-                                          required: true,
-                                          validator: (value) =>
-                                              ValidateCheck.validateEmail(
-                                                  value),
-                                          maxLength: 30,
-                                        ),
-                                      )
+                                  child: CustomTextField(
+                                    labelText: 'email'.tr,
+                                    titleText: 'enter_email'.tr,
+                                    controller: _emailController,
+                                    focusNode: _emailFocus,
+                                    nextFocus: ResponsiveHelper.isDesktop(
+                                        context)
+                                        ? _phoneFocus
+                                        : _firmNameFocus,
+                                    inputType: TextInputType.emailAddress,
+                                    prefixImage: Images.mail,
+                                    required: true,
+                                    validator: (value) =>
+                                        ValidateCheck.validateEmail(
+                                            value),
+                                    maxLength: 80,
+                                  ),
+                                )
                                     : const SizedBox(),
                                 SizedBox(
                                     width: ResponsiveHelper.isDesktop(context)
@@ -386,25 +386,24 @@ class SignUpScreenState extends State<SignUpScreen> {
                                     controller: _phoneController,
                                     focusNode: _phoneFocus,
                                     nextFocus:
-                                        ResponsiveHelper.isDesktop(context)
-                                            ? _firmNameFocus
-                                            : _emailFocus,
+                                    ResponsiveHelper.isDesktop(context)
+                                        ? _firmNameFocus
+                                        : _emailFocus,
                                     inputType: TextInputType.phone,
                                     isPhone: true,
-                                    isEnabled: false,
                                     onCountryChanged:
                                         (CountryCode countryCode) {
                                       _countryDialCode = countryCode.dialCode;
                                     },
                                     countryDialCode: _countryDialCode != null
                                         ? CountryCode.fromCountryCode(
-                                                Get.find<SplashController>()
-                                                    .configModel!
-                                                    .country!)
-                                            .code
+                                        Get.find<SplashController>()
+                                            .configModel!
+                                            .country!)
+                                        .code
                                         : Get.find<LocalizationController>()
-                                            .locale
-                                            .countryCode,
+                                        .locale
+                                        .countryCode,
                                     required: true,
                                     validator: (value) =>
                                         ValidateCheck.validatePhone(
@@ -417,30 +416,30 @@ class SignUpScreenState extends State<SignUpScreen> {
                                   height: Dimensions.paddingSizeExtraLarge),
                               !ResponsiveHelper.isDesktop(context)
                                   ? Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        CustomTextField(
-                                          labelText: 'email'.tr,
-                                          titleText: 'enter_email'.tr,
-                                          controller: _emailController,
-                                          focusNode: _emailFocus,
-                                          nextFocus: _firmNameFocus,
-                                          inputType: TextInputType.emailAddress,
-                                          prefixIcon: Icons.mail,
-                                          required: true,
-                                          validator: (value) =>
-                                              ValidateCheck.validateEmptyText(
-                                                  value, null),
-                                          maxLength: 30,
-                                        ),
-                                        // const SizedBox(height: 4),
-                                        // const Text(
-                                        //   "This email ID will be used to send OTPs for password recovery.",
-                                        //   style: TextStyle(fontSize: 11, color: Colors.red),
-                                        // ),
-                                      ],
-                                    )
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: [
+                                  CustomTextField(
+                                    labelText: 'email'.tr,
+                                    titleText: 'enter_email'.tr,
+                                    controller: _emailController,
+                                    focusNode: _emailFocus,
+                                    nextFocus: _firmNameFocus,
+                                    inputType: TextInputType.emailAddress,
+                                    prefixIcon: Icons.mail,
+                                    required: true,
+                                    validator: (value) =>
+                                        ValidateCheck.validateEmptyText(
+                                            value, null),
+                                    maxLength: 80,
+                                  ),
+                                  // const SizedBox(height: 4),
+                                  // const Text(
+                                  //   "This email ID will be used to send OTPs for password recovery.",
+                                  //   style: TextStyle(fontSize: 11, color: Colors.red),
+                                  // ),
+                                ],
+                              )
                                   : const SizedBox(),
                               SizedBox(
                                   height: !ResponsiveHelper.isDesktop(context)
@@ -466,15 +465,15 @@ class SignUpScreenState extends State<SignUpScreen> {
                                           validator: (value) =>
                                               ValidateCheck.validateEmptyText(
                                                   value, null),
-                                          maxLength: 12,
+                                          maxLength: 300,
                                         ),
                                       ]),
                                     ),
                                     SizedBox(
                                         width:
-                                            ResponsiveHelper.isDesktop(context)
-                                                ? Dimensions.paddingSizeSmall
-                                                : 0),
+                                        ResponsiveHelper.isDesktop(context)
+                                            ? Dimensions.paddingSizeSmall
+                                            : 0),
                                     // ResponsiveHelper.isDesktop(context)
                                     //     ? Expanded(
                                     //         child: CustomTextField(
@@ -577,7 +576,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                                 onTap: () =>
                                     controller.showPickOptions(context),
                                 child: Obx(
-                                  () => Container(
+                                      () => Container(
                                     padding: const EdgeInsets.all(10),
                                     margin: const EdgeInsets.all(10),
                                     width: 160,
@@ -589,39 +588,39 @@ class SignUpScreenState extends State<SignUpScreen> {
                                     ),
                                     child: controller.file.value != null
                                         ? ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            child: Image.file(
-                                              controller.file.value!,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          )
+                                      borderRadius:
+                                      BorderRadius.circular(12),
+                                      child: Image.file(
+                                        controller.file.value!,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
                                         : Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              const Icon(
-                                                  Icons.add_photo_alternate,
-                                                  size: 40,
-                                                  color: Colors.grey),
-                                              const SizedBox(height: 8),
-                                              Text("Add File",
-                                                  style: TextStyle(
-                                                      color: controller
-                                                                  .file.value ==
-                                                              null
-                                                          ? Colors.red
-                                                          : Colors.grey)),
-                                            ],
-                                          ),
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                            Icons.add_photo_alternate,
+                                            size: 40,
+                                            color: Colors.grey),
+                                        const SizedBox(height: 8),
+                                        Text("Add File",
+                                            style: TextStyle(
+                                                color: controller
+                                                    .file.value ==
+                                                    null
+                                                    ? Colors.red
+                                                    : Colors.grey)),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
                               controller.file.value == null
                                   ? const Text(
-                                      'Firm image is required',
-                                      style: TextStyle(color: Colors.red),
-                                    )
+                                'Firm image is required',
+                                style: TextStyle(color: Colors.red),
+                              )
                                   : const SizedBox.shrink(),
 
                               const Align(
@@ -644,65 +643,65 @@ class SignUpScreenState extends State<SignUpScreen> {
                                     width: double.infinity,
                                     child: _currentPosition == null
                                         ? Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              const Center(
-                                                child: SizedBox(
-                                                  width: 20,
-                                                  height: 20,
-                                                  child:
-                                                      CircularProgressIndicator(),
-                                                ),
-                                              ),
-                                              if (_showLocationText)
-                                                const Padding(
-                                                  padding:
-                                                      EdgeInsets.only(top: 20),
-                                                  child: Text(
-                                                    'Enable location of your device',
-                                                    style: TextStyle(
-                                                      fontSize: 13,
-                                                      color: Colors.red,
-                                                    ),
-                                                  ),
-                                                ),
-                                            ],
-                                          )
-                                        : GoogleMap(
-                                            initialCameraPosition:
-                                                CameraPosition(
-                                              target: _selectedPosition ??
-                                                  _currentPosition!,
-                                              zoom: 12,
-                                            ),
-                                            onMapCreated: (GoogleMapController
-                                                controller) {
-                                              _mapController = controller;
-                                              _mapController!.animateCamera(
-                                                CameraUpdate.newLatLng(
-                                                    _selectedPosition ??
-                                                        _currentPosition!),
-                                              );
-                                            },
-                                            markers: {
-                                              if (_selectedPosition != null)
-                                                Marker(
-                                                  markerId: const MarkerId(
-                                                      "selected-location"),
-                                                  position: _selectedPosition!,
-                                                  icon: BitmapDescriptor
-                                                      .defaultMarkerWithHue(
-                                                          BitmapDescriptor
-                                                              .hueRed),
-                                                ),
-                                            },
-                                            myLocationEnabled: true,
-                                            myLocationButtonEnabled: false,
-                                            zoomControlsEnabled: false,
-                                            gestureRecognizers: const <Factory<
-                                                OneSequenceGestureRecognizer>>{},
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                      children: [
+                                        const Center(
+                                          child: SizedBox(
+                                            width: 20,
+                                            height: 20,
+                                            child:
+                                            CircularProgressIndicator(),
                                           ),
+                                        ),
+                                        if (_showLocationText)
+                                          const Padding(
+                                            padding:
+                                            EdgeInsets.only(top: 20),
+                                            child: Text(
+                                              'Enable location of your device',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    )
+                                        : GoogleMap(
+                                      initialCameraPosition:
+                                      CameraPosition(
+                                        target: _selectedPosition ??
+                                            _currentPosition!,
+                                        zoom: 12,
+                                      ),
+                                      onMapCreated: (GoogleMapController
+                                      controller) {
+                                        _mapController = controller;
+                                        _mapController!.animateCamera(
+                                          CameraUpdate.newLatLng(
+                                              _selectedPosition ??
+                                                  _currentPosition!),
+                                        );
+                                      },
+                                      markers: {
+                                        if (_selectedPosition != null)
+                                          Marker(
+                                            markerId: const MarkerId(
+                                                "selected-location"),
+                                            position: _selectedPosition!,
+                                            icon: BitmapDescriptor
+                                                .defaultMarkerWithHue(
+                                                BitmapDescriptor
+                                                    .hueRed),
+                                          ),
+                                      },
+                                      myLocationEnabled: true,
+                                      myLocationButtonEnabled: false,
+                                      zoomControlsEnabled: false,
+                                      gestureRecognizers: const <Factory<
+                                          OneSequenceGestureRecognizer>>{},
+                                    ),
                                   ),
                                   if (_currentPosition != null)
                                     Positioned(
@@ -715,7 +714,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                                             decoration: BoxDecoration(
                                               color: Colors.white,
                                               borderRadius:
-                                                  BorderRadius.circular(8),
+                                              BorderRadius.circular(8),
                                               boxShadow: const [
                                                 BoxShadow(
                                                   color: Colors.black26,
@@ -733,41 +732,41 @@ class SignUpScreenState extends State<SignUpScreen> {
                                               },
                                               decoration: InputDecoration(
                                                 hintText:
-                                                    'Select store location',
+                                                'Select store location',
                                                 hintStyle: const TextStyle(
                                                     color: Colors.grey,
                                                     fontSize: 14.0),
                                                 border: InputBorder.none,
                                                 contentPadding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 10),
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 10),
                                                 suffixIcon: _searchController
-                                                        .text.isNotEmpty
+                                                    .text.isNotEmpty
                                                     ? IconButton(
-                                                        icon: const Icon(
-                                                            Icons.cancel,
-                                                            color: Colors.grey),
-                                                        onPressed: () {
-                                                          _searchController
-                                                              .clear();
-                                                          setState(() {
-                                                            _placeSuggestions
-                                                                .clear();
-                                                            _selectedPosition =
-                                                                _currentPosition;
-                                                          });
-                                                          _updateAddressFromLatLng(
-                                                              _selectedPosition!);
-                                                          _mapController!
-                                                              .animateCamera(
-                                                            CameraUpdate
-                                                                .newLatLngZoom(
-                                                                    _selectedPosition!,
-                                                                    15),
-                                                          );
-                                                        },
-                                                      )
+                                                  icon: const Icon(
+                                                      Icons.cancel,
+                                                      color: Colors.grey),
+                                                  onPressed: () {
+                                                    _searchController
+                                                        .clear();
+                                                    setState(() {
+                                                      _placeSuggestions
+                                                          .clear();
+                                                      _selectedPosition =
+                                                          _currentPosition;
+                                                    });
+                                                    _updateAddressFromLatLng(
+                                                        _selectedPosition!);
+                                                    _mapController!
+                                                        .animateCamera(
+                                                      CameraUpdate
+                                                          .newLatLngZoom(
+                                                          _selectedPosition!,
+                                                          15),
+                                                    );
+                                                  },
+                                                )
                                                     : null,
                                               ),
                                             ),
@@ -775,15 +774,15 @@ class SignUpScreenState extends State<SignUpScreen> {
                                           if (_placeSuggestions.isNotEmpty)
                                             Padding(
                                               padding:
-                                                  const EdgeInsets.only(top: 8),
+                                              const EdgeInsets.only(top: 8),
                                               child: SizedBox(
                                                 height: 160,
                                                 child: Container(
                                                   decoration: BoxDecoration(
                                                     color: Colors.white,
                                                     borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
+                                                    BorderRadius.circular(
+                                                        8),
                                                     boxShadow: const [
                                                       BoxShadow(
                                                         color: Colors.black26,
@@ -795,25 +794,25 @@ class SignUpScreenState extends State<SignUpScreen> {
                                                   child: ListView.separated(
                                                     padding: EdgeInsets.zero,
                                                     physics:
-                                                        const AlwaysScrollableScrollPhysics(),
+                                                    const AlwaysScrollableScrollPhysics(),
                                                     itemCount: _placeSuggestions
                                                         .length,
                                                     separatorBuilder: (context,
-                                                            index) =>
-                                                        const Divider(
-                                                            color: Colors.grey,
-                                                            height: 1),
+                                                        index) =>
+                                                    const Divider(
+                                                        color: Colors.grey,
+                                                        height: 1),
                                                     itemBuilder:
                                                         (context, index) {
                                                       return ListTile(
                                                         title: Text(
                                                             _placeSuggestions[
-                                                                index]),
+                                                            index]),
                                                         onTap: () async {
                                                           _searchController
-                                                                  .text =
-                                                              _placeSuggestions[
-                                                                  index];
+                                                              .text =
+                                                          _placeSuggestions[
+                                                          index];
                                                           _placeSuggestions
                                                               .clear();
                                                           setState(() {});
@@ -840,18 +839,18 @@ class SignUpScreenState extends State<SignUpScreen> {
                                 decoration: InputDecoration(
                                   labelText: 'Address'.tr,
                                   labelStyle:
-                                      const TextStyle(color: Colors.grey),
+                                  const TextStyle(color: Colors.grey),
                                   border: OutlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: Colors.grey[200]!),
+                                    BorderSide(color: Colors.grey[200]!),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: Colors.grey[200]!),
+                                    BorderSide(color: Colors.grey[200]!),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: Colors.grey[200]!),
+                                    BorderSide(color: Colors.grey[200]!),
                                   ),
                                   contentPadding: const EdgeInsets.symmetric(
                                       horizontal: 12, vertical: 16),
@@ -881,7 +880,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                                 isLoading: authController.isLoading,
                                 onPressed: authController.acceptTerms
                                     ? () => _register(
-                                        authController, _countryDialCode!)
+                                    authController, _countryDialCode!)
                                     : null,
                               ),
                               const SizedBox(
@@ -956,7 +955,7 @@ class SignUpScreenState extends State<SignUpScreen> {
 
     String numberWithCountryCode = countryCode + number;
     PhoneValid phoneValid =
-        await CustomValidator.isPhoneValid(numberWithCountryCode);
+    await CustomValidator.isPhoneValid(numberWithCountryCode);
     numberWithCountryCode = phoneValid.phone;
 
     if (_formKeySignUp.currentState!.validate()) {
@@ -993,6 +992,7 @@ class SignUpScreenState extends State<SignUpScreen> {
       // ✅ Passed all validations — proceed to registration
       String? zoneId;
       String? moduleId;
+      debugPrint(moduleId);
 
       if (Get.find<ApiClient>()
           .sharedPreferences
@@ -1041,7 +1041,6 @@ class SignUpScreenState extends State<SignUpScreen> {
       authController.registration(signUpBody).then((status) async {
         if (status.isSuccess) {
           Future.microtask(() => Get.to(() => const SubscreptionScreen()));
-
           // if (Get.find<SplashController>().configModel!.customerVerification!) {
           //   if (Get.find<SplashController>()
           //       .configModel!
@@ -1072,6 +1071,7 @@ class SignUpScreenState extends State<SignUpScreen> {
           //   }
           // }
         } else {
+          print('ganesh 4');
           showCustomSnackBar(status.message);
           print("Form validation failed.");
         }
